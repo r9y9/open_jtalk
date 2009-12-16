@@ -1,0 +1,6 @@
+Makefile
+*.in
+open_jtalk
+text2lab
+.deps
+*.idb

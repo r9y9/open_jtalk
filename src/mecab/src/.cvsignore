@@ -1,0 +1,6 @@
+Makefile
+*.in
+mecab-dict-index
+.deps
+*.idb
+*.lib

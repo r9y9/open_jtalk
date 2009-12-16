@@ -1,0 +1,11 @@
+
+DISTCLEANFILES = *.log *.out *~
+
+MAINTAINERCLEANFILES = Makefile.in
+
+INCLUDES = -I @top_srcdir@/njd
+
+noinst_LIBRARIES = libmecab2njd.a
+
+libmecab2njd_a_SOURCES = mecab2njd.h \
+                         mecab2njd.c

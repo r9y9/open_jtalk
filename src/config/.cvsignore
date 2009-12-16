@@ -1,0 +1,5 @@
+compile
+config.*
+depcomp
+install-sh
+missing
