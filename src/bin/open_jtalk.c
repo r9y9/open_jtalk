@@ -214,6 +214,8 @@ void Usage()
    fprintf(stderr,
            "    -ow s          : filename of output wav audio (generated speech)         [  N/A]\n");
    fprintf(stderr,
+           "    -ot s          : filename of output trace information                    [  N/A]\n");
+   fprintf(stderr,
            "    -s  i          : sampling frequency                                      [16000][   1--48000]\n");
    fprintf(stderr,
            "    -p  i          : frame period (point)                                    [   80][   1--]\n");
