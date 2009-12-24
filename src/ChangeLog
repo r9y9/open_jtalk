@@ -1,3 +1,7 @@
+2009-12-21 13:44  uratec
+
+	* ChangeLog, bin/open_jtalk.c: add log option to help message.
+
 2009-12-17 01:01  uratec
 
 	* .cvsignore, AUTHORS, COPYING, ChangeLog, INSTALL, Makefile.am,

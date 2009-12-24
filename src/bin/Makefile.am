@@ -31,7 +31,7 @@ open_jtalk_LDADD = @top_srcdir@/text2mecab/libtext2mecab.a \
                    @top_srcdir@/njd_set_long_vowel/libnjd_set_long_vowel.a \
                    @top_srcdir@/njd2jpcommon/libnjd2jpcommon.a \
                    @top_srcdir@/jpcommon/libjpcommon.a \
-                   @HTS_ENGINE_LIBRARY@ \
-                   -L @top_srcdir@/mecab/src -lmecab -lstdc++
+                   @top_srcdir@/mecab/src/libmecab.a \
+                   @HTS_ENGINE_LIBRARY@ -lstdc++
 
 open_jtalk_SOURCES = open_jtalk.c

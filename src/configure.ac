@@ -25,7 +25,7 @@ AC_CHECK_LIB(stdc++, main, MECAB_LIBS="-lstdc++")
 AC_CHECK_LIB(pthread,pthread_create)
 AC_CHECK_LIB(pthread,pthread_join)
 AC_CHECK_LIB(pthread,pthread_mutex_lock)
-AC_CHECK_LIB(iconv,iconv_open,use_iconv=yes)
+AC_CHECK_LIB(iconv,iconv_open,use_libiconv=yes)
 AC_CHECK_FUNC(iconv_open,use_iconv=yes)
 
 # Checks for header files.
@@ -57,6 +57,11 @@ AC_CYGWIN
 AC_LANG_CPLUSPLUS
 AC_LANG(C)
 AC_TYPE_OFF_T
+if test "$use_libiconv" == "yes"; then
+   MECAB_LIBS="$MECAB_LIBS -liconv"
+   AC_DEFINE(HAVE_ICONV,1,Define to 1 if you have the `iconv_open' library(-liconv).)
+   AC_DEFINE(ICONV_CONST,,Define to 1 if you have the `iconv_open' library(-liconv).)
+fi
 if test "$use_iconv" == "yes"; then
    AC_DEFINE(HAVE_ICONV,1,Define to 1 if you have the `iconv_open' library(-liconv).)
    AC_DEFINE(ICONV_CONST,,Define to 1 if you have the `iconv_open' library(-liconv).)
