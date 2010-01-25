@@ -1,3 +1,9 @@
+2009-12-25 00:16  uratec
+
+	* ChangeLog, configure.ac, bin/Makefile.am: Marge patch code by
+	  Daisuke Saito of Tokyo University: Edit compile option for Mac
+	  OS.
+
 2009-12-21 13:44  uratec
 
 	* ChangeLog, bin/open_jtalk.c: add log option to help message.

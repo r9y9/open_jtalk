@@ -245,7 +245,7 @@ void Usage()
            "    -k  tree       : use GV switch                                           [  N/A]\n");
    fprintf(stderr, "  infile:\n");
    fprintf(stderr,
-           "    label file                                                               [stdin]\n");
+           "    text file                                                                [stdin]\n");
    fprintf(stderr, "  note:\n");
    fprintf(stderr, "    option '-d' may be repeated to use multiple delta parameters.\n");
    fprintf(stderr, "    generated spectrum and log F0 sequences are saved in natural\n");
