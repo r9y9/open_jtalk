@@ -1,6 +1,6 @@
 ===============================================================================
-                          The Open JTalk version 1.00
-                           release December 25, 2009
+                          The Open JTalk version 1.01
+                             release May 14, 2010
 
 
 The Open JTalk is a Japanese TTS system. It has been being developed by HTS
@@ -24,7 +24,7 @@ the conditions in the following license:
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */

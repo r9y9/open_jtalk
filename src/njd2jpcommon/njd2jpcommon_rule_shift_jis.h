@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -73,6 +73,7 @@ static const char *njd2jpcommon_pos_list[] = {
    "“®Œ", "©—§", "*", "*", "“®Œ",
    "“®Œ", "Ú”ö", "*", "*", "Ú”ö«-“®Œ“I",
    "“®Œ", "”ñ©—§", "*", "*", "“®Œ-”ñ©—§",
+   "•›Œ", "*", "*", "*", "•›Œ",
    "•›Œ", "ˆê”Ê", "*", "*", "•›Œ",
    "•›Œ", "•Œ—ŞÚ‘±", "*", "*", "•›Œ",
    "–¼Œ", "ƒT•ÏÚ‘±", "*", "*", "–¼Œ-ƒT•ÏÚ‘±",

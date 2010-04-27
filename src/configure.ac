@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(open_jtalk, 1.00, open-jtalk-users@lists.sourceforge.net)
+AC_INIT(open_jtalk, 1.01, open-jtalk-users@lists.sourceforge.net)
 AC_CONFIG_AUX_DIR([config])
-AC_COPYRIGHT(Copyright 2008-2009 Nagoya Institute of Technology)
-AM_INIT_AUTOMAKE(open_jtalk, 1.00, nostdinc no-installinfo no-installman)
+AC_COPYRIGHT(Copyright 2008-2010 Nagoya Institute of Technology)
+AM_INIT_AUTOMAKE(open_jtalk, 1.01, nostdinc no-installinfo no-installman)
 
 # Checks for C/C++ compiler
 AC_PROG_CC
@@ -22,15 +22,12 @@ AC_C_BIGENDIAN
 # Checks for libraries.
 AC_CHECK_LIB([m], [log])
 AC_CHECK_LIB(stdc++, main, MECAB_LIBS="-lstdc++")
-AC_CHECK_LIB(pthread,pthread_create)
-AC_CHECK_LIB(pthread,pthread_join)
-AC_CHECK_LIB(pthread,pthread_mutex_lock)
 AC_CHECK_LIB(iconv,iconv_open,use_libiconv=yes)
 AC_CHECK_FUNC(iconv_open,use_iconv=yes)
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(stdlib.h string.h unistd.h fcntl.h sys/stat.h sys/mman.h sys/times.h sys/types.h dirent.h ctype.h sys/types.h io.h windows.h pthread.h setjmp.h)
+AC_CHECK_HEADERS(stdlib.h string.h unistd.h fcntl.h sys/stat.h sys/mman.h sys/times.h sys/types.h dirent.h ctype.h sys/types.h io.h windows.h setjmp.h)
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -80,7 +77,6 @@ if test "$enable_mutex" = "no"; then
    MECAB_WITHOUT_MUTEX_LOCK="-DMECAB_WITHOUT_MUTEX_LOCK"
 else
    MECAB_WITHOUT_MUTEX_LOCK=""
-   MECAB_LIBS="$MECAB_LIBS $PTHREAD_LIB"
 fi
 LIBS="$LIBS $MECAB_LIBS"
 AC_SUBST(MECAB_LIBS)

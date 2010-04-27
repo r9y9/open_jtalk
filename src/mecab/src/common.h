@@ -10,7 +10,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -53,9 +53,11 @@
 #include <cstring>
 #include <string>
 #include <iostream>
+/* for Open JTalk
 #include <algorithm>
 #include <cmath>
 #include <sstream>
+*/
 
 #ifdef __CYGWIN__
 #define _GLIBCXX_EXPORT_TEMPLATE
@@ -75,6 +77,10 @@
 #if defined (_MSC_VER) /* for Open JTalk */
 #define snprintf _snprintf
 #endif
+
+#include <algorithm> /* for Open JTalk */
+#include <cmath>     /* for Open JTalk */
+#include <sstream>   /* for Open JTalk */
 
 #define COPYRIGHT "MeCab: Yet Another Part-of-Speech and Morphological Analyzer\n\
 \nCopyright(C) 2001-2009 Taku Kudo \nCopyright(C) 2004-2008 Nippon Telegraph and Telephone Corporation\n"

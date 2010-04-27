@@ -10,7 +10,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -59,7 +59,7 @@
 #include "iconv_utils.h"
 #include "char_property.h"
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
+#ifdef HAVE_WINDOWS_H /* for Open JTalk */
 #include "windows.h"
 #endif
 
@@ -90,7 +90,7 @@ const char * decode_charset_iconv(const char *str) {
 }
 #endif
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
+#ifdef HAVE_WINDOWS_H /* for Open JTalk */
 DWORD decode_charset_win32(const char *str) {
   const int charset = MeCab::decode_charset(str);
   switch (charset) {
@@ -133,7 +133,7 @@ bool Iconv::open(const char* from, const char* to) {
     return false;
   }
 #else
-#if defined(_WIN32) && !defined(__CYGWIN__)
+#ifdef HAVE_WINDOWS_H /* for Open JTalk */
   from_cp_ = decode_charset_win32(from);
   to_cp_ = decode_charset_win32(to);
   if (from_cp_ == to_cp_) {
@@ -156,7 +156,7 @@ bool Iconv::convert(std::string *str) {
     return true;
   }
 
-#if defined HAVE_ICONV && !defined(_WIN32) && !defined(__CYGWIN__) /* for Open JTalk */
+#if defined HAVE_ICONV /* for Open JTalk */
   size_t ilen = 0;
   size_t olen = 0;
   ilen = str->size();
@@ -177,7 +177,7 @@ bool Iconv::convert(std::string *str) {
   }
   str->assign(obuf_org, olen_org - olen);
 #else
-#if defined(_WIN32) && !defined(__CYGWIN__)
+#ifdef HAVE_WINDOWS_H /* for Open JTalk */
   // covert it to wide character first
   const size_t wide_len = ::MultiByteToWideChar(from_cp_, 0,
                                                 str->c_str(),

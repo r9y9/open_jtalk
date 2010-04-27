@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -171,8 +171,8 @@ void Usage()
 {
    fprintf(stderr, "\n");
    fprintf(stderr, "The HMM-based speech synthesis system (HTS)\n");
-   fprintf(stderr, "Open JTalk version 1.00 (http://open-jtalk.sourceforge.net/)\n");
-   fprintf(stderr, "Copyright (C) 2008-2009  Nagoya Institute of Technology\n");
+   fprintf(stderr, "Open JTalk version 1.01 (http://open-jtalk.sourceforge.net/)\n");
+   fprintf(stderr, "Copyright (C) 2008-2010  Nagoya Institute of Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    HTS_show_copyright(stderr);
    fprintf(stderr, "\n");
@@ -243,6 +243,8 @@ void Usage()
            "    -jm f          : weight of GV for spectrum                               [  1.0][ 0.0--2.0]\n");
    fprintf(stderr,
            "    -k  tree       : use GV switch                                           [  N/A]\n");
+   fprintf(stderr,
+           "    -z  i          : audio buffer size                                       [ 1600][   0--48000]\n");
    fprintf(stderr, "  infile:\n");
    fprintf(stderr,
            "    text file                                                                [stdin]\n");
@@ -490,6 +492,10 @@ int main(int argc, char **argv)
             break;
          case 'k':
             fn_gv_switch = *++argv;
+            --argc;
+            break;
+         case 'z':
+            audio_buff_size = atoi(*++argv);
             --argc;
             break;
          default:

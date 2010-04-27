@@ -1,3 +1,7 @@
+2010-01-25 14:03  uratec
+
+	* ChangeLog, bin/open_jtalk.c: Fix a typo in help message.
+
 2009-12-25 00:16  uratec
 
 	* ChangeLog, configure.ac, bin/Makefile.am: Marge patch code by

@@ -12,7 +12,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -168,13 +168,15 @@ struct mecab_learner_node_t {
 extern "C" {
 #endif
 
-#if defined(_WIN32) && !defined(__CYGWIN__) /* for Open JTalk */
+#ifdef _WIN32
 #include <windows.h>
+#if 0 /* for Open JTalk */
 #  ifdef DLL_EXPORT
 #    define MECAB_DLL_EXTERN  __declspec(dllexport)
 #  else
 #    define MECAB_DLL_EXTERN  __declspec(dllimport)
 #  endif
+#endif /* for Open JTalk */
 #endif
 
 #ifndef MECAB_DLL_EXTERN

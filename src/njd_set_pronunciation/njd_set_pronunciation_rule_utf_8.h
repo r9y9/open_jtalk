@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2009  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -496,5 +496,6 @@ static const char *njd_set_pronunciation_symbol_list[] = {
    "〓", "、",
    "─", "、",
    "──", "、",
+   "−", "、",
    NULL, NULL
 };
