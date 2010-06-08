@@ -1,7 +1,7 @@
 
-EXTRA_DIST = COPYING
-
 SUBDIRS = src
+
+EXTRA_DIST = COPYING Makefile.mak
 
 DISTCLEANFILES = *.log *.out *~
 

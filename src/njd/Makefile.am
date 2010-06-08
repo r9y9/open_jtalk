@@ -1,4 +1,6 @@
 
+EXTRA_DIST = Makefile.mak
+
 DISTCLEANFILES = *.log *.out *~
 
 MAINTAINERCLEANFILES = Makefile.in

@@ -14,7 +14,7 @@ SUBDIRS = text2mecab \
           bin \
           mecab-naist-jdic
 
-EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL NEWS README
+EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL Makefile.mak NEWS README
 
 DISTCLEANFILES = *.log *.out *~ config/*~
 
