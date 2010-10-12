@@ -1,6 +1,9 @@
 Makefile
 *.in
 open_jtalk
-text2lab
 .deps
 *.idb
+njd2lab
+njd2wav
+txt2lab
+txt2njd

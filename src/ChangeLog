@@ -1,3 +1,26 @@
+2010-06-08 18:48  uratec
+
+	* ChangeLog, Makefile.am, Makefile.mak, bin/Makefile.am,
+	  bin/Makefile.mak, jpcommon/Makefile.am, jpcommon/Makefile.mak,
+	  mecab/Makefile.am, mecab/Makefile.mak, mecab/src/Makefile.am,
+	  mecab/src/Makefile.mak, mecab/src/dictionary_rewriter.cpp,
+	  mecab/src/viterbi.cpp, mecab-naist-jdic/Makefile.am,
+	  mecab-naist-jdic/Makefile.mak, mecab2njd/Makefile.am,
+	  mecab2njd/Makefile.mak, njd/Makefile.am, njd/Makefile.mak,
+	  njd2jpcommon/Makefile.am, njd2jpcommon/Makefile.mak,
+	  njd_set_accent_phrase/Makefile.am,
+	  njd_set_accent_phrase/Makefile.mak,
+	  njd_set_accent_type/Makefile.am,
+	  njd_set_accent_type/Makefile.mak, njd_set_digit/Makefile.am,
+	  njd_set_digit/Makefile.mak, njd_set_long_vowel/Makefile.am,
+	  njd_set_long_vowel/Makefile.mak,
+	  njd_set_pronunciation/Makefile.am,
+	  njd_set_pronunciation/Makefile.mak,
+	  njd_set_unvoiced_vowel/Makefile.am,
+	  njd_set_unvoiced_vowel/Makefile.mak, text2mecab/Makefile.am,
+	  text2mecab/Makefile.mak: add Makefile.mak for Visual studio
+	  compile.
+
 2010-04-27 11:26  uratec
 
 	* COPYING, ChangeLog, NEWS, README, configure.ac, bin/open_jtalk.c,

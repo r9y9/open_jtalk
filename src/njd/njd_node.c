@@ -138,7 +138,7 @@ void NJDNode_set_string(NJDNode * node, char *str)
 {
    if (node->string != NULL)
       free(node->string);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->string = NULL;
    else
       node->string = strdup(str);
@@ -148,7 +148,7 @@ void NJDNode_set_pos(NJDNode * node, char *str)
 {
    if (node->pos != NULL)
       free(node->pos);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->pos = NULL;
    else
       node->pos = strdup(str);
@@ -158,7 +158,7 @@ void NJDNode_set_pos_group1(NJDNode * node, char *str)
 {
    if (node->pos_group1 != NULL)
       free(node->pos_group1);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->pos_group1 = NULL;
    else
       node->pos_group1 = strdup(str);
@@ -168,7 +168,7 @@ void NJDNode_set_pos_group2(NJDNode * node, char *str)
 {
    if (node->pos_group2 != NULL)
       free(node->pos_group2);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->pos_group2 = NULL;
    else
       node->pos_group2 = strdup(str);
@@ -178,7 +178,7 @@ void NJDNode_set_pos_group3(NJDNode * node, char *str)
 {
    if (node->pos_group3 != NULL)
       free(node->pos_group3);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->pos_group3 = NULL;
    else
       node->pos_group3 = strdup(str);
@@ -188,7 +188,7 @@ void NJDNode_set_ctype(NJDNode * node, char *str)
 {
    if (node->ctype != NULL)
       free(node->ctype);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->ctype = NULL;
    else
       node->ctype = strdup(str);
@@ -198,7 +198,7 @@ void NJDNode_set_cform(NJDNode * node, char *str)
 {
    if (node->cform != NULL)
       free(node->cform);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->cform = NULL;
    else
       node->cform = strdup(str);
@@ -208,7 +208,7 @@ void NJDNode_set_orig(NJDNode * node, char *str)
 {
    if (node->orig != NULL)
       free(node->orig);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->orig = NULL;
    else
       node->orig = strdup(str);
@@ -218,7 +218,7 @@ void NJDNode_set_read(NJDNode * node, char *str)
 {
    if (node->read != NULL)
       free(node->read);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->read = NULL;
    else
       node->read = strdup(str);
@@ -228,7 +228,7 @@ void NJDNode_set_pron(NJDNode * node, char *str)
 {
    if (node->pron != NULL)
       free(node->pron);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->pron = NULL;
    else
       node->pron = strdup(str);
@@ -257,7 +257,7 @@ void NJDNode_set_chain_rule(NJDNode * node, char *str)
 {
    if (node->chain_rule != NULL)
       free(node->chain_rule);
-   if (str == NULL)
+   if (str == NULL || strlen(str) == 0)
       node->chain_rule = NULL;
    else
       node->chain_rule = strdup(str);
@@ -561,10 +561,27 @@ void NJDNode_print(NJDNode * node)
 
 void NJDNode_fprint(NJDNode * node, FILE * fp)
 {
-   fprintf(fp, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d\n", node->string,
-           node->pos, node->pos_group1, node->pos_group2, node->pos_group3,
-           node->ctype, node->cform, node->orig, node->read, node->pron,
-           node->acc, node->mora_size, node->chain_rule, node->chain_flag);
+   fprintf(fp, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d\n",
+           node->string == NULL ? "" : node->string, node->pos == NULL ? "" : node->pos,
+           node->pos_group1 == NULL ? "" : node->pos_group1,
+           node->pos_group2 == NULL ? "" : node->pos_group2,
+           node->pos_group3 == NULL ? "" : node->pos_group3, node->ctype == NULL ? "" : node->ctype,
+           node->cform == NULL ? "" : node->cform, node->orig == NULL ? "" : node->orig,
+           node->read == NULL ? "" : node->read, node->pron == NULL ? "" : node->pron, node->acc,
+           node->mora_size, node->chain_rule == NULL ? "" : node->chain_rule, node->chain_flag);
+}
+
+void NJDNode_sprint(NJDNode * node, char *buff, const char *split_code)
+{
+   sprintf(buff, "%s%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d%s", buff,
+           node->string == NULL ? "" : node->string, node->pos == NULL ? "" : node->pos,
+           node->pos_group1 == NULL ? "" : node->pos_group1,
+           node->pos_group2 == NULL ? "" : node->pos_group2,
+           node->pos_group3 == NULL ? "" : node->pos_group3, node->ctype == NULL ? "" : node->ctype,
+           node->cform == NULL ? "" : node->cform, node->orig == NULL ? "" : node->orig,
+           node->read == NULL ? "" : node->read, node->pron == NULL ? "" : node->pron, node->acc,
+           node->mora_size, node->chain_rule == NULL ? "" : node->chain_rule, node->chain_flag,
+           split_code);
 }
 
 void NJDNode_clear(NJDNode * node)

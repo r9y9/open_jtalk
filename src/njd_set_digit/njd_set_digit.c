@@ -317,47 +317,52 @@ void njd_set_digit(NJD * njd)
    /* convert feature of a decimal point */
    find = 0;
    for (node = njd->head->next; node != NULL; node = node->next) {
-      if (node->next != NULL &&
-          (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_TEN1) == 0 ||
-           strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_TEN2) == 0) &&
-          strcmp(NJDNode_get_pos_group1(node->prev), NJD_SET_DIGIT_KAZU) == 0 &&
-          strcmp(NJDNode_get_pos_group1(node->next), NJD_SET_DIGIT_KAZU) == 0) {
-         NJDNode_load(node, NJD_SET_DIGIT_TEN_FEATURE);
-         NJDNode_set_chain_flag(node, 1);
-         find = 1;
-         if (strcmp(NJDNode_get_string(node->prev), NJD_SET_DIGIT_ZERO) == 0) {
-            NJDNode_set_pron(node->prev, NJD_SET_DIGIT_ZERO_BEFORE_DP);
-            NJDNode_set_mora_size(node->prev, 2);
-         } else if (strcmp(NJDNode_get_string(node->prev), NJD_SET_DIGIT_TWO) == 0) {
-            NJDNode_set_pron(node->prev, NJD_SET_DIGIT_TWO_BEFORE_DP);
-            NJDNode_set_mora_size(node->prev, 2);
-         } else if (strcmp(NJDNode_get_string(node->prev), NJD_SET_DIGIT_FIVE) == 0) {
-            NJDNode_set_pron(node->prev, NJD_SET_DIGIT_FIVE_BEFORE_DP);
-            NJDNode_set_mora_size(node->prev, 2);
-         }
-      } else if (find > 0) {
-         if (strcmp(NJDNode_get_pos_group1(node), NJD_SET_DIGIT_KAZU) == 0) {
-            if (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_ZERO) == 0) {
-               NJDNode_set_pron(node, NJD_SET_DIGIT_ZERO_AFTER_DP);
-               NJDNode_set_mora_size(node, 2);
-            } else if (node->next == NULL ||
-                       (node->next != NULL &&
-                        strcmp(NJDNode_get_pos_group2(node->next), NJD_SET_DIGIT_JOSUUSHI) != 0)) {
-               if (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_TWO) == 0) {
-                  NJDNode_set_pron(node, NJD_SET_DIGIT_TWO_AFTER_DP);
-                  NJDNode_set_mora_size(node, 2);
-               } else if (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_FIVE) == 0) {
-                  NJDNode_set_pron(node, NJD_SET_DIGIT_FIVE_AFTER_DP);
-                  NJDNode_set_mora_size(node, 2);
+      if (NJDNode_get_string(node) != NULL) {
+         if (node->next != NULL &&
+             (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_TEN1) == 0 ||
+              strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_TEN2) == 0) &&
+             strcmp(NJDNode_get_pos_group1(node->prev), NJD_SET_DIGIT_KAZU) == 0 &&
+             strcmp(NJDNode_get_pos_group1(node->next), NJD_SET_DIGIT_KAZU) == 0) {
+            NJDNode_load(node, NJD_SET_DIGIT_TEN_FEATURE);
+            NJDNode_set_chain_flag(node, 1);
+            find = 1;
+            if (NJDNode_get_string(node->prev) != NULL) {
+               if (strcmp(NJDNode_get_string(node->prev), NJD_SET_DIGIT_ZERO) == 0) {
+                  NJDNode_set_pron(node->prev, NJD_SET_DIGIT_ZERO_BEFORE_DP);
+                  NJDNode_set_mora_size(node->prev, 2);
+               } else if (strcmp(NJDNode_get_string(node->prev), NJD_SET_DIGIT_TWO) == 0) {
+                  NJDNode_set_pron(node->prev, NJD_SET_DIGIT_TWO_BEFORE_DP);
+                  NJDNode_set_mora_size(node->prev, 2);
+               } else if (strcmp(NJDNode_get_string(node->prev), NJD_SET_DIGIT_FIVE) == 0) {
+                  NJDNode_set_pron(node->prev, NJD_SET_DIGIT_FIVE_BEFORE_DP);
+                  NJDNode_set_mora_size(node->prev, 2);
                }
             }
-            if (find % 2 == 1)
-               NJDNode_set_chain_flag(node, 0);
-            else
-               NJDNode_set_chain_flag(node, 1);
-            find++;
-         } else {
-            find = 0;
+         } else if (find > 0) {
+            if (strcmp(NJDNode_get_pos_group1(node), NJD_SET_DIGIT_KAZU) == 0) {
+               if (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_ZERO) == 0) {
+                  NJDNode_set_pron(node, NJD_SET_DIGIT_ZERO_AFTER_DP);
+                  NJDNode_set_mora_size(node, 2);
+               } else if (node->next == NULL ||
+                          (node->next != NULL &&
+                           strcmp(NJDNode_get_pos_group2(node->next),
+                                  NJD_SET_DIGIT_JOSUUSHI) != 0)) {
+                  if (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_TWO) == 0) {
+                     NJDNode_set_pron(node, NJD_SET_DIGIT_TWO_AFTER_DP);
+                     NJDNode_set_mora_size(node, 2);
+                  } else if (strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_FIVE) == 0) {
+                     NJDNode_set_pron(node, NJD_SET_DIGIT_FIVE_AFTER_DP);
+                     NJDNode_set_mora_size(node, 2);
+                  }
+               }
+               if (find % 2 == 1)
+                  NJDNode_set_chain_flag(node, 0);
+               else
+                  NJDNode_set_chain_flag(node, 1);
+               find++;
+            } else {
+               find = 0;
+            }
          }
       }
    }
@@ -400,7 +405,8 @@ void njd_set_digit(NJD * njd)
             /* modify accent phrase */
             NJDNode_set_chain_flag(node->prev, 0);
             NJDNode_set_chain_flag(node, 1);
-         } else if (strcmp(NJDNode_get_pos_group1(node), NJD_SET_DIGIT_KAZU) == 0) {
+         } else if (strcmp(NJDNode_get_pos_group1(node), NJD_SET_DIGIT_KAZU) == 0
+                    && NJDNode_get_string(node->prev) != NULL && NJDNode_get_string(node) != NULL) {
             /* modify accent phrase */
             find = 0;
             for (i = 0; njd_set_digit_rule_numeral_list4[i] != NULL; i++) {
