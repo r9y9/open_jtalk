@@ -23,6 +23,7 @@ INCLUDES = -I @top_srcdir@/text2mecab \
 bin_PROGRAMS = open_jtalk
 
 open_jtalk_LDADD = @top_srcdir@/text2mecab/libtext2mecab.a \
+                   @top_srcdir@/mecab/src/libmecab.a \
                    @top_srcdir@/mecab2njd/libmecab2njd.a \
                    @top_srcdir@/njd/libnjd.a \
                    @top_srcdir@/njd_set_pronunciation/libnjd_set_pronunciation.a \
@@ -33,7 +34,6 @@ open_jtalk_LDADD = @top_srcdir@/text2mecab/libtext2mecab.a \
                    @top_srcdir@/njd_set_long_vowel/libnjd_set_long_vowel.a \
                    @top_srcdir@/njd2jpcommon/libnjd2jpcommon.a \
                    @top_srcdir@/jpcommon/libjpcommon.a \
-                   @top_srcdir@/mecab/src/libmecab.a \
                    @HTS_ENGINE_LIBRARY@ -lstdc++
 
 open_jtalk_SOURCES = open_jtalk.c
