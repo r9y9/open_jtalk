@@ -108,8 +108,7 @@ class DictionaryComplier {
 #define DCONF(file) create_filename(dicdir, std::string(file)).c_str()
 #define OCONF(file) create_filename(outdir, std::string(file)).c_str()
 
-    /* for Open JTalk */
-    /*
+    /* for Open JTalk
     CHECK_DIE(param.load(DCONF(DICRC)))
         << "no such file or directory: " << DCONF(DICRC);
     */

@@ -87,7 +87,7 @@ struct mecab_t {
   MeCab::Tagger* ptr;
 };
 
-#if 0 /* for Open JTalk */
+/* for Open JTalk
 #if defined(_WIN32) && !defined(__CYGWIN__)
 HINSTANCE DllInstance = 0;
 
@@ -107,7 +107,7 @@ extern "C" {
 }
 #endif
 #endif
-#endif /* for Open JTalk */
+*/
 
 mecab_t* mecab_new(int argc, char **argv) {
   mecab_t *c = new mecab_t;

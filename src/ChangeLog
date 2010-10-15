@@ -1,3 +1,8 @@
+2010-10-15 15:16  uratec
+
+	* ChangeLog, bin/Makefile.am, mecab/src/libmecab.cpp: remove code
+	  about DLL.
+
 2010-10-15 14:38  uratec
 
 	* ChangeLog, NEWS, README, configure.ac, bin/open_jtalk.c,

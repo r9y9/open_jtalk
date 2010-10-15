@@ -170,13 +170,13 @@ extern "C" {
 
 #ifdef _WIN32
 #include <windows.h>
-#if 0 /* for Open JTalk */
+/* for Open JTalk
 #  ifdef DLL_EXPORT
 #    define MECAB_DLL_EXTERN  __declspec(dllexport)
 #  else
 #    define MECAB_DLL_EXTERN  __declspec(dllimport)
 #  endif
-#endif /* for Open JTalk */
+*/
 #endif
 
 #ifndef MECAB_DLL_EXTERN
@@ -341,6 +341,5 @@ void Mecab_clear(Mecab *m);
 MECAB_H_END;
 
 #endif                          /* !MECAB_H */
-/* for Open JTalk */
 
 #endif

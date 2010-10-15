@@ -108,8 +108,7 @@ void Param::dump_config(std::ostream *os) const {
 bool Param::load(const char *filename) {
   std::ifstream ifs(filename);
 
-  /* for Open JTalk */
-  /*
+  /* for Open JTalk
   CHECK_FALSE(ifs) << "no such file or directory: " << filename;
 
   std::string line;
