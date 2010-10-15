@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_ACCENT_TYPE_RULE_H
+#define NJD_SET_ACCENT_TYPE_RULE_H
+
+#ifdef __cplusplus
+#define NJD_SET_ACCENT_TYPE_RULE_H_START extern "C" {
+#define NJD_SET_ACCENT_TYPE_RULE_H_END   }
+#else
+#define NJD_SET_ACCENT_TYPE_RULE_H_START
+#define NJD_SET_ACCENT_TYPE_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_ACCENT_TYPE_RULE_H_START;
+
 #define NJD_SET_ACCENT_TYPE_KAZU "数"
 #define NJD_SET_ACCENT_TYPE_ICHI "一"
 #define NJD_SET_ACCENT_TYPE_NI "二"
@@ -56,3 +69,7 @@
 #define NJD_SET_ACCENT_TYPE_SUU "数"
 #define NJD_SET_ACCENT_TYPE_NAN "何"
 #define NJD_SET_ACCENT_TYPE_IKU "幾"
+
+NJD_SET_ACCENT_TYPE_RULE_H_END;
+
+#endif                          /* !NJD_SET_ACCENT_TYPE_RULE_H */

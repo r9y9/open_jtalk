@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_C
+#define NJD_C
+
+#ifdef __cplusplus
+#define NJD_C_START extern "C" {
+#define NJD_C_END   }
+#else
+#define NJD_C_START
+#define NJD_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -391,3 +404,7 @@ void NJD_clear(NJD * njd)
    }
    njd->tail = NULL;
 }
+
+NJD_C_END;
+
+#endif                          /* !NJD_C */

@@ -1,3 +1,13 @@
+2010-10-13 00:47  uratec
+
+	* ChangeLog, bin/.cvsignore, njd/njd.c, njd/njd.h, njd/njd_node.c,
+	  njd_set_digit/njd_set_digit.c,
+	  njd_set_long_vowel/njd_set_long_vowel_rule_euc_jp.h,
+	  njd_set_long_vowel/njd_set_long_vowel_rule_shift_jis.h,
+	  njd_set_long_vowel/njd_set_long_vowel_rule_utf_8.h,
+	  njd_set_unvoiced_vowel/njd_set_unvoiced_vowel.c: Fix a bug for
+	  digit.  Add njd_load functions.
+
 2010-06-08 18:48  uratec
 
 	* ChangeLog, Makefile.am, Makefile.mak, bin/Makefile.am,

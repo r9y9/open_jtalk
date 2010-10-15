@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_ACCENT_TYPE_C
+#define NJD_SET_ACCENT_TYPE_C
+
+#ifdef __cplusplus
+#define NJD_SET_ACCENT_TYPE_C_START extern "C" {
+#define NJD_SET_ACCENT_TYPE_C_END   }
+#else
+#define NJD_SET_ACCENT_TYPE_C_START
+#define NJD_SET_ACCENT_TYPE_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_ACCENT_TYPE_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -217,3 +230,7 @@ void njd_set_accent_type(NJD * njd)
       mora_size += NJDNode_get_mora_size(node);
    }
 }
+
+NJD_SET_ACCENT_TYPE_C_END;
+
+#endif                          /* !NJD_SET_ACCENT_TYPE_C */

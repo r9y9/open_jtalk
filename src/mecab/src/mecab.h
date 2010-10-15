@@ -310,9 +310,18 @@ MECAB_DLL_EXTERN const char* getTaggerError();
 #endif
 
 /* for Open JTalk */
+#ifndef MECAB_H
+#define MECAB_H
+
 #ifdef __cplusplus
-extern "C" {
-#endif
+#define MECAB_H_START extern "C" {
+#define MECAB_H_END   }
+#else
+#define MECAB_H_START
+#define MECAB_H_END
+#endif                          /* __CPLUSPLUS */
+
+MECAB_H_START;
 
 typedef struct _Mecab{
    char **feature;
@@ -329,9 +338,9 @@ char **Mecab_get_feature(Mecab *m);
 void Mecab_refresh(Mecab *m);
 void Mecab_clear(Mecab *m);
 
-#ifdef __cplusplus
-}
-#endif
+MECAB_H_END;
+
+#endif                          /* !MECAB_H */
 /* for Open JTalk */
 
 #endif

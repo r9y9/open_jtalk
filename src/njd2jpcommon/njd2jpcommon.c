@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD2JPCOMMON_C
+#define NJD2JPCOMMON_C
+
+#ifdef __cplusplus
+#define NJD2JPCOMMON_C_START extern "C" {
+#define NJD2JPCOMMON_C_END   }
+#else
+#define NJD2JPCOMMON_C_START
+#define NJD2JPCOMMON_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD2JPCOMMON_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -130,3 +143,7 @@ void njd2jpcommon(JPCommon * jpcommon, NJD * njd)
       JPCommon_push(jpcommon, jnode);
    }
 }
+
+NJD2JPCOMMON_C_END;
+
+#endif                          /* !NJD2JPCOMMON_C */

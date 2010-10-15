@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_H
+#define NJD_H
+
+#ifdef __cplusplus
+#define NJD_H_START extern "C" {
+#define NJD_H_END   }
+#else
+#define NJD_H_START
+#define NJD_H_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_H_START;
+
 /* NJDNode */
 
 typedef struct _NJDNode {
@@ -120,3 +133,7 @@ void NJD_fprint(NJD * njd, FILE * fp);
 void NJD_sprint(NJD * njd, char *buff, const char *split_code);
 void NJD_refresh(NJD * njd);
 void NJD_clear(NJD * wl);
+
+NJD_H_END;
+
+#endif                          /* !NJD_H */

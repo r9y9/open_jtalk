@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef OPEN_JTALK_C
+#define OPEN_JTALK_C
+
+#ifdef __cplusplus
+#define OPEN_JTALK_C_START extern "C" {
+#define OPEN_JTALK_C_END   }
+#else
+#define OPEN_JTALK_C_START
+#define OPEN_JTALK_C_END
+#endif                          /* __CPLUSPLUS */
+
+OPEN_JTALK_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -171,7 +184,7 @@ void Usage()
 {
    fprintf(stderr, "\n");
    fprintf(stderr, "The HMM-based speech synthesis system (HTS)\n");
-   fprintf(stderr, "Open JTalk version 1.01 (http://open-jtalk.sourceforge.net/)\n");
+   fprintf(stderr, "Open JTalk version 1.02 (http://open-jtalk.sourceforge.net/)\n");
    fprintf(stderr, "Copyright (C) 2008-2010  Nagoya Institute of Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    HTS_show_copyright(stderr);
@@ -545,3 +558,7 @@ int main(int argc, char **argv)
 
    return 0;
 }
+
+OPEN_JTALK_C_END;
+
+#endif                          /* !OPEN_JTALK_C */

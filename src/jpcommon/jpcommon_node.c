@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef JPCOMMON_NODE_C
+#define JPCOMMON_NODE_C
+
+#ifdef __cplusplus
+#define JPCOMMON_NODE_C_START extern "C" {
+#define JPCOMMON_NODE_C_END   }
+#else
+#define JPCOMMON_NODE_C_START
+#define JPCOMMON_NODE_C_END
+#endif                          /* __CPLUSPLUS */
+
+JPCOMMON_NODE_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -168,3 +181,7 @@ void JPCommonNode_clear(JPCommonNode * node)
    node->prev = NULL;
    node->next = NULL;
 }
+
+JPCOMMON_NODE_C_END;
+
+#endif                          /* !JPCOMMON_NODE_C */

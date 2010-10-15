@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_ACCENT_PHRASE_RULE_H
+#define NJD_SET_ACCENT_PHRASE_RULE_H
+
+#ifdef __cplusplus
+#define NJD_SET_ACCENT_PHRASE_RULE_H_START extern "C" {
+#define NJD_SET_ACCENT_PHRASE_RULE_H_END   }
+#else
+#define NJD_SET_ACCENT_PHRASE_RULE_H_START
+#define NJD_SET_ACCENT_PHRASE_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_ACCENT_PHRASE_RULE_H_START;
+
 /*
   Rule 01 デフォルトはくっつける
   Rule 02 「名詞」の連続はくっつける
@@ -72,3 +85,7 @@
 #define NJD_SET_ACCENT_PHRASE_SAHEN_SETSUZOKU "サ変接続"
 #define NJD_SET_ACCENT_PHRASE_TE "て"
 #define NJD_SET_ACCENT_PHRASE_DE "で"
+
+NJD_SET_ACCENT_PHRASE_RULE_H_END;
+
+#endif                          /* !NJD_SET_ACCENT_PHRASE_RULE_H */

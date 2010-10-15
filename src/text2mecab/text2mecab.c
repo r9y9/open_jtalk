@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef TEXT2MECAB_C
+#define TEXT2MECAB_C
+
+#ifdef __cplusplus
+#define TEXT2MECAB_C_START extern "C" {
+#define TEXT2MECAB_C_END   }
+#else
+#define TEXT2MECAB_C_START
+#define TEXT2MECAB_C_END
+#endif                          /* __CPLUSPLUS */
+
+TEXT2MECAB_C_START;
+
 #include <stdio.h>
 #include <string.h>
 
@@ -113,3 +126,7 @@ void text2mecab(char *output, char *input)
    }
    output[index] = '\0';
 }
+
+TEXT2MECAB_C_END;
+
+#endif                          /* !TEXT2MECAB_C */

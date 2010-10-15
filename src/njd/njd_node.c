@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_NODE_C
+#define NJD_NODE_C
+
+#ifdef __cplusplus
+#define NJD_NODE_C_START extern "C" {
+#define NJD_NODE_C_END   }
+#else
+#define NJD_NODE_C_START
+#define NJD_NODE_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_NODE_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -636,3 +649,7 @@ void NJDNode_clear(NJDNode * node)
    node->prev = NULL;
    node->next = NULL;
 }
+
+NJD_NODE_C_END;
+
+#endif                          /* !NJD_NODE_C */

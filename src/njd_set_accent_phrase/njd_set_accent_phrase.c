@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_ACCENT_PHRASE_C
+#define NJD_SET_ACCENT_PHRASE_C
+
+#ifdef __cplusplus
+#define NJD_SET_ACCENT_PHRASE_C_START extern "C" {
+#define NJD_SET_ACCENT_PHRASE_C_END   }
+#else
+#define NJD_SET_ACCENT_PHRASE_C_START
+#define NJD_SET_ACCENT_PHRASE_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_ACCENT_PHRASE_C_START;
+
 #include <stdio.h>
 #include <string.h>
 
@@ -198,3 +211,7 @@ void njd_set_accent_phrase(NJD * njd)
       }
    }
 }
+
+NJD_SET_ACCENT_PHRASE_C_END;
+
+#endif                          /* !NJD_SET_ACCENT_PHRASE_C */

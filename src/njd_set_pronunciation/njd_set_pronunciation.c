@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_PRONUNCIATION_C
+#define NJD_SET_PRONUNCIATION_C
+
+#ifdef __cplusplus
+#define NJD_SET_PRONUNCIATION_C_START extern "C" {
+#define NJD_SET_PRONUNCIATION_C_END   }
+#else
+#define NJD_SET_PRONUNCIATION_C_START
+#define NJD_SET_PRONUNCIATION_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_PRONUNCIATION_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -113,3 +126,7 @@ void njd_set_pronunciation(NJD * njd)
    }
    NJD_remove_silent_node(njd);
 }
+
+NJD_SET_PRONUNCIATION_C_END;
+
+#endif                          /* !NJD_SET_PRONUNCIATION_C */

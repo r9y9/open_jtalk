@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_RULE_H
+#define NJD_RULE_H
+
+#ifdef __cplusplus
+#define NJD_RULE_H_START extern "C" {
+#define NJD_RULE_H_END   }
+#else
+#define NJD_RULE_H_START
+#define NJD_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_RULE_H_START;
+
 static const char *njd_mora_list[] = {
    "ÉîÉá",
    "ÉîÉÖ",
@@ -200,3 +213,7 @@ static const char *njd_mora_list[] = {
    "Å[",
    NULL
 };
+
+NJD_RULE_H_END;
+
+#endif                          /* !NJD_RULE_H */

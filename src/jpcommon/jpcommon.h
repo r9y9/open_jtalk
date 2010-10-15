@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef JPCOMMON_H
+#define JPCOMMON_H
+
+#ifdef __cplusplus
+#define JPCOMMON_H_START extern "C" {
+#define JPCOMMON_H_END   }
+#else
+#define JPCOMMON_H_START
+#define JPCOMMON_H_END
+#endif                          /* __CPLUSPLUS */
+
+JPCOMMON_H_START;
+
 /* JPCommonLabel */
 
 struct _JPCommonLabelPhoneme;
@@ -164,3 +177,7 @@ void JPCommon_print(JPCommon * jpcommon);
 void JPCommon_fprint(JPCommon * jpcommon, FILE * fp);
 void JPCommon_refresh(JPCommon * jpcommon);
 void JPCommon_clear(JPCommon * jpcommon);
+
+JPCOMMON_H_END;
+
+#endif                          /* !JPCOMMON_H */

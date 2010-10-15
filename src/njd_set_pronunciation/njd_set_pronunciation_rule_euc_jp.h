@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_PRONUNCIATION_RULE_H
+#define NJD_SET_PRONUNCIATION_RULE_H
+
+#ifdef __cplusplus
+#define NJD_SET_PRONUNCIATION_RULE_H_START extern "C" {
+#define NJD_SET_PRONUNCIATION_RULE_H_END   }
+#else
+#define NJD_SET_PRONUNCIATION_RULE_H_START
+#define NJD_SET_PRONUNCIATION_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_PRONUNCIATION_RULE_H_START;
+
 static const char *njd_set_pronunciation_list[] = {
    "任亦", "任亦", "1",
    "任亙", "任亙", "1",
@@ -499,3 +512,7 @@ static const char *njd_set_pronunciation_symbol_list[] = {
    "≡", "﹜",
    NULL, NULL
 };
+
+NJD_SET_PRONUNCIATION_RULE_H_END;
+
+#endif                          /* !NJD_SET_PRONUNCIATION_RULE_H */

@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef JPCOMMON_RULE_H
+#define JPCOMMON_RULE_H
+
+#ifdef __cplusplus
+#define JPCOMMON_RULE_H_START extern "C" {
+#define JPCOMMON_RULE_H_END   }
+#else
+#define JPCOMMON_RULE_H_START
+#define JPCOMMON_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+JPCOMMON_RULE_H_START;
+
 #define JPCOMMON_MORA_UNVOICE "’"
 #define JPCOMMON_MORA_LONG_VOWEL "ー"
 #define JPCOMMON_MORA_SHORT_PAUSE "、"
@@ -283,3 +296,7 @@ static const char *jpcommon_ctype_list[] = {
    "文語助動詞", "6",
    NULL, NULL
 };
+
+JPCOMMON_RULE_H_END;
+
+#endif                          /* !JPCOMMON_RULE_H */

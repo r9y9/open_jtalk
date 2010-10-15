@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef TEXT2MECAB_RULE_H
+#define TEXT2MECAB_RULE_H
+
+#ifdef __cplusplus
+#define TEXT2MECAB_RULE_H_START extern "C" {
+#define TEXT2MECAB_RULE_H_END   }
+#else
+#define TEXT2MECAB_RULE_H_START
+#define TEXT2MECAB_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+TEXT2MECAB_RULE_H_START;
+
 static const char text2mecab_control_range[] = {
    0x00, 0x7F
 };
@@ -245,3 +258,7 @@ static const char *text2mecab_conv_list[] = {
    "Žß", "",
    NULL, NULL
 };
+
+TEXT2MECAB_RULE_H_END;
+
+#endif                          /* !TEXT2MECAB_RULE_H */

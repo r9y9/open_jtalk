@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_UNVOICED_VOWEL_C
+#define NJD_SET_UNVOICED_VOWEL_C
+
+#ifdef __cplusplus
+#define NJD_SET_UNVOICED_VOWEL_C_START extern "C" {
+#define NJD_SET_UNVOICED_VOWEL_C_END   }
+#else
+#define NJD_SET_UNVOICED_VOWEL_C_START
+#define NJD_SET_UNVOICED_VOWEL_C_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_UNVOICED_VOWEL_C_START;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -217,3 +230,7 @@ void njd_set_unvoiced_vowel(NJD * njd)
       set_unvoiced_vowel(node, &acc_in_accent_phrase, &mora_in_accent_phrase, &last_unvoiced_flag);
    }
 }
+
+NJD_SET_UNVOICED_VOWEL_C_END;
+
+#endif                          /* !NJD_SET_UNVOICED_VOWEL_C */

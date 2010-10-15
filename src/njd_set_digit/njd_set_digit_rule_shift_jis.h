@@ -38,6 +38,19 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
+#ifndef NJD_SET_DIGIT_RULE_H
+#define NJD_SET_DIGIT_RULE_H
+
+#ifdef __cplusplus
+#define NJD_SET_DIGIT_RULE_H_START extern "C" {
+#define NJD_SET_DIGIT_RULE_H_END   }
+#else
+#define NJD_SET_DIGIT_RULE_H_START
+#define NJD_SET_DIGIT_RULE_H_END
+#endif                          /* __CPLUSPLUS */
+
+NJD_SET_DIGIT_RULE_H_START;
+
 #define NJD_SET_DIGIT_KAZU "数"
 #define NJD_SET_DIGIT_SUUSETSUZOKU "数接続"
 #define NJD_SET_DIGIT_JOSUUSHI "助数詞"
@@ -547,3 +560,7 @@ static const char *njd_set_digit_rule_conv_table6[] = {
    "十", "十日間,名詞,副詞可能,*,*,*,*,十日,トウカカン,トーカカン,3/5,*",
    NULL, NULL
 };
+
+NJD_SET_DIGIT_RULE_H_END;
+
+#endif                          /* !NJD_SET_DIGIT_RULE_H */

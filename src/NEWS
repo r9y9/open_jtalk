@@ -1,8 +1,14 @@
+Version 1.02:
+ * add makefiles for nmake of VC.
+ * support C++ compiler.
+ * add loading function for NJD.
+ * bug fixes.
+
 Version 1.01:
- * add '-z' option to control audio buffer size
- * remove PTHREAD flag
- * remove ICONV flag for windows compile
- * fix bugs and typos
+ * add '-z' option to control audio buffer size.
+ * remove PTHREAD flag.
+ * remove ICONV flag for windows compile.
+ * fix bugs and typos.
 
 Version 1.00:
  * released in SourceForge.
