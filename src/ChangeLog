@@ -1,3 +1,9 @@
+2010-10-15 21:01  uratec
+
+	* ChangeLog, mecab/src/dictionary_compiler.cpp,
+	  mecab/src/libmecab.cpp, mecab/src/mecab.h, mecab/src/param.cpp,
+	  mecab/src/utils.cpp: Remove code about DLL.
+
 2010-10-15 15:16  uratec
 
 	* ChangeLog, bin/Makefile.am, mecab/src/libmecab.cpp: remove code
