@@ -162,10 +162,32 @@ static const char *njd_set_digit_rule_numeral_list5[] = {
    NULL
 };
 
+static const char *njd_set_digit_rule_numeral_list6[] = {
+   "百", "千", NULL
+};
+
+static const char *njd_set_digit_rule_numeral_list7[] = {
+   "三", "1",
+   "六", "2",
+   "八", "2",
+   "何", "1",
+   NULL, NULL
+};
+
+static const char *njd_set_digit_rule_numeral_list8[] = {
+   "百", "千", NULL
+};
+
+static const char *njd_set_digit_rule_numeral_list9[] = {
+   "六", "ロッ", "0", "2",
+   "八", "ハッ", "1", "2",
+   NULL, NULL, NULL
+};
+
 static const char *njd_set_digit_rule_numerative_class1b[] = {
-/* from paper */
+   /* from paper */
    "年" /* ねん */ , "円",
-/* from dictionary */
+   /* from dictionary */
    "年間", "年生", "年代", "年度", "年版", "年余", "年余", "年来", "えん",
    NULL
 };
@@ -176,9 +198,9 @@ static const char *njd_set_digit_rule_conv_table1b[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1c[] = {
-/* from paper */
+   /* from paper */
    "時", "時間", "人",
-/* from dictionary */
+   /* from dictionary */
    "時限", "時半", "人月", "人前", "人組",
    NULL
 };
@@ -191,9 +213,9 @@ static const char *njd_set_digit_rule_conv_table1c[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1d[] = {
-/* from paper */
+   /* from paper */
    "日" /* にち */ ,
-/* from dictionary */
+   /* from dictionary */
    "日間",
    NULL
 };
@@ -206,7 +228,7 @@ static const char *njd_set_digit_rule_conv_table1d[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1e[] = {
-/* from paper */
+   /* from paper */
    "月" /* がつ */ ,
    NULL
 };
@@ -219,7 +241,7 @@ static const char *njd_set_digit_rule_conv_table1e[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1f[] = {
-/* from paper */
+   /* from paper */
    /* "羽", "把", *//* modified */
    NULL
 };
@@ -233,9 +255,9 @@ static const char *njd_set_digit_rule_conv_table1f[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1g[] = {
-/* from paper */
+   /* from paper */
    "個", "階", "分" /* ふん */ , "発", "本", "鉢", "口", "切れ", "箱",
-/* from dictionary */
+   /* from dictionary */
    "か月", "か国", "か所", "か条", "か村", "か年", "カ月", "カ国", "カ寺", "カ所", "カ条", "カ村",
    "カ店", "カ年", "ケ月", "ケ国", "ケ所", "ケ条", "ケ村", "ケ年", "ヵ月", "ヵ国", "ヵ所",
    "ヵ条", "ヵ村", "ヵ年", "ヶ月", "ヶ国", "ヶ所", "ヶ条", "ヶ村", "ヶ年", "個月", "個口",
@@ -260,9 +282,9 @@ static const char *njd_set_digit_rule_conv_table1g[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1h[] = {
-/* from paper */
+   /* from paper */
    "．", "・", "才", "頭", "着", "足", "尺", "坪", "通り", "センチ", "シーシー",
-/* from dictionary */
+   /* from dictionary */
    "ＣＣ", "ｃｃ", "ｃｍ", "サイクル", "サンチーム", "シーズン", "シート", "シリング",
    "シンガポールドル", "スイスフラン", "スウェーデンクローネ", "スクレ", "セット", "セント",
    "ソル", "ゾーン", "糎", "糎", "竿", "差", "差し", "歳", "歳児", "作", "冊", "刷", "皿", "棹",
@@ -284,9 +306,9 @@ static const char *njd_set_digit_rule_conv_table1h[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1i[] = {
-/* from paper */
+   /* from paper */
    "キロ", "カロリー",
-/* from dictionary */
+   /* from dictionary */
    "ｃａｌ", "ｋｂ", "ｋｇ", "ｋｌ", "ｋｍ", "ｋｔ", "ｋｗ", "ｋグラム", "ｋバイト", "ｋヘルツ",
    "ｋメートル", "ｋリットル", "ｋワット", "カナダドル", "カラット", "ガロン", "キュリー",
    "キロカロリー", "キログラム", "キロトン", "キロバイト", "キロヘルツ", "キロメートル",
@@ -303,9 +325,9 @@ static const char *njd_set_digit_rule_conv_table1i[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1j[] = {
-/* from paper */
+   /* from paper */
    "トン",
-/* from dictionary */
+   /* from dictionary */
    "ｔ", "タル", "テラ", "トライ",
    NULL
 };
@@ -317,9 +339,9 @@ static const char *njd_set_digit_rule_conv_table1j[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class1k[] = {
-/* from paper */
+   /* from paper */
    "房" /* ふさ */ , "柱", "％", "ポンド",
-/* from dictionary */
+   /* from dictionary */
    "ｐａ", "ｐｐｍ", "パーセント", "パーミル", "パスカル", "パック", "パット", "ピーピーエム",
    "ピコ", "ページ", "頁", "ペア", "ペセタ", "ペソ", "ペニー", "ペニヒ", "ペンス", "ポイント",
    "振り", "針", "袋", "張り", "平米", "平方キロ", "平方キロメートル", "平方センチメートル",
@@ -333,9 +355,9 @@ static const char *njd_set_digit_rule_conv_table1k[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class2b[] = {
-/* from paper */
+   /* from paper */
    "分", "版", "敗", "発", "拍", "鉢",
-/* from dictionary */
+   /* from dictionary */
    "波", "派", "泊", "犯", "班", "品", "分間", "分目", "片", "篇", "編", "辺", "遍", "歩", "報",
    "方",
    NULL
@@ -356,9 +378,9 @@ static const char *njd_set_digit_rule_conv_table2b[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class2c[] = {
-/* from paper */
+   /* from paper */
    "本", "匹", "票", "俵", "箱",
-/* from dictionary */
+   /* from dictionary */
    "本立て", "杯", "針", "柱",
    NULL
 };
@@ -395,9 +417,9 @@ static const char *njd_set_digit_rule_conv_table2d[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class2e[] = {
-/* from paper */
+   /* from paper */
    "軒", "石", "足", "尺",
-/* from dictionary */
+   /* from dictionary */
    "かけ", "重ね", "件", "勺",
    NULL
 };
@@ -410,7 +432,7 @@ static const char *njd_set_digit_rule_conv_table2e[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class2f[] = {
-/* from paper */
+   /* from paper */
    "階",
    NULL
 };
@@ -454,9 +476,9 @@ static const char *njd_set_digit_rule_semivoiced_sound_symbol_list[] = {
 };
 
 static const char *njd_set_digit_rule_numerative_class3[] = {
-/* from paper */
+   /* from paper */
    "棟", "ムネ",
-/* from dictionary */
+   /* from dictionary */
    "かけ", "カケ",
    "くだり", "クダリ",
    "けた", "ケタ",
