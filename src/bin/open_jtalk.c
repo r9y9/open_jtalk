@@ -83,14 +83,18 @@ typedef struct _OpenJTalk {
    HTS_Engine engine;
 } OpenJTalk;
 
-void OpenJTalk_initialize(OpenJTalk * open_jtalk, int sampling_rate, int fperiod, double alpha,
-                          int stage, double beta, int audio_buff_size, double uv_threshold,
-                          HTS_Boolean use_log_gain, double gv_weight_mcp, double gv_weight_lf0)
+void OpenJTalk_initialize(OpenJTalk * open_jtalk, HTS_Boolean use_lpf, int sampling_rate,
+                          int fperiod, double alpha, int stage, double beta, int audio_buff_size,
+                          double uv_threshold, HTS_Boolean use_log_gain, double gv_weight_mgc,
+                          double gv_weight_lf0, double gv_weight_lpf)
 {
    Mecab_initialize(&open_jtalk->mecab);
    NJD_initialize(&open_jtalk->njd);
    JPCommon_initialize(&open_jtalk->jpcommon);
-   HTS_Engine_initialize(&open_jtalk->engine, 2);
+   if (use_lpf)
+      HTS_Engine_initialize(&open_jtalk->engine, 3);
+   else
+      HTS_Engine_initialize(&open_jtalk->engine, 2);
    HTS_Engine_set_sampling_rate(&open_jtalk->engine, sampling_rate);
    HTS_Engine_set_fperiod(&open_jtalk->engine, fperiod);
    HTS_Engine_set_alpha(&open_jtalk->engine, alpha);
@@ -99,22 +103,28 @@ void OpenJTalk_initialize(OpenJTalk * open_jtalk, int sampling_rate, int fperiod
    HTS_Engine_set_beta(&open_jtalk->engine, beta);
    HTS_Engine_set_audio_buff_size(&open_jtalk->engine, audio_buff_size);
    HTS_Engine_set_msd_threshold(&open_jtalk->engine, 1, uv_threshold);
-   HTS_Engine_set_gv_weight(&open_jtalk->engine, 0, gv_weight_mcp);
+   HTS_Engine_set_gv_weight(&open_jtalk->engine, 0, gv_weight_mgc);
    HTS_Engine_set_gv_weight(&open_jtalk->engine, 1, gv_weight_lf0);
+   if (use_lpf)
+      HTS_Engine_set_gv_weight(&open_jtalk->engine, 2, gv_weight_lpf);
 }
 
 void OpenJTalk_load(OpenJTalk * open_jtalk, char *dn_mecab, char *fn_ms_dur, char *fn_ts_dur,
-                    char *fn_ms_mcp, char *fn_ts_mcp, char **fn_ws_mcp, int num_ws_mcp,
+                    char *fn_ms_mgc, char *fn_ts_mgc, char **fn_ws_mgc, int num_ws_mgc,
                     char *fn_ms_lf0, char *fn_ts_lf0, char **fn_ws_lf0, int num_ws_lf0,
+                    char *fn_ms_lpf, char *fn_ts_lpf, char **fn_ws_lpf, int num_ws_lpf,
                     char *fn_ms_gvm, char *fn_ts_gvm, char *fn_ms_gvl, char *fn_ts_gvl,
-                    char *fn_gv_switch)
+                    char *fn_ms_gvf, char *fn_ts_gvf, char *fn_gv_switch)
 {
    Mecab_load(&open_jtalk->mecab, dn_mecab);
    HTS_Engine_load_duration_from_fn(&open_jtalk->engine, &fn_ms_dur, &fn_ts_dur, 1);
-   HTS_Engine_load_parameter_from_fn(&open_jtalk->engine, &fn_ms_mcp, &fn_ts_mcp,
-                                     fn_ws_mcp, 0, FALSE, num_ws_mcp, 1);
-   HTS_Engine_load_parameter_from_fn(&open_jtalk->engine, &fn_ms_lf0, &fn_ts_lf0,
-                                     fn_ws_lf0, 1, TRUE, num_ws_lf0, 1);
+   HTS_Engine_load_parameter_from_fn(&open_jtalk->engine, &fn_ms_mgc, &fn_ts_mgc, fn_ws_mgc, 0,
+                                     FALSE, num_ws_mgc, 1);
+   HTS_Engine_load_parameter_from_fn(&open_jtalk->engine, &fn_ms_lf0, &fn_ts_lf0, fn_ws_lf0, 1,
+                                     TRUE, num_ws_lf0, 1);
+   if (HTS_Engine_get_nstream(&open_jtalk->engine) == 3)
+      HTS_Engine_load_parameter_from_fn(&open_jtalk->engine, &fn_ms_lpf, &fn_ts_lpf, fn_ws_lpf, 2,
+                                        FALSE, num_ws_lpf, 1);
    if (fn_ms_gvm != NULL) {
       if (fn_ts_gvm != NULL)
          HTS_Engine_load_gv_from_fn(&open_jtalk->engine, &fn_ms_gvm, &fn_ts_gvm, 0, 1);
@@ -126,6 +136,12 @@ void OpenJTalk_load(OpenJTalk * open_jtalk, char *dn_mecab, char *fn_ms_dur, cha
          HTS_Engine_load_gv_from_fn(&open_jtalk->engine, &fn_ms_gvl, &fn_ts_gvl, 1, 1);
       else
          HTS_Engine_load_gv_from_fn(&open_jtalk->engine, &fn_ms_gvl, NULL, 1, 1);
+   }
+   if (HTS_Engine_get_nstream(&open_jtalk->engine) == 3 && fn_ms_gvf != NULL) {
+      if (fn_ts_gvf != NULL)
+         HTS_Engine_load_gv_from_fn(&open_jtalk->engine, &fn_ms_gvf, &fn_ts_gvf, 2, 1);
+      else
+         HTS_Engine_load_gv_from_fn(&open_jtalk->engine, &fn_ms_gvf, NULL, 2, 1);
    }
    if (fn_gv_switch != NULL)
       HTS_Engine_load_gv_switch_from_fn(&open_jtalk->engine, fn_gv_switch);
@@ -200,7 +216,7 @@ void Usage()
    fprintf(stderr, "Copyright (C) 2009  Nara Institute of Science and Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    fprintf(stderr, "\n");
-   fprintf(stderr, "open_jtalk - An HMM-based text to speech system\n");
+   fprintf(stderr, "open_jtalk - A Japanese text-to-speech synthesis system\n");
    fprintf(stderr, "\n");
    fprintf(stderr, "  usage:\n");
    fprintf(stderr, "       open_jtalk [ options ] [ infile ] \n");
@@ -211,19 +227,25 @@ void Usage()
    fprintf(stderr,
            "    -td tree       : decision trees file for state duration                  [  N/A]\n");
    fprintf(stderr,
+           "    -tm tree       : decision trees file for spectrum                        [  N/A]\n");
+   fprintf(stderr,
            "    -tf tree       : decision trees file for Log F0                          [  N/A]\n");
    fprintf(stderr,
-           "    -tm tree       : decision trees file for spectrum                        [  N/A]\n");
+           "    -tl tree       : decision trees file for low-pass filter                 [  N/A]\n");
    fprintf(stderr,
            "    -md pdf        : model file for state duration                           [  N/A]\n");
    fprintf(stderr,
+           "    -mm pdf        : model file for spectrum                                 [  N/A]\n");
+   fprintf(stderr,
            "    -mf pdf        : model file for Log F0                                   [  N/A]\n");
    fprintf(stderr,
-           "    -mm pdf        : model file for spectrum                                 [  N/A]\n");
+           "    -ml pdf        : model file for low-pass filter                          [  N/A]\n");
+   fprintf(stderr,
+           "    -dm win        : window files for calculation delta of spectrum          [  N/A]\n");
    fprintf(stderr,
            "    -df win        : window files for calculation delta of Log F0            [  N/A]\n");
    fprintf(stderr,
-           "    -dm win        : window files for calculation delta of spectrum          [  N/A]\n");
+           "    -dl win        : window files for calculation delta of low-pass filter   [  N/A]\n");
    fprintf(stderr,
            "    -ow s          : filename of output wav audio (generated speech)         [  N/A]\n");
    fprintf(stderr,
@@ -243,17 +265,23 @@ void Usage()
    fprintf(stderr,
            "    -u  f          : voiced/unvoiced threshold                               [  0.5][ 0.0--1.0]\n");
    fprintf(stderr,
-           "    -ef tree       : decision tree file for GV of Log F0                     [  N/A]\n");
-   fprintf(stderr,
            "    -em tree       : decision tree file for GV of spectrum                   [  N/A]\n");
    fprintf(stderr,
-           "    -cf pdf        : filename of GV for Log F0                               [  N/A]\n");
+           "    -ef tree       : decision tree file for GV of Log F0                     [  N/A]\n");
+   fprintf(stderr,
+           "    -el tree       : decision tree file for GV of low-pass filter            [  N/A]\n");
    fprintf(stderr,
            "    -cm pdf        : filename of GV for spectrum                             [  N/A]\n");
    fprintf(stderr,
-           "    -jf f          : weight of GV for Log F0                                 [  0.7][ 0.0--2.0]\n");
+           "    -cf pdf        : filename of GV for Log F0                               [  N/A]\n");
+   fprintf(stderr,
+           "    -cl pdf        : filename of GV for low-pass filter                      [  N/A]\n");
    fprintf(stderr,
            "    -jm f          : weight of GV for spectrum                               [  1.0][ 0.0--2.0]\n");
+   fprintf(stderr,
+           "    -jf f          : weight of GV for Log F0                                 [  1.0][ 0.0--2.0]\n");
+   fprintf(stderr,
+           "    -jl f          : weight of GV for low-pass filter                        [  1.0][ 0.0--2.0]\n");
    fprintf(stderr,
            "    -k  tree       : use GV switch                                           [  N/A]\n");
    fprintf(stderr,
@@ -263,8 +291,8 @@ void Usage()
            "    text file                                                                [stdin]\n");
    fprintf(stderr, "  note:\n");
    fprintf(stderr, "    option '-d' may be repeated to use multiple delta parameters.\n");
-   fprintf(stderr, "    generated spectrum and log F0 sequences are saved in natural\n");
-   fprintf(stderr, "    endian, binary (float) format.\n");
+   fprintf(stderr, "    generated spectrum, log F0, and low-pass filter coefficient\n");
+   fprintf(stderr, "    sequences are saved in natural endian, binary (float) format.\n");
    fprintf(stderr, "\n");
 
    exit(0);
@@ -300,27 +328,32 @@ int main(int argc, char **argv)
    char *dn_mecab = NULL;
 
    /* file names of models */
-   char *fn_ms_lf0 = NULL;
-   char *fn_ms_mcp = NULL;
    char *fn_ms_dur = NULL;
+   char *fn_ms_mgc = NULL;
+   char *fn_ms_lf0 = NULL;
+   char *fn_ms_lpf = NULL;
 
    /* file names of trees */
-   char *fn_ts_lf0 = NULL;
-   char *fn_ts_mcp = NULL;
    char *fn_ts_dur = NULL;
+   char *fn_ts_mgc = NULL;
+   char *fn_ts_lf0 = NULL;
+   char *fn_ts_lpf = NULL;
 
    /* file names of windows */
+   char **fn_ws_mgc;
    char **fn_ws_lf0;
-   char **fn_ws_mcp;
-   int num_ws_lf0 = 0, num_ws_mcp = 0;
+   char **fn_ws_lpf;
+   int num_ws_mgc = 0, num_ws_lf0 = 0, num_ws_lpf = 0;
 
    /* file names of global variance */
-   char *fn_ms_gvl = NULL;
    char *fn_ms_gvm = NULL;
+   char *fn_ms_gvl = NULL;
+   char *fn_ms_gvf = NULL;
 
    /* file names of global variance trees */
-   char *fn_ts_gvl = NULL;
    char *fn_ts_gvm = NULL;
+   char *fn_ts_gvl = NULL;
+   char *fn_ts_gvf = NULL;
 
    /* file names of global variance switch */
    char *fn_gv_switch = NULL;
@@ -333,18 +366,22 @@ int main(int argc, char **argv)
    double beta = 0.0;
    int audio_buff_size = 1600;
    double uv_threshold = 0.5;
-   double gv_weight_lf0 = 0.7;
-   double gv_weight_mcp = 1.0;
+   double gv_weight_mgc = 1.0;
+   double gv_weight_lf0 = 1.0;
+   double gv_weight_lpf = 1.0;
    HTS_Boolean use_log_gain = FALSE;
+   HTS_Boolean use_lpf = FALSE;
 
    /* parse command line */
    if (argc == 1)
       Usage();
 
+   /* delta window handler for mel-cepstrum */
+   fn_ws_mgc = (char **) calloc(argc, sizeof(char *));
    /* delta window handler for log f0 */
    fn_ws_lf0 = (char **) calloc(argc, sizeof(char *));
-   /* delta window handler for mel-cepstrum */
-   fn_ws_mcp = (char **) calloc(argc, sizeof(char *));
+   /* delta window handler for low-pass filter */
+   fn_ws_lpf = (char **) calloc(argc, sizeof(char *));
 
    /* read command */
    while (--argc) {
@@ -356,15 +393,18 @@ int main(int argc, char **argv)
             break;
          case 't':
             switch (*(*argv + 2)) {
+            case 'd':
+               fn_ts_dur = *(++argv);
+               break;
+            case 'm':
+               fn_ts_mgc = *(++argv);
+               break;
             case 'f':
             case 'p':
                fn_ts_lf0 = *(++argv);
                break;
-            case 'm':
-               fn_ts_mcp = *(++argv);
-               break;
-            case 'd':
-               fn_ts_dur = *(++argv);
+            case 'l':
+               fn_ts_lpf = *(++argv);
                break;
             default:
                fprintf(stderr,
@@ -375,15 +415,18 @@ int main(int argc, char **argv)
             break;
          case 'm':
             switch (*(*argv + 2)) {
+            case 'd':
+               fn_ms_dur = *(++argv);
+               break;
+            case 'm':
+               fn_ms_mgc = *(++argv);
+               break;
             case 'f':
             case 'p':
                fn_ms_lf0 = *(++argv);
                break;
-            case 'm':
-               fn_ms_mcp = *(++argv);
-               break;
-            case 'd':
-               fn_ms_dur = *(++argv);
+            case 'l':
+               fn_ms_lpf = *(++argv);
                break;
             default:
                fprintf(stderr,
@@ -394,14 +437,15 @@ int main(int argc, char **argv)
             break;
          case 'd':
             switch (*(*argv + 2)) {
+            case 'm':
+               fn_ws_mgc[num_ws_mgc++] = *(++argv);
+               break;
             case 'f':
             case 'p':
-               fn_ws_lf0[num_ws_lf0] = *(++argv);
-               num_ws_lf0++;
+               fn_ws_lf0[num_ws_lf0++] = *(++argv);
                break;
-            case 'm':
-               fn_ws_mcp[num_ws_mcp] = *(++argv);
-               num_ws_mcp++;
+            case 'l':
+               fn_ws_lpf[num_ws_lpf++] = *(++argv);
                break;
             default:
                fprintf(stderr,
@@ -457,12 +501,15 @@ int main(int argc, char **argv)
             break;
          case 'e':
             switch (*(*argv + 2)) {
+            case 'm':
+               fn_ts_gvm = *(++argv);
+               break;
             case 'f':
             case 'p':
                fn_ts_gvl = *(++argv);
                break;
-            case 'm':
-               fn_ts_gvm = *(++argv);
+            case 'l':
+               fn_ts_gvf = *(++argv);
                break;
             default:
                fprintf(stderr,
@@ -473,12 +520,15 @@ int main(int argc, char **argv)
             break;
          case 'c':
             switch (*(*argv + 2)) {
+            case 'm':
+               fn_ms_gvm = *(++argv);
+               break;
             case 'f':
             case 'p':
                fn_ms_gvl = *(++argv);
                break;
-            case 'm':
-               fn_ms_gvm = *(++argv);
+            case 'l':
+               fn_ms_gvf = *(++argv);
                break;
             default:
                fprintf(stderr,
@@ -489,12 +539,15 @@ int main(int argc, char **argv)
             break;
          case 'j':
             switch (*(*argv + 2)) {
+            case 'm':
+               gv_weight_mgc = atof(*(++argv));
+               break;
             case 'f':
             case 'p':
                gv_weight_lf0 = atof(*(++argv));
                break;
-            case 'm':
-               gv_weight_mcp = atof(*(++argv));
+            case 'l':
+               gv_weight_lpf = atof(*(++argv));
                break;
             default:
                fprintf(stderr,
@@ -526,20 +579,24 @@ int main(int argc, char **argv)
       exit(1);
    }
    /* number of models,trees check */
-   if (fn_ms_dur == NULL || fn_ms_mcp == NULL || fn_ms_lf0 == NULL ||
-       fn_ts_dur == NULL || fn_ts_mcp == NULL || fn_ts_lf0 == NULL ||
-       fn_ws_mcp == NULL || fn_ws_lf0 == NULL) {
+   if (fn_ms_dur == NULL || fn_ms_mgc == NULL || fn_ms_lf0 == NULL ||
+       fn_ts_dur == NULL || fn_ts_mgc == NULL || fn_ts_lf0 == NULL ||
+       num_ws_mgc <= 0 || num_ws_lf0 <= 0) {
       fprintf(stderr,
               "ERROR: main() in open_jtalk.c: Specify models (trees) for each parameter.\n");
       exit(1);
    }
+   if (fn_ms_lpf != NULL && fn_ts_lpf != NULL && num_ws_lpf > 0)
+      use_lpf = TRUE;
 
    /* initialize and load */
-   OpenJTalk_initialize(&open_jtalk, sampling_rate, fperiod, alpha, stage, beta, audio_buff_size,
-                        uv_threshold, use_log_gain, gv_weight_mcp, gv_weight_lf0);
-   OpenJTalk_load(&open_jtalk, dn_mecab, fn_ms_dur, fn_ts_dur, fn_ms_mcp, fn_ts_mcp, fn_ws_mcp,
-                  num_ws_mcp, fn_ms_lf0, fn_ts_lf0, fn_ws_lf0, num_ws_lf0, fn_ms_gvm, fn_ts_gvm,
-                  fn_ms_gvl, fn_ts_gvl, fn_gv_switch);
+   OpenJTalk_initialize(&open_jtalk, use_lpf, sampling_rate, fperiod, alpha, stage, beta,
+                        audio_buff_size, uv_threshold, use_log_gain, gv_weight_mgc,
+                        gv_weight_lf0, gv_weight_lpf);
+   OpenJTalk_load(&open_jtalk, dn_mecab, fn_ms_dur, fn_ts_dur, fn_ms_mgc, fn_ts_mgc,
+                  fn_ws_mgc, num_ws_mgc, fn_ms_lf0, fn_ts_lf0, fn_ws_lf0, num_ws_lf0,
+                  fn_ms_lpf, fn_ts_lpf, fn_ws_lpf, num_ws_lpf, fn_ms_gvm, fn_ts_gvm,
+                  fn_ms_gvl, fn_ts_gvl, fn_ms_gvf, fn_ts_gvf, fn_gv_switch);
 
    /* synthesis */
    fgets(buff, MAXBUFLEN - 1, txtfp);
@@ -547,8 +604,9 @@ int main(int argc, char **argv)
 
    /* free */
    OpenJTalk_clear(&open_jtalk);
-   free(fn_ws_mcp);
+   free(fn_ws_mgc);
    free(fn_ws_lf0);
+   free(fn_ws_lpf);
    if (txtfn != NULL)
       fclose(txtfp);
    if (wavfp != NULL)
@@ -560,5 +618,4 @@ int main(int argc, char **argv)
 }
 
 OPEN_JTALK_C_END;
-
 #endif                          /* !OPEN_JTALK_C */
