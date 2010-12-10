@@ -1,3 +1,23 @@
+2010-12-10 18:58  uratec
+
+	* njd_set_accent_type/njd_set_accent_type.c,
+	  njd_set_accent_type/njd_set_accent_type_rule_euc_jp.h,
+	  njd_set_accent_type/njd_set_accent_type_rule_shift_jis.h,
+	  njd_set_accent_type/njd_set_accent_type_rule_utf_8.h,
+	  njd_set_digit/njd_set_digit.c,
+	  njd_set_digit/njd_set_digit_rule_euc_jp.h,
+	  njd_set_digit/njd_set_digit_rule_shift_jis.h,
+	  njd_set_digit/njd_set_digit_rule_utf_8.h: Re-make pron & accent
+	  estimation for digit.
+
+2010-12-10 18:57  uratec
+
+	* bin/open_jtalk.c: Add low-pass filter stream.
+
+2010-11-19 16:14  uratec
+
+	* ChangeLog, mecab/src/mecab.cpp: Remove warning for gcc in Cygwin.
+
 2010-10-15 21:01  uratec
 
 	* ChangeLog, mecab/src/dictionary_compiler.cpp,

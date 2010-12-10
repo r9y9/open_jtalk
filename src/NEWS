@@ -1,7 +1,10 @@
 Version 1.02:
  * add makefiles for nmake of VC.
  * support C++ compiler.
+ * add low-pass filter stream.
+ * re-make pronunciation and accent estimation for digit.
  * add loading function for NJD.
+ * modify dictionary.
  * bug fixes.
 
 Version 1.01:
