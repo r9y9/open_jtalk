@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------- */
-/*           The HMM-Based Speech Synthesis System (HTS)             */
-/*           Open JTalk developed by HTS Working Group               */
+/*           The Japanese TTS System "Open JTalk"                    */
+/*           developed by HTS Working Group                          */
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
@@ -199,7 +199,7 @@ void OpenJTalk_clear(OpenJTalk * open_jtalk)
 void Usage()
 {
    fprintf(stderr, "\n");
-   fprintf(stderr, "The HMM-based speech synthesis system (HTS)\n");
+   fprintf(stderr, "The Japanese TTS System \"Open JTalk\"\n");
    fprintf(stderr, "Open JTalk version 1.02 (http://open-jtalk.sourceforge.net/)\n");
    fprintf(stderr, "Copyright (C) 2008-2010  Nagoya Institute of Technology\n");
    fprintf(stderr, "All rights reserved.\n");
@@ -216,7 +216,7 @@ void Usage()
    fprintf(stderr, "Copyright (C) 2009  Nara Institute of Science and Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    fprintf(stderr, "\n");
-   fprintf(stderr, "open_jtalk - A Japanese text-to-speech synthesis system\n");
+   fprintf(stderr, "open_jtalk - The Japanese TTS system \"Open JTalk\"\n");
    fprintf(stderr, "\n");
    fprintf(stderr, "  usage:\n");
    fprintf(stderr, "       open_jtalk [ options ] [ infile ] \n");

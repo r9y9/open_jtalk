@@ -6,8 +6,8 @@
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 
 /* ----------------------------------------------------------------- */
-/*           The HMM-Based Speech Synthesis System (HTS)             */
-/*           Open JTalk developed by HTS Working Group               */
+/*           The Japanese TTS System "Open JTalk"                    */
+/*           developed by HTS Working Group                          */
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
@@ -287,4 +287,3 @@ const mecab_dictionary_info_t *mecab_dictionary_info(mecab_t *c) {
   MECAB_CHECK_FIRST_ARG(c, t);
   return(const mecab_dictionary_info_t *)(t->dictionary_info());
 }
-
