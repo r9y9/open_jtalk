@@ -1,3 +1,8 @@
+2010-12-13 12:29  uratec
+
+	* ChangeLog, njd_set_accent_type/njd_set_accent_type.c: Fix bugs
+	  for NULL string in njd_set_accent_type function.
+
 2010-12-12 21:52  uratec
 
 	* AUTHORS, COPYING, ChangeLog, README, bin/open_jtalk.c,
