@@ -1,9 +1,9 @@
 ===============================================================================
-                The Japanese TTS System Open JTalk version 1.02
+               The Japanese TTS System "Open JTalk" version 1.02
                            release December 25, 2010
 
 
-The Open JTalk is Japanese TTS software. It has been being developed by HTS
+The Open JTalk is a Japanese TTS System. It has been being developed by HTS
 working group (see "Who we are" below) and some graduate students in Nagoya
 Institute of Technology (see "AUTHORS" in the same directory).
 
@@ -80,7 +80,7 @@ directory for details.
 See "INSTALL" in the same directory for details.
 
 *******************************************************************************
-                                  Acknowledgements
+                               Acknowledgements
 *******************************************************************************
 
 Keiichi Tokuda
