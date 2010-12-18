@@ -211,7 +211,7 @@ void Usage()
    fprintf(stderr, "              2004-2008  Nippon Telegraph and Telephone Corporation\n");
    fprintf(stderr, "All rights reserved.\n");
    fprintf(stderr, "\n");
-   fprintf(stderr, "NAIST Japanese dictionary\n");
+   fprintf(stderr, "NAIST Japanese Dictionary\n");
    fprintf(stderr, "mecab-naist-jdic version 0.6.1-20090630 (http://naist-jdic.sourceforge.jp/)\n");
    fprintf(stderr, "Copyright (C) 2009  Nara Institute of Science and Technology\n");
    fprintf(stderr, "All rights reserved.\n");
