@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -80,7 +80,7 @@ static int strtopcmp(const char *str, const char *pattern)
    }
 }
 
-void text2mecab(char *output, char *input)
+void text2mecab(char *output, const char *input)
 {
    int i, j;
    const int length = strlen(input);

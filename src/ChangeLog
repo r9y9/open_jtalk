@@ -1,3 +1,8 @@
+2010-12-18 18:13  uratec
+
+	* ChangeLog, text2mecab/text2mecab_rule_shift_jis.h: change return
+	  code to CR+LF for text2mecab_rule_shift_jis.h
+
 2010-12-18 17:01  uratec
 
 	* ChangeLog, bin/open_jtalk.c: Modify help message.

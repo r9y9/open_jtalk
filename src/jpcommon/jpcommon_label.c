@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -652,8 +652,11 @@ void JPCommonLabel_make(JPCommonLabel * label)
          sprintf(label->feature[i], "%s/A:xx+xx+xx", label->feature[i]);
       else {
          tmp1 = index_mora_in_accent_phrase(p->up);
-         sprintf(label->feature[i], "%s/A:%d+%d+%d", label->feature[i],
-                 tmp1 - p->up->up->up->accent, tmp1, count_mora_in_accent_phrase(p->up) - tmp1 + 1);
+         tmp2 =
+             p->up->up->up->accent ==
+             0 ? count_mora_in_accent_phrase(p->up) : p->up->up->up->accent;
+         sprintf(label->feature[i], "%s/A:%d+%d+%d", label->feature[i], tmp1 - tmp2, tmp1,
+                 count_mora_in_accent_phrase(p->up) - tmp1 + 1);
       }
       /* for B: */
       if (short_pause_flag == 1)
