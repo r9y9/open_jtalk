@@ -1,3 +1,8 @@
+2011-03-07 08:26  uratec
+
+	* ChangeLog, jpcommon/jpcommon_label.c: Fix a serious bug in accent
+	  estimation.
+
 2011-03-07 08:25  uratec
 
 	* mecab-naist-jdic/naist-jdic.csv: Update dictionary.
