@@ -208,6 +208,10 @@ void njd_set_accent_phrase(NJD * njd)
          if (strcmp(NJDNode_get_pos(node), NJD_SET_ACCENT_PHRASE_KIGOU) == 0 ||
              strcmp(NJDNode_get_pos(node->prev), NJD_SET_ACCENT_PHRASE_KIGOU) == 0)
             NJDNode_set_chain_flag(node, 0);
+
+         /* Rule 14 */
+         if (strcmp(NJDNode_get_pos(node), NJD_SET_ACCENT_PHRASE_SETTOUSHI) == 0)
+            NJDNode_set_chain_flag(node, 0);
       }
    }
 }
