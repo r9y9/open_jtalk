@@ -1,3 +1,8 @@
+Version 1.03:
+ * fix serious bugs in accent estimation and label maker.
+ * add new rule for accent phrasing.
+ * modify dictionary.
+
 Version 1.02:
  * add makefiles for nmake of VC.
  * support C++ compiler.
