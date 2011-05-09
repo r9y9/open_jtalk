@@ -149,11 +149,10 @@ void OpenJTalk_load(OpenJTalk * open_jtalk, char *dn_mecab, char *fn_ms_dur, cha
 
 void OpenJTalk_synthesis(OpenJTalk * open_jtalk, char *txt, FILE * wavfp, FILE * logfp)
 {
-   char *buff = (char *) calloc(2 * strlen(txt) + 1, sizeof(char));
+   char buff[MAXBUFLEN];
 
    text2mecab(buff, txt);
    Mecab_analysis(&open_jtalk->mecab, buff);
-   free(buff);
    mecab2njd(&open_jtalk->njd, Mecab_get_feature(&open_jtalk->mecab),
              Mecab_get_size(&open_jtalk->mecab));
    njd_set_pronunciation(&open_jtalk->njd);

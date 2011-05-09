@@ -1,3 +1,11 @@
+2011-05-09 17:18  uratec
+
+	* ChangeLog, bin/open_jtalk.c, jpcommon/jpcommon_label.c,
+	  njd_set_accent_type/njd_set_accent_type.c,
+	  njd_set_digit/njd_set_digit.c: Fix some bugs suggested by
+	  Shinsuke Irie: Fix segmentation fault by long vowel symbol or
+	  digit.
+
 2011-04-29 14:07  uratec
 
 	* ChangeLog, NEWS, README, configure.ac,
