@@ -88,6 +88,9 @@ static int get_digit(NJDNode * node, int convert_flag)
 {
    int i;
 
+   if (NJDNode_get_string(node) == NULL)
+      return -1;
+
    if (strcmp(NJDNode_get_pos_group1(node), NJD_SET_DIGIT_KAZU) == 0)
       for (i = 0; njd_set_digit_rule_numeral_list1[i] != NULL; i += 3)
          if (strcmp(njd_set_digit_rule_numeral_list1[i], NJDNode_get_string(node)) == 0) {
@@ -115,27 +118,30 @@ static int get_digit_sequence_score(NJDNode * start, NJDNode * end)
       if (strcmp(buff_pos_group1, NJD_SET_DIGIT_SUUSETSUZOKU) == 0)     /* prev pos_group1 */
          score += 2;
       else if (strcmp(buff_pos_group1, NJD_SET_DIGIT_KAZU) == 0) {
-         if (strcmp(buff_string, NJD_SET_DIGIT_TEN1) == 0
-             || strcmp(buff_string, NJD_SET_DIGIT_TEN2) == 0)
+         if (buff_string != NULL
+             && (strcmp(buff_string, NJD_SET_DIGIT_TEN1) == 0
+                 || strcmp(buff_string, NJD_SET_DIGIT_TEN2) == 0))
             score -= 3;
       }
       if (strcmp(buff_pos_group2, NJD_SET_DIGIT_JOSUUSHI) == 0) /* prev pos_group2 */
          score += 1;
-      if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN1) == 0)      /* prev string */
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN2) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN3) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO1) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO2) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_BANGOU) == 0)
-         score -= 2;
+      if (buff_string != NULL) {
+         if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN1) == 0)   /* prev string */
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN2) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN3) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO1) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO2) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_BANGOU) == 0)
+            score -= 2;
+      }
       if (start->prev->prev) {
          buff_string = NJDNode_get_string(start->prev->prev);   /* prev prev string */
-         if (strcmp(buff_string, NJD_SET_DIGIT_BANGOU) == 0)
+         if (buff_string != NULL && strcmp(buff_string, NJD_SET_DIGIT_BANGOU) == 0)
             score -= 2;
       }
    }
@@ -144,22 +150,24 @@ static int get_digit_sequence_score(NJDNode * start, NJDNode * end)
       buff_string = NJDNode_get_string(end->next);      /* next string */
       if (strcmp(buff_pos_group2, NJD_SET_DIGIT_JOSUUSHI) == 0)
          score += 2;
-      if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN1) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN2) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN3) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO1) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO2) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_BANGOU) == 0)
-         score -= 2;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_TEN1) == 0)
-         score += 4;
-      else if (strcmp(buff_string, NJD_SET_DIGIT_TEN2) == 0)
-         score += 4;
+      if (buff_string != NULL) {
+         if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN1) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN2) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_HAIHUN3) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO1) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_KAKKO2) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_BANGOU) == 0)
+            score -= 2;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_TEN1) == 0)
+            score += 4;
+         else if (strcmp(buff_string, NJD_SET_DIGIT_TEN2) == 0)
+            score += 4;
+      }
    }
 
    return score;
@@ -236,6 +244,8 @@ static int search_numerative_class(const char *list[], NJDNode * node)
    int i;
    char *str = NJDNode_get_string(node);
 
+   if (str == NULL)
+      return 0;
    for (i = 0; list[i] != NULL; i++) {
       if (strcmp(list[i], str) == 0)
          return 1;
@@ -248,6 +258,8 @@ static void convert_digit_pron(const char *list[], NJDNode * node)
    int i;
    char *str = NJDNode_get_string(node);
 
+   if (str == NULL)
+      return;
    for (i = 0; list[i] != NULL; i += 4) {
       if (strcmp(list[i], str) == 0) {
          NJDNode_set_pron(node, (char *) list[i + 1]);
@@ -265,6 +277,8 @@ static void convert_numerative_pron(const char *list[], NJDNode * node1, NJDNode
    char *str = NJDNode_get_string(node1);
    char buff[MAXBUFLEN];
 
+   if (str == NULL)
+      return;
    for (i = 0; list[i] != NULL; i += 2) {
       if (strcmp(list[i], str) == 0) {
          type = atoi(list[i + 1]);
@@ -466,6 +480,7 @@ void njd_set_digit(NJD * njd)
 
    for (node = njd->head->next; node != NULL; node = node->next) {
       if (node->next != NULL &&
+          NJDNode_get_string(node->next) != NULL &&
           strcmp(NJDNode_get_pos_group1(node), NJD_SET_DIGIT_KAZU) == 0 &&
           strcmp(NJDNode_get_pos_group1(node->prev), NJD_SET_DIGIT_KAZU) != 0 &&
           strcmp(NJDNode_get_pos_group2(node->next), NJD_SET_DIGIT_JOSUUSHI) == 0) {
@@ -475,7 +490,8 @@ void njd_set_digit(NJD * njd)
                 && strcmp(NJDNode_get_read(node->next),
                           njd_set_digit_rule_numerative_class3[i + 1]) == 0) {
                for (j = 0; njd_set_digit_rule_conv_table3[j] != NULL; j += 4) {
-                  if (strcmp(NJDNode_get_string(node), njd_set_digit_rule_conv_table3[j]) == 0) {
+                  if (NJDNode_get_string(node) != NULL &&
+                      strcmp(NJDNode_get_string(node), njd_set_digit_rule_conv_table3[j]) == 0) {
                      NJDNode_set_read(node, (char *) njd_set_digit_rule_conv_table3[j + 1]);
                      NJDNode_set_pron(node, (char *) njd_set_digit_rule_conv_table3[j + 1]);
                      NJDNode_set_acc(node, atoi(njd_set_digit_rule_conv_table3[j + 2]));
@@ -489,7 +505,8 @@ void njd_set_digit(NJD * njd)
          /* person */
          if (strcmp(NJDNode_get_string(node->next), NJD_SET_DIGIT_NIN) == 0) {
             for (i = 0; njd_set_digit_rule_conv_table4[i] != NULL; i += 2) {
-               if (strcmp(NJDNode_get_string(node), njd_set_digit_rule_conv_table4[i]) == 0) {
+               if (NJDNode_get_string(node) != NULL
+                   && strcmp(NJDNode_get_string(node), njd_set_digit_rule_conv_table4[i]) == 0) {
                   NJDNode_load(node, (char *) njd_set_digit_rule_conv_table4[i + 1]);
                   NJDNode_set_pron(node->next, NULL);
                   break;
@@ -497,9 +514,11 @@ void njd_set_digit(NJD * njd)
             }
          }
          /* the day of month */
-         if (strcmp(NJDNode_get_string(node->next), NJD_SET_DIGIT_NICHI) == 0) {
-            if (strstr(NJDNode_get_string(node->prev), NJD_SET_DIGIT_GATSU) != NULL &&
-                strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_ONE) == 0) {
+         if (strcmp(NJDNode_get_string(node->next), NJD_SET_DIGIT_NICHI) == 0
+             && NJDNode_get_string(node) != NULL) {
+            if (NJDNode_get_string(node->prev) != NULL
+                && strstr(NJDNode_get_string(node->prev), NJD_SET_DIGIT_GATSU) != NULL
+                && strcmp(NJDNode_get_string(node), NJD_SET_DIGIT_ONE) == 0) {
                NJDNode_load(node, NJD_SET_DIGIT_TSUITACHI);
                NJDNode_set_pron(node->next, NULL);
             } else {

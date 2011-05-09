@@ -387,6 +387,29 @@ void JPCommonLabel_initialize(JPCommonLabel * label)
    label->phoneme_tail = NULL;
 }
 
+static void JPCommonLabel_insert_pause(JPCommonLabel * label)
+{
+   /* insert short pause */
+   if (label->short_pause_flag == 1) {
+      if (label->phoneme_tail != NULL) {
+         if (strcmp(label->phoneme_tail->phoneme, JPCOMMON_PHONEME_SHORT_PAUSE) == 0) {
+            fprintf(stderr,
+                    "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: Short pause should not be chained.\n");
+            return;
+         }
+         label->phoneme_tail->next =
+             (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
+         JPCommonLabelPhoneme_initialize(label->phoneme_tail->next, JPCOMMON_PHONEME_SHORT_PAUSE,
+                                         label->phoneme_tail, NULL, NULL);
+         label->phoneme_tail = label->phoneme_tail->next;
+      } else {
+         fprintf(stderr,
+                 "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: First mora should not be short pause.\n");
+      }
+      label->short_pause_flag = 0;
+   }
+}
+
 void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char *ctype, char *cform,
                              int acc, int chain_flag)
 {
@@ -416,32 +439,13 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
       return;
    }
 
-   /* insert short pause */
-   if (label->short_pause_flag == 1) {
-      if (label->phoneme_tail != NULL) {
-         if (strcmp(label->phoneme_tail->phoneme, JPCOMMON_PHONEME_SHORT_PAUSE) == 0) {
-            fprintf(stderr,
-                    "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: Short pause should not be chained.\n");
-            return;
-         }
-         label->phoneme_tail->next =
-             (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
-         JPCommonLabelPhoneme_initialize(label->phoneme_tail->next, JPCOMMON_PHONEME_SHORT_PAUSE,
-                                         label->phoneme_tail, NULL, NULL);
-         label->phoneme_tail = label->phoneme_tail->next;
-      } else {
-         fprintf(stderr,
-                 "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: First mora should not be short pause.\n");
-      }
-      label->short_pause_flag = 0;
-   }
-
    /* analysis pron */
    while (pron[0] != '\0') {
       find = strtopcmp(pron, JPCOMMON_MORA_LONG_VOWEL);
       if (find != -1) {
          /* for long vowel */
          if (label->phoneme_tail != NULL && is_first_word != 1) {
+            JPCommonLabel_insert_pause(label);
             label->phoneme_tail->next =
                 (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
             label->mora_tail->next = (JPCommonLabelMora *) calloc(1, sizeof(JPCommonLabelMora));
@@ -477,6 +481,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
             }
             if (find != -1) {
                if (label->phoneme_tail == NULL) {
+                  JPCommonLabel_insert_pause(label);
                   label->phoneme_tail =
                       (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
                   label->mora_tail = (JPCommonLabelMora *) calloc(1, sizeof(JPCommonLabelMora));
@@ -494,6 +499,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
                   is_first_word = 0;
                } else {
                   if (is_first_word == 1) {
+                     JPCommonLabel_insert_pause(label);
                      label->phoneme_tail->next =
                          (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
                      label->mora_tail->next =
@@ -515,6 +521,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
                      label->word_tail = label->word_tail->next;
                      is_first_word = 0;
                   } else {
+                     JPCommonLabel_insert_pause(label);
                      label->phoneme_tail->next =
                          (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
                      label->mora_tail->next =
@@ -532,6 +539,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
                   }
                }
                if (jpcommon_mora_list[i + 2] != NULL) {
+                  JPCommonLabel_insert_pause(label);
                   label->phoneme_tail->next =
                       (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
                   JPCommonLabelPhoneme_initialize(label->phoneme_tail->next,
