@@ -1,3 +1,7 @@
+Version 1.04:
+ * fix some bugs.
+ * modify dictionary.
+
 Version 1.03:
  * fix serious bugs in accent estimation and label maker.
  * add new rule for accent phrasing.

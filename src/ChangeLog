@@ -1,3 +1,12 @@
+2011-07-07 11:19  uratec
+
+	* mecab-naist-jdic/naist-jdic.csv: Modify dictionary.
+
+2011-05-09 22:38  uratec
+
+	* ChangeLog, bin/open_jtalk.c: Fix a bug suggested by Shinsuke
+	  Irie: small buffer size for UTF-8.
+
 2011-05-09 17:18  uratec
 
 	* ChangeLog, bin/open_jtalk.c, jpcommon/jpcommon_label.c,

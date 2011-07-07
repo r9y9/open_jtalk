@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(open_jtalk, 1.03, open-jtalk-users@lists.sourceforge.net)
+AC_INIT(open_jtalk, 1.04, open-jtalk-users@lists.sourceforge.net)
 AC_CONFIG_AUX_DIR([config])
 AC_COPYRIGHT(Copyright 2008-2011 Nagoya Institute of Technology)
-AM_INIT_AUTOMAKE(open_jtalk, 1.03, nostdinc no-installinfo no-installman)
+AM_INIT_AUTOMAKE(open_jtalk, 1.04, nostdinc no-installinfo no-installman)
 
 # Checks for C/C++ compiler
 AC_PROG_CC
