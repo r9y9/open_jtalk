@@ -1,3 +1,9 @@
+Version 1.05:
+ * modify pronunciation rule after a decimal point.
+ * modify accent type detection.
+ * add new moras and new words.
+ * fix some bugs.
+
 Version 1.04:
  * fix some bugs.
  * modify dictionary.

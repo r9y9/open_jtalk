@@ -1,3 +1,32 @@
+2011-12-20 15:05  uratec
+
+	* njd_set_digit/: njd_set_digit.c, njd_set_digit_rule_euc_jp.h,
+	  njd_set_digit_rule_shift_jis.h, njd_set_digit_rule_utf_8.h:
+	  Modify rule after a decimal point.
+
+2011-12-20 13:59  uratec
+
+	* njd_set_accent_type/njd_set_accent_type.c: Modify accent type
+	  detection.
+
+2011-12-20 13:49  uratec
+
+	* jpcommon/: jpcommon_rule_euc_jp.h, jpcommon_rule_shift_jis.h,
+	  jpcommon_rule_utf_8.h: Add new moras.
+
+2011-12-20 13:48  uratec
+
+	* jpcommon/jpcommon_label.c: Fix bugs in label generation.
+
+2011-12-20 13:46  uratec
+
+	* mecab-naist-jdic/naist-jdic.csv: add new words to dictionary
+
+2011-07-07 11:20  uratec
+
+	* ChangeLog, NEWS, README, configure.ac, bin/open_jtalk.c: update
+	  all documents.
+
 2011-07-07 11:19  uratec
 
 	* mecab-naist-jdic/naist-jdic.csv: Modify dictionary.
