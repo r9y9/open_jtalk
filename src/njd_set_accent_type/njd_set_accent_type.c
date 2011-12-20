@@ -95,25 +95,27 @@ static void get_rule(char *input_rule, char *prev_pos, char *rule, int *add_type
    char buff[MAXBUFLEN];
    char c = ' ';
 
-   while (c != '\0') {
-      c = get_token_from_string(input_rule, &index, buff);
-      if ((c == '%' && strstr(prev_pos, buff) != NULL) || c == '@' || c == '/' || c == '\0') {
-         /* find */
-         if (c == '%')
-            c = get_token_from_string(input_rule, &index, rule);
-         else
-            strcpy(rule, buff);
-         if (c == '@') {
-            c = get_token_from_string(input_rule, &index, buff);
-            (*add_type) = atoi(buff);
+   if (input_rule) {
+      while (c != '\0') {
+         c = get_token_from_string(input_rule, &index, buff);
+         if ((c == '%' && strstr(prev_pos, buff) != NULL) || c == '@' || c == '/' || c == '\0') {
+            /* find */
+            if (c == '%')
+               c = get_token_from_string(input_rule, &index, rule);
+            else
+               strcpy(rule, buff);
+            if (c == '@') {
+               c = get_token_from_string(input_rule, &index, buff);
+               (*add_type) = atoi(buff);
+            } else {
+               (*add_type) = 0;
+            }
+            return;
          } else {
-            (*add_type) = 0;
+            /* skip */
+            while (c == '%' || c == '@')
+               c = get_token_from_string(input_rule, &index, buff);
          }
-         return;
-      } else {
-         /* skip */
-         while (c == '%' || c == '@')
-            c = get_token_from_string(input_rule, &index, buff);
       }
    }
 
@@ -235,6 +237,7 @@ void njd_set_accent_type(NJD * njd)
                 (strcmp(NJDNode_get_string(node->prev), NJD_SET_ACCENT_TYPE_ICHI) == 0 ||
                  strcmp(NJDNode_get_string(node->prev), NJD_SET_ACCENT_TYPE_ROKU) == 0 ||
                  strcmp(NJDNode_get_string(node->prev), NJD_SET_ACCENT_TYPE_NANA) == 0 ||
+                 strcmp(NJDNode_get_string(node->prev), NJD_SET_ACCENT_TYPE_HACHI) == 0 ||
                  strcmp(NJDNode_get_string(node->prev), NJD_SET_ACCENT_TYPE_IKU) == 0)) {
                NJDNode_set_acc(node->prev, 2);
             } else {
