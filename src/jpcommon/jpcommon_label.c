@@ -394,7 +394,7 @@ static void JPCommonLabel_insert_pause(JPCommonLabel * label)
       if (label->phoneme_tail != NULL) {
          if (strcmp(label->phoneme_tail->phoneme, JPCOMMON_PHONEME_SHORT_PAUSE) == 0) {
             fprintf(stderr,
-                    "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: Short pause should not be chained.\n");
+                    "WARNING: JPCommonLabel_insert_word() in jpcommon_label.c: Short pause should not be chained.\n");
             return;
          }
          label->phoneme_tail->next =
@@ -404,7 +404,7 @@ static void JPCommonLabel_insert_pause(JPCommonLabel * label)
          label->phoneme_tail = label->phoneme_tail->next;
       } else {
          fprintf(stderr,
-                 "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: First mora should not be short pause.\n");
+                 "WARNING: JPCommonLabel_insert_word() in jpcommon_label.c: First mora should not be short pause.\n");
       }
       label->short_pause_flag = 0;
    }
@@ -444,7 +444,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
       find = strtopcmp(pron, JPCOMMON_MORA_LONG_VOWEL);
       if (find != -1) {
          /* for long vowel */
-         if (label->phoneme_tail != NULL && is_first_word != 1) {
+         if (label->phoneme_tail != NULL) {
             JPCommonLabel_insert_pause(label);
             label->phoneme_tail->next =
                 (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
@@ -724,7 +724,7 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          a = p->up->up->up;
       if (a == NULL)
-         sprintf(label->feature[i], "%s/F:xx_xx#xx_xx@xx", label->feature[i]);
+         sprintf(label->feature[i], "%s/F:xx_xx#xx_xx@xx_xx|xx_xx", label->feature[i]);
       else {
          tmp1 = index_accent_phrase_in_breath_group(a);
          tmp2 = index_mora_in_breath_group(a->head->head);
