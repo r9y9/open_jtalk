@@ -199,7 +199,7 @@ void Usage()
 {
    fprintf(stderr, "\n");
    fprintf(stderr, "The Japanese TTS System \"Open JTalk\"\n");
-   fprintf(stderr, "Open JTalk version 1.04 (http://open-jtalk.sourceforge.net/)\n");
+   fprintf(stderr, "Open JTalk version 1.05 (http://open-jtalk.sourceforge.net/)\n");
    fprintf(stderr, "Copyright (C) 2008-2011  Nagoya Institute of Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    HTS_show_copyright(stderr);
