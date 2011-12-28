@@ -444,7 +444,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
       find = strtopcmp(pron, JPCOMMON_MORA_LONG_VOWEL);
       if (find != -1) {
          /* for long vowel */
-         if (label->phoneme_tail != NULL) {
+         if (label->phoneme_tail != NULL && label->short_pause_flag == 0) {
             JPCommonLabel_insert_pause(label);
             label->phoneme_tail->next =
                 (JPCommonLabelPhoneme *) calloc(1, sizeof(JPCommonLabelPhoneme));
