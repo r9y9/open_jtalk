@@ -125,6 +125,17 @@ void njd_set_pronunciation(NJD * njd)
       }
    }
    NJD_remove_silent_node(njd);
+
+   for (node = njd->head; node != NULL; node = node->next) {
+      if (node->next != NULL
+          && strcmp(NJDNode_get_pron(node->next), NJD_SET_PRONUNCIATION_U) == 0
+          && strcmp(NJDNode_get_pos(node->next), NJD_SET_PRONUNCIATION_JODOUSHI) == 0
+          && (strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_DOUSHI)
+              || strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_JODOUSHI))
+          && NJDNode_get_mora_size(node) > 0) {
+         NJDNode_set_pron(node->next, NJD_SET_PRONUNCIATION_CHOUON);
+      }
+   }
 }
 
 NJD_SET_PRONUNCIATION_C_END;

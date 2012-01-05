@@ -513,6 +513,11 @@ static const char *njd_set_pronunciation_symbol_list[] = {
    NULL, NULL
 };
 
+#define NJD_SET_PRONUNCIATION_U        "ウ"
+#define NJD_SET_PRONUNCIATION_DOUSHI   "動詞"
+#define NJD_SET_PRONUNCIATION_JODOUSHI "助動詞"
+#define NJD_SET_PRONUNCIATION_CHOUON   "ー"
+
 NJD_SET_PRONUNCIATION_RULE_H_END;
 
 #endif                          /* !NJD_SET_PRONUNCIATION_RULE_H */

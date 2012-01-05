@@ -513,6 +513,11 @@ static const char *njd_set_pronunciation_symbol_list[] = {
    NULL, NULL
 };
 
+#define NJD_SET_PRONUNCIATION_U        "ÉE"
+#define NJD_SET_PRONUNCIATION_DOUSHI   "ìÆéå"
+#define NJD_SET_PRONUNCIATION_JODOUSHI "èïìÆéå"
+#define NJD_SET_PRONUNCIATION_CHOUON   "Å["
+
 NJD_SET_PRONUNCIATION_RULE_H_END;
 
 #endif                          /* !NJD_SET_PRONUNCIATION_RULE_H */
