@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -54,6 +54,7 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_KAZU "数"
 #define NJD_SET_DIGIT_SUUSETSUZOKU "数接続"
 #define NJD_SET_DIGIT_JOSUUSHI "助数詞"
+#define NJD_SET_DIGIT_FUKUSHIKANOU "副詞可能"
 #define NJD_SET_DIGIT_HAIHUN1 "―"
 #define NJD_SET_DIGIT_HAIHUN2 "−"
 #define NJD_SET_DIGIT_HAIHUN3 "‐"

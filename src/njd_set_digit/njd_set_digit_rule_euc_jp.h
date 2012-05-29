@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -54,6 +54,7 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_KAZU "¿ô"
 #define NJD_SET_DIGIT_SUUSETSUZOKU "¿ôÀÜÂ³"
 #define NJD_SET_DIGIT_JOSUUSHI "½õ¿ô»ì"
+#define NJD_SET_DIGIT_FUKUSHIKANOU "Éû»ì²ÄÇ½"
 #define NJD_SET_DIGIT_HAIHUN1 "¡½"
 #define NJD_SET_DIGIT_HAIHUN2 "¡Ý"
 #define NJD_SET_DIGIT_HAIHUN3 "¡¾"
