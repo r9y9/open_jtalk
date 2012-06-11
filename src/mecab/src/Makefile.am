@@ -6,7 +6,6 @@ DISTCLEANFILES = *.log *.out *~
 MAINTAINERCLEANFILES = Makefile.in mecab-dict-index
 
 INCLUDES = -D DIC_VERSION=@DIC_VERSION@ \
-           @MECAB_WITHOUT_MUTEX_LOCK@ \
            @MECAB_USE_UTF8_ONLY@ \
            -D MECAB_DEFAULT_RC="\"@MECAB_DEFAULT_RC@\"" \
            -D PACKAGE="\"@PACKAGE@\"" \
@@ -48,9 +47,7 @@ libmecab_a_SOURCES = char_property.cpp \
                      libmecab.cpp \
                      mecab.cpp \
                      mecab.h \
-                     mempool.h \
                      mmap.h \
-                     mutex.h \
                      nbest_generator.cpp \
                      nbest_generator.h \
                      param.cpp \
@@ -70,5 +67,6 @@ libmecab_a_SOURCES = char_property.cpp \
                      viterbi.cpp \
                      viterbi.h \
                      viterbisub.h \
+                     winmain.h \
                      writer.cpp \
                      writer.h

@@ -3,39 +3,29 @@
 //
 //  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include <fstream>
-#include "common.h"
-#include "utils.h"
-#include "mecab.h"
-#include "param.h"
-#include "mmap.h"
-#include "feature_index.h"
-#include "context_id.h"
-#include "dictionary_rewriter.h"
-#include "dictionary.h"
 #include "char_property.h"
+#include "common.h"
+#include "context_id.h"
+#include "dictionary.h"
+#include "dictionary_rewriter.h"
+#include "feature_index.h"
+#include "mecab.h"
+#include "mmap.h"
+#include "param.h"
+#include "utils.h"
 
 namespace MeCab {
-
-short int tocost(double d, int n, int default_cost) {
-  if (d == 0.0) return default_cost;
-  static const short max = +32767;
-  static const short min = -32767;
-  return static_cast<short>(_max(_min(
-                                     -n * d,
-                                     static_cast<double>(max)),
-                                 static_cast<double>(min)) );
-}
 
 void copy(const char *src, const char *dst) {
   std::cout << "copying " << src << " to " <<  dst << std::endl;
   Mmap<char> mmap;
   CHECK_DIE(mmap.open(src)) << mmap.what();
-  std::ofstream ofs(dst, std::ios::binary|std::ios::out);
+  std::ofstream ofs(WPATH(dst), std::ios::binary|std::ios::out);
   CHECK_DIE(ofs) << "permission denied: " << dst;
   ofs.write(reinterpret_cast<char*>(mmap.begin()), mmap.size());
   ofs.close();
@@ -54,16 +44,16 @@ class DictionaryGenerator {
   static void gencid(const char *filename,
                      DictionaryRewriter *rewrite,
                      ContextID *cid) {
-    std::ifstream ifs(filename);
+    std::ifstream ifs(WPATH(filename));
     CHECK_DIE(ifs) << "no such file or directory: " << filename;
-    char line[BUF_SIZE];
+    scoped_fixed_array<char, BUF_SIZE> line;
     std::cout << "reading " << filename << " ... " << std::flush;
     size_t num = 0;
     std::string feature, ufeature, lfeature, rfeature;
     char *col[8];
-    while (ifs.getline(line, sizeof(line))) {
-      const size_t n = tokenizeCSV(line, col, 5);
-      CHECK_DIE(n == 5) << "format error: " << line;
+    while (ifs.getline(line.get(), line.size())) {
+      const size_t n = tokenizeCSV(line.get(), col, 5);
+      CHECK_DIE(n == 5) << "format error: " << line.get();
       feature = col[4];
       rewrite->rewrite2(feature, &ufeature, &lfeature, &rfeature);
       cid->add(lfeature.c_str(), rfeature.c_str());
@@ -76,9 +66,8 @@ class DictionaryGenerator {
   static bool genmatrix(const char *filename,
                         const ContextID &cid,
                         DecoderFeatureIndex *fi,
-                        int factor,
-                        int default_cost) {
-    std::ofstream ofs(filename);
+                        int factor) {
+    std::ofstream ofs(WPATH(filename));
     CHECK_DIE(ofs) << "permission denied: " << filename;
 
     LearnerPath path;
@@ -111,7 +100,7 @@ class DictionaryGenerator {
         fi->buildBigramFeature(&path, rit->first.c_str(), lit->first.c_str());
         fi->calcCost(&path);
         ofs << rit->second << ' ' << lit->second << ' '
-            << tocost(path.cost, factor, default_cost) << std::endl;
+            << tocost(path.cost, factor) << '\n';
       }
     }
 
@@ -125,16 +114,12 @@ class DictionaryGenerator {
                      const ContextID &cid,
                      DecoderFeatureIndex *fi,
                      bool unk,
-                     int factor,
-                     int default_cost) {
-    std::ifstream ifs(ifile);
+                     int factor) {
+    std::ifstream ifs(WPATH(ifile));
     CHECK_DIE(ifs) << "no such file or directory: " << ifile;
 
-    std::ofstream ofs(ofile);
+    std::ofstream ofs(WPATH(ofile));
     CHECK_DIE(ofs) << "permission denied: " << ofile;
-
-    std::string w, feature, ufeature, lfeature, rfeature;
-    int cost, lid, rid;
 
     std::cout <<  "emitting " << ofile << " ... " << std::flush;
 
@@ -147,35 +132,34 @@ class DictionaryGenerator {
     path.lnode  = &lnode;
     path.rnode  = &rnode;
 
-    char line[BUF_SIZE];
+    scoped_fixed_array<char, BUF_SIZE> line;
     char *col[8];
     size_t num = 0;
 
-    while (ifs.getline(line, sizeof(line))) {
-      const size_t n = tokenizeCSV(line, col, 5);
-      CHECK_DIE(n == 5) << "format error: " << line;
+    while (ifs.getline(line.get(), line.size())) {
+      const size_t n = tokenizeCSV(line.get(), col, 5);
+      CHECK_DIE(n == 5) << "format error: " << line.get();
 
-      w = std::string(col[0]);
-      lid = std::atoi(col[1]);
-      rid = std::atoi(col[2]);
-      cost = std::atoi(col[3]);
-      feature = std::string(col[4]);
+      std::string w = std::string(col[0]);
+      const std::string feature = std::string(col[4]);
 
+      std::string ufeature, lfeature, rfeature;
       rewrite->rewrite2(feature, &ufeature, &lfeature, &rfeature);
-      lid = cid.lid(lfeature.c_str());
-      rid = cid.rid(rfeature.c_str());
+      const int lid = cid.lid(lfeature.c_str());
+      const int rid = cid.rid(rfeature.c_str());
 
       CHECK_DIE(lid > 0) << "CID is not found for " << lfeature;
       CHECK_DIE(rid > 0) << "CID is not found for " << rfeature;
 
       if (unk) {
-        int c = property.id(w.c_str());
+        const int c = property.id(w.c_str());
         CHECK_DIE(c >= 0) << "unknown property [" << w << "]";
-        path.rnode->char_type = (unsigned char)c;
+        path.rnode->char_type = static_cast<unsigned char>(c);
       } else {
-        size_t mblen;
-        CharInfo cinfo = property.getCharInfo(w.c_str(),
-                                              w.c_str() + w.size(), &mblen);
+        size_t mblen = 0;
+        const CharInfo cinfo = property.getCharInfo(w.c_str(),
+                                                    w.c_str() + w.size(),
+                                                    &mblen);
         path.rnode->char_type = cinfo.default_type;
       }
 
@@ -184,8 +168,8 @@ class DictionaryGenerator {
       CHECK_DIE(escape_csv_element(&w)) << "invalid character found: " << w;
 
       ofs << w << ',' << lid << ',' << rid << ','
-          << tocost(rnode.wcost, factor, default_cost)
-          << ',' << feature << std::endl;
+          << tocost(rnode.wcost, factor)
+          << ',' << feature << '\n';
       ++num;
     }
 
@@ -200,12 +184,6 @@ class DictionaryGenerator {
       { "outdir",  'o',  ".",   "DIR", "set DIR as output dir" },
       { "model",   'm',  0,     "FILE",   "use FILE as model file" },
       { "version", 'v',  0,   0,  "show the version and exit"  },
-      { "training-algorithm", 'a',  "crf",    "(crf|hmm)",
-        "set training algorithm" },
-      { "default-emission-cost", 'E', "4000", "INT",
-        "set default emission cost for HMM" },
-      { "default-transition-cost", 'T', "4000", "INT",
-        "set default transition cost for HMM" },
       { "help",    'h',  0,   0,  "show this help and exit."      },
       { 0, 0, 0, 0 }
     };
@@ -242,24 +220,6 @@ class DictionaryGenerator {
       CHECK_DIE(!charset.empty());
     }
 
-    int default_emission_cost = 0;
-    int default_transition_cost = 0;
-
-    std::string type = param.get<std::string>("training-algorithm");
-    toLower(&type);
-
-    if (type == "hmm") {
-      default_emission_cost =
-          param.get<int>("default-emission-cost");
-      default_transition_cost =
-          param.get<int>("default-transition-cost");
-      CHECK_DIE(default_transition_cost > 0)
-          << "default transition cost must be > 0";
-      CHECK_DIE(default_emission_cost > 0)
-          << "default transition cost must be > 0";
-      param.set("identity-template", 1);
-    }
-
     CharProperty property;
     CHECK_DIE(property.open(param));
     property.set_charset(charset.c_str());
@@ -276,7 +236,7 @@ class DictionaryGenerator {
           "Please specify different directory.";
       CHECK_DIE(!outdir.empty()) << "output directory is empty";
       CHECK_DIE(!model.empty()) << "model file is empty";
-      CHECK_DIE(fi.open(param)) << fi.what();
+      CHECK_DIE(fi.open(param)) << "cannot open feature index";
       CHECK_DIE(factor > 0)   << "cost factor needs to be positive value";
       CHECK_DIE(!bos.empty()) << "bos-feature is empty";
       CHECK_DIE(dic.size()) << "no dictionary is found in " << dicdir;
@@ -300,7 +260,7 @@ class DictionaryGenerator {
     cid.save(OCONF(LEFT_ID_FILE), OCONF(RIGHT_ID_FILE));
 
     gendic(DCONF(UNK_DEF_FILE), OCONF(UNK_DEF_FILE), property,
-           &rewrite, cid, &fi, true, factor, default_emission_cost);
+           &rewrite, cid, &fi, true, factor);
 
     for (std::vector<std::string>::const_iterator it = dic.begin();
          it != dic.end();
@@ -308,18 +268,16 @@ class DictionaryGenerator {
       std::string file =  *it;
       remove_pathname(&file);
       gendic(it->c_str(), OCONF(file.c_str()), property,
-             &rewrite, cid, &fi, false, factor, default_emission_cost);
+             &rewrite, cid, &fi, false, factor);
     }
 
-    genmatrix(OCONF(MATRIX_DEF_FILE), cid, &fi,
-              factor, default_transition_cost);
+    genmatrix(OCONF(MATRIX_DEF_FILE), cid, &fi, factor);
 
     copy(DCONF(CHAR_PROPERTY_DEF_FILE), OCONF(CHAR_PROPERTY_DEF_FILE));
     copy(DCONF(REWRITE_FILE), OCONF(REWRITE_FILE));
     copy(DCONF(DICRC), OCONF(DICRC));
-
-    if (type == "crf")
-      copy(DCONF(FEATURE_FILE), OCONF(FEATURE_FILE));
+    copy(DCONF(FEATURE_FILE), OCONF(FEATURE_FILE));
+    copy(model.c_str(), OCONF(MODEL_DEF_FILE));
 
 #undef OCONF
 #undef DCONF

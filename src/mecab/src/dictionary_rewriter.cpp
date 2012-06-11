@@ -3,58 +3,17 @@
 //
 //  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
-
-/* ----------------------------------------------------------------- */
-/*           The Japanese TTS System "Open JTalk"                    */
-/*           developed by HTS Working Group                          */
-/*           http://open-jtalk.sourceforge.net/                      */
-/* ----------------------------------------------------------------- */
-/*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
-/*                           Department of Computer Science          */
-/*                                                                   */
-/* All rights reserved.                                              */
-/*                                                                   */
-/* Redistribution and use in source and binary forms, with or        */
-/* without modification, are permitted provided that the following   */
-/* conditions are met:                                               */
-/*                                                                   */
-/* - Redistributions of source code must retain the above copyright  */
-/*   notice, this list of conditions and the following disclaimer.   */
-/* - Redistributions in binary form must reproduce the above         */
-/*   copyright notice, this list of conditions and the following     */
-/*   disclaimer in the documentation and/or other materials provided */
-/*   with the distribution.                                          */
-/* - Neither the name of the HTS working group nor the names of its  */
-/*   contributors may be used to endorse or promote products derived */
-/*   from this software without specific prior written permission.   */
-/*                                                                   */
-/* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND            */
-/* CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,       */
-/* INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF          */
-/* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE          */
-/* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS */
-/* BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,          */
-/* EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED   */
-/* TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     */
-/* DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON */
-/* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,   */
-/* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY    */
-/* OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE           */
-/* POSSIBILITY OF SUCH DAMAGE.                                       */
-/* ----------------------------------------------------------------- */
-
 #include <cstring>
+#include <fstream>
+#include <iterator>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include <fstream>
-#include <iterator> /* for Open JTalk */
-
-#include "utils.h"
 #include "common.h"
 #include "dictionary_rewriter.h"
 #include "iconv_utils.h"
+#include "scoped_ptr.h"
+#include "utils.h"
 
 namespace {
 
@@ -82,13 +41,13 @@ bool match_rewrite_pattern(const char *pat,
 
   size_t len = std::strlen(pat);
   if (len >= 3 && pat[0] == '(' && pat[len-1] == ')') {
-    char buf[BUF_SIZE];
-    char *col[BUF_SIZE];
-    CHECK_DIE(len < sizeof(buf) - 3) << "too long parameter";
-    std::strncpy(buf, pat + 1, BUF_SIZE);
+    scoped_fixed_array<char, BUF_SIZE> buf;
+    scoped_fixed_array<char *, BUF_SIZE> col;
+    CHECK_DIE(len < buf.size() - 3) << "too long parameter";
+    std::strncpy(buf.get(), pat + 1, buf.size());
     buf[len-2] = '\0';
-    const size_t n = tokenize(buf, "|", col, sizeof(col));
-    CHECK_DIE(n < sizeof(col)) << "too long OR nodes";
+    const size_t n = tokenize(buf.get(), "|", col.get(), col.size());
+    CHECK_DIE(n < col.size()) << "too long OR nodes";
     for (size_t i = 0; i < n; ++i) {
       if (std::strcmp(str, col[i]) == 0) return true;
     }
@@ -101,15 +60,15 @@ namespace MeCab {
 
 bool RewritePattern::set_pattern(const char *src,
                                  const char *dst) {
-  char buf[BUF_SIZE];
+  scoped_fixed_array<char, BUF_SIZE> buf;
   spat_.clear();
   dpat_.clear();
 
-  std::strncpy(buf, src, sizeof(buf));
-  tokenizeCSV(buf, back_inserter(spat_), 512);
+  std::strncpy(buf.get(), src, buf.size());
+  tokenizeCSV(buf.get(), back_inserter(spat_), 512);
 
-  std::strncpy(buf, dst, sizeof(buf));
-  tokenizeCSV(buf, back_inserter(dpat_), 512);
+  std::strncpy(buf.get(), dst, buf.size());
+  tokenizeCSV(buf.get(), back_inserter(dpat_), 512);
 
   return (spat_.size() && dpat_.size());
 }
@@ -173,7 +132,7 @@ void DictionaryRewriter::clear() { cache_.clear(); }
 
 bool DictionaryRewriter::open(const char *filename,
                               Iconv *iconv) {
-  std::ifstream ifs(filename);
+  std::ifstream ifs(WPATH(filename));
   CHECK_DIE(ifs) << "no such file or directory: " << filename;
   int append_to = 0;
   std::string line;
@@ -204,17 +163,17 @@ bool DictionaryRewriter::rewrite(const std::string &feature,
                                  std::string *ufeature,
                                  std::string *lfeature,
                                  std::string *rfeature) const {
-  char buf[BUF_SIZE];
-  char *col[BUF_SIZE];
-  CHECK_DIE(feature.size() < sizeof(buf) - 1) << "too long feature";
-  std::strncpy(buf, feature.c_str(), sizeof(buf) - 1);
-  size_t n = tokenizeCSV(buf, col, sizeof(col));
-  CHECK_DIE(n < sizeof(col)) << "too long CSV entities";
-  return (unigram_rewrite_.rewrite(n, const_cast<const char **>(col),
+  scoped_fixed_array<char, BUF_SIZE> buf;
+  scoped_fixed_array<char *, BUF_SIZE> col;
+  CHECK_DIE(feature.size() < buf.size() - 1) << "too long feature";
+  std::strncpy(buf.get(), feature.c_str(), buf.size() - 1);
+  const size_t n = tokenizeCSV(buf.get(), col.get(), col.size());
+  CHECK_DIE(n < col.size()) << "too long CSV entities";
+  return (unigram_rewrite_.rewrite(n, const_cast<const char **>(col.get()),
                                    ufeature) &&
-          left_rewrite_.rewrite(n, const_cast<const char **>(col),
+          left_rewrite_.rewrite(n, const_cast<const char **>(col.get()),
                                 lfeature) &&
-          right_rewrite_.rewrite(n, const_cast<const char **>(col),
+          right_rewrite_.rewrite(n, const_cast<const char **>(col.get()),
                                  rfeature));
 }
 
@@ -230,7 +189,7 @@ bool DictionaryRewriter::rewrite2(const std::string &feature,
     f.ufeature = *ufeature;
     f.lfeature = *lfeature;
     f.rfeature = *rfeature;
-    cache_.insert(std::make_pair<std::string, FeatureSet>(feature, f));
+    cache_.insert(std::pair<std::string, FeatureSet>(feature, f));
   } else {
     *ufeature = it->second.ufeature;
     *lfeature = it->second.lfeature;
@@ -242,7 +201,7 @@ bool DictionaryRewriter::rewrite2(const std::string &feature,
 
 bool POSIDGenerator::open(const char *filename,
                           Iconv *iconv) {
-  std::ifstream ifs(filename);
+  std::ifstream ifs(WPATH(filename));
   if (!ifs) {
     std::cerr << filename
               << " is not found. minimum setting is used" << std::endl;
@@ -268,15 +227,16 @@ bool POSIDGenerator::open(const char *filename,
 }
 
 int POSIDGenerator::id(const char *feature) const {
-  char buf[BUF_SIZE];
-  char *col[BUF_SIZE];
-  CHECK_DIE(std::strlen(feature) < sizeof(buf) - 1) << "too long feature";
-  std::strncpy(buf, feature, sizeof(buf) - 1);
-  const size_t n = tokenizeCSV(buf, col, sizeof(col));
-  CHECK_DIE(n < sizeof(col)) << "too long CSV entities";
+  scoped_fixed_array<char, BUF_SIZE> buf;
+  scoped_fixed_array<char *, BUF_SIZE> col;
+  CHECK_DIE(std::strlen(feature) < buf.size() - 1) << "too long feature";
+  std::strncpy(buf.get(), feature, buf.size() - 1);
+  const size_t n = tokenizeCSV(buf.get(), col.get(), col.size());
+  CHECK_DIE(n < col.size()) << "too long CSV entities";
   std::string tmp;
-  if (!rewrite_.rewrite(n, const_cast<const char **>(col), &tmp))
+  if (!rewrite_.rewrite(n, const_cast<const char **>(col.get()), &tmp)) {
     return -1;
+  }
   return std::atoi(tmp.c_str());
 }
 }

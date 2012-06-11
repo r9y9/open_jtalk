@@ -1,7 +1,6 @@
-//  MeCab -- Yet Another Part-of-Speech and Morphological Analyzer
+// MeCab -- Yet Another Part-of-Speech and Morphological Analyzer
 //
-//
-//  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
+//  Copyright(C) 2001-2011 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 
 /* ----------------------------------------------------------------- */
@@ -10,7 +9,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -44,69 +43,68 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
-#ifndef MECAB_MUTEX_H
-#define MECAB_MUTEX_H
+/* for Open JTalk
+#if defined(_WIN32) || defined(__CYGWIN__)
+*/
+#if defined(_WIN32) && !defined(__CYGWIN__) /* for Open JTalk */
 
-#include <string>
-#include "common.h"
-#include "string_buffer.h"
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifndef MECAB_WITHOUT_MUTEX_LOCK
-#ifdef HAVE_PTHREAD_H
-#define _USE_PTHREAD_MUTEX
-#include <pthread.h>
-#else
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#ifdef HAVE_WINDOWS_H
 #include <windows.h>
-#endif
-#define _USE_WINDOWS_MUTEX
-#endif
-#endif
-#endif
+#include <string>
 
-namespace MeCab {
-
-class Mutex {
- private:
-#ifdef _USE_PTHREAD_MUTEX
-  pthread_mutex_t mutex_;
-#else
-#ifdef _USE_WINDOWS_MUTEX
-  CRITICAL_SECTION mutex_;
-#endif
-#endif
-  whatlog what_;
-
+namespace {
+class CommandLine {
  public:
-  const char *what() { return what_.str(); }
-
-#ifdef _USE_PTHREAD_MUTEX
-  Mutex()       { pthread_mutex_init(&mutex_, NULL); }
-  virtual ~Mutex() {  pthread_mutex_destroy(&mutex_); }
-  void lock()   { pthread_mutex_lock(&mutex_); }
-  void unlock() { pthread_mutex_unlock(&mutex_); }
-#else
-#ifdef _USE_WINDOWS_MUTEX
-  Mutex()       { InitializeCriticalSection(&mutex_); }
-  virtual ~Mutex() {
-    unlock();
-    DeleteCriticalSection(&mutex_);
+  CommandLine(int argc, wchar_t **argv) : argc_(argc), argv_(0) {
+    argv_ = new char * [argc_];
+    for (int i = 0; i < argc_; ++i) {
+      const std::string arg = WideToUtf8(argv[i]);
+      argv_[i] = new char[arg.size() + 1];
+      ::memcpy(argv_[i], arg.data(), arg.size());
+      argv_[i][arg.size()] = '\0';
+    }
   }
-  void lock()   { EnterCriticalSection(&mutex_); }
-  void unlock() { LeaveCriticalSection(&mutex_); }
-#else
-  Mutex() { /* WHAT("this machine does not support mutex"); */ } /* for Open JTalk */
-  virtual ~Mutex() {}
-  void lock()   {}
-  void unlock() {}
-#endif
-#endif
-};
-}
+  ~CommandLine() {
+    for (int i = 0; i < argc_; ++i) {
+      delete [] argv_[i];
+    }
+    delete [] argv_;
+  }
 
+  int argc() const { return argc_; }
+  char **argv() const { return argv_; }
+
+ private:
+  static std::string WideToUtf8(const std::wstring &input) {
+    const int output_length = ::WideCharToMultiByte(CP_UTF8, 0,
+                                                    input.c_str(), -1, NULL, 0,
+                                                    NULL, NULL);
+    if (output_length == 0) {
+      return "";
+    }
+
+    char *input_encoded = new char[output_length + 1];
+    const int result = ::WideCharToMultiByte(CP_UTF8, 0, input.c_str(), -1,
+                                             input_encoded,
+                                             output_length + 1, NULL, NULL);
+    std::string output;
+    if (result > 0) {
+      output.assign(input_encoded);
+    }
+    delete [] input_encoded;
+    return output;
+  }
+
+  int argc_;
+  char **argv_;
+};
+}  // namespace
+
+#define main(argc, argv) wmain_to_main_wrapper(argc, argv)
+
+int wmain_to_main_wrapper(int argc, char **argv);
+
+int wmain(int argc, wchar_t **argv) {
+  CommandLine cmd(argc, argv);
+  return wmain_to_main_wrapper(cmd.argc(), cmd.argv());
+}
 #endif

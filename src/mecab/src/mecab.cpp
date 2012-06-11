@@ -1,17 +1,16 @@
 //  MeCab -- Yet Another Part-of-Speech and Morphological Analyzer
 //
-//  $Id: mecab.cpp,v 1.2 2010/11/19 07:14:37 uratec Exp $;
 //
 //  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 
 /* ----------------------------------------------------------------- */
-/*           The HMM-Based Speech Synthesis System (HTS)             */
-/*           Open JTalk developed by HTS Working Group               */
+/*           The Japanese TTS System "Open JTalk"                    */
+/*           developed by HTS Working Group                          */
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2010  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */

@@ -1,36 +1,39 @@
 //  MeCab -- Yet Another Part-of-Speech and Morphological Analyzer
 //
 //
-//  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
+//  Copyright(C) 2001-2011 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 #include <cstdio>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include "common.h"
-#include "utils.h"
-#include "string_buffer.h"
-#include "writer.h"
 #include "param.h"
+#include "string_buffer.h"
+#include "utils.h"
+#include "writer.h"
 
 namespace MeCab {
 
+Writer::Writer() : write_(&Writer::writeLattice) {}
+Writer::~Writer() {}
+
 void Writer::close() {
-  _write = &Writer::writeLattice;
+  write_ = &Writer::writeLattice;
 }
 
 bool Writer::open(const Param &param) {
   const std::string ostyle = param.get<std::string>("output-format-type");
-  _write = &Writer::writeLattice;
+  write_ = &Writer::writeLattice;
 
   if (ostyle == "wakati") {
-    _write = &Writer::writeWakati;
+    write_ = &Writer::writeWakati;
   } else if (ostyle == "none") {
-    _write = &Writer::writeNone;
+    write_ = &Writer::writeNone;
   } else if (ostyle == "dump") {
-    _write = &Writer::writeDump;
+    write_ = &Writer::writeDump;
   } else if (ostyle == "em") {
-    _write = &Writer::writeEM;
+    write_ = &Writer::writeEM;
   } else {
     // default values
     std::string node_format = "%m\\t%H\\n";
@@ -57,8 +60,7 @@ bool Writer::open(const Param &param) {
       eon_format_key += "-";
       eon_format_key += ostyle;
       const std::string tmp = param.get<std::string>(node_format_key.c_str());
-      CHECK_FALSE(!tmp.empty())
-          << "unknown format type [" << ostyle << "]";
+      CHECK_FALSE(!tmp.empty()) << "unkown format type [" << ostyle << "]";
     }
 
     const std::string node_format2 =
@@ -74,17 +76,26 @@ bool Writer::open(const Param &param) {
 
     if (node_format != node_format2 || bos_format != bos_format2 ||
         eos_format != eos_format2 || unk_format != unk_format2) {
-      _write = &Writer::writeUser;
-      if (node_format != node_format2) node_format = node_format2;
-      if (bos_format != bos_format2) bos_format = bos_format2;
-      if (eos_format != eos_format2) eos_format = eos_format2;
-      if (unk_format != unk_format2)
+      write_ = &Writer::writeUser;
+      if (node_format != node_format2) {
+        node_format = node_format2;
+      }
+      if (bos_format != bos_format2) {
+        bos_format = bos_format2;
+      }
+      if (eos_format != eos_format2) {
+        eos_format = eos_format2;
+      }
+      if (unk_format != unk_format2) {
         unk_format = unk_format2;
-      else if (node_format != node_format2)
+      } else if (node_format != node_format2) {
         unk_format = node_format2;
-      else
+      } else {
         unk_format = node_format;
-      if (eon_format != eon_format2) eon_format = eon_format2;
+      }
+      if (eon_format != eon_format2) {
+        eon_format = eon_format2;
+      }
       node_format_.reset_string(node_format.c_str());
       bos_format_.reset_string(bos_format.c_str());
       eos_format_.reset_string(eos_format.c_str());
@@ -96,13 +107,16 @@ bool Writer::open(const Param &param) {
   return true;
 }
 
-bool Writer::write(StringBuffer *os, const char* str, const Node *bosNode) {
-  return (this->*_write)(os, str, bosNode);
+bool Writer::write(Lattice *lattice, StringBuffer *os) const {
+  if (!lattice || !lattice->is_available()) {
+    return false;
+  }
+  return (this->*write_)(lattice, os);
 }
 
-bool Writer::writeLattice(StringBuffer *os, const char* str,
-                          const Node *bosNode) {
-  for (const Node *node = bosNode->next; node->next; node = node->next) {
+bool Writer::writeLattice(Lattice *lattice, StringBuffer *os) const {
+  for (const Node *node = lattice->bos_node()->next;
+       node->next; node = node->next) {
     os->write(node->surface, node->length);
     *os << '\t' << node->feature;  // << '\t';
     *os << '\n';
@@ -111,9 +125,9 @@ bool Writer::writeLattice(StringBuffer *os, const char* str,
   return true;
 }
 
-bool Writer::writeWakati(StringBuffer *os, const char*,
-                         const Node *bosNode) {
-  for (const Node *node = bosNode->next; node->next; node = node->next) {
+bool Writer::writeWakati(Lattice *lattice, StringBuffer *os) const {
+  for (const Node *node = lattice->bos_node()->next;
+       node->next; node = node->next) {
     os->write(node->surface, node->length);
     *os << ' ';
   }
@@ -121,36 +135,22 @@ bool Writer::writeWakati(StringBuffer *os, const char*,
   return true;
 }
 
-bool Writer::writeNone(StringBuffer *, const char*, const Node *) {
+bool Writer::writeNone(Lattice *lattice, StringBuffer *os) const {
   return true;  // do nothing
 }
 
-bool Writer::writeUser(StringBuffer *os, const char* str,
-                       const Node *bosNode) {
-  if (!writeNode(os, bos_format_.get(), str, bosNode)) return false;
-  const Node *node = 0;
-  const char *fmt = 0;
-  for (node = bosNode->next; node->next; node = node->next) {
-    fmt = (node->stat == MECAB_UNK_NODE ? unk_format_.get() :
-           node_format_.get());
-    if (!writeNode(os, fmt, str, node)) return false;
-  }
-  if (!writeNode(os, eos_format_.get(), str, node)) return false;
-  return true;
-}
-
-bool Writer::writeEM(StringBuffer *os, const char* str,
-                     const Node *bosNode) {
+bool Writer::writeEM(Lattice *lattice, StringBuffer *os) const {
   static const float min_prob = 0.0001;
-  for (const Node *node = bosNode; node; node = node->next) {
+  for (const Node *node = lattice->bos_node(); node; node = node->next) {
     if (node->prob >= min_prob) {
       *os << "U\t";
-      if (node->stat == MECAB_BOS_NODE)
+      if (node->stat == MECAB_BOS_NODE) {
         *os << "BOS";
-      else if (node->stat == MECAB_EOS_NODE)
+      } else if (node->stat == MECAB_EOS_NODE) {
         *os << "EOS";
-      else
+      }  else {
         os->write(node->surface, node->length);
+      }
       *os << '\t' << node->feature << '\t' << node->prob << '\n';
     }
     for (const Path *path = node->lpath; path; path = path->lnext) {
@@ -164,16 +164,17 @@ bool Writer::writeEM(StringBuffer *os, const char* str,
   return true;
 }
 
-bool Writer::writeDump(StringBuffer *os, const char* str,
-                       const Node *bosNode) {
-  for (const Node *node = bosNode; node; node = node->next) {
+bool Writer::writeDump(Lattice *lattice, StringBuffer *os) const {
+  const char *str = lattice->sentence();
+  for (const Node *node = lattice->bos_node(); node; node = node->next) {
     *os << node->id << ' ';
-    if (node->stat == MECAB_BOS_NODE)
+    if (node->stat == MECAB_BOS_NODE) {
       *os << "BOS";
-    else if (node->stat == MECAB_EOS_NODE)
+    } else if (node->stat == MECAB_EOS_NODE) {
       *os << "EOS";
-    else
+    } else {
       os->write(node->surface, node->length);
+    }
 
     *os << ' ' << node->feature
         << ' ' << static_cast<int>(node->surface - str)
@@ -197,27 +198,47 @@ bool Writer::writeDump(StringBuffer *os, const char* str,
   return true;
 }
 
-bool Writer::writeNode(StringBuffer *os, const char *sentence,
-                       const Node *node) {
-  switch (node->stat) {
-    case MECAB_BOS_NODE:
-      return writeNode(os, bos_format_.get(),  sentence, node);
-    case MECAB_EOS_NODE:
-      return writeNode(os, eos_format_.get(),  sentence, node);
-    case MECAB_UNK_NODE:
-      return writeNode(os, unk_format_.get(),  sentence, node);
-    case MECAB_NOR_NODE:
-      return writeNode(os, node_format_.get(), sentence, node);
-    case MECAB_EON_NODE:
-      return writeNode(os, eon_format_.get(), sentence, node);
+bool Writer::writeUser(Lattice *lattice, StringBuffer *os) const {
+  if (!writeNode(lattice, bos_format_.get(), lattice->bos_node(), os)) {
+    return false;
+  }
+  const Node *node = 0;
+  for (node = lattice->bos_node()->next; node->next; node = node->next) {
+    const char *fmt = (node->stat == MECAB_UNK_NODE ? unk_format_.get() :
+                       node_format_.get());
+    if (!writeNode(lattice, fmt, node, os)) {
+      return false;
+    }
+  }
+  if (!writeNode(lattice, eos_format_.get(), node, os)) {
+    return false;
   }
   return true;
 }
 
-bool Writer::writeNode(StringBuffer *os, const char *p,
-                       const char *sentence, const Node *node) {
-  char buf[BUF_SIZE];
-  char *ptr[64];
+bool Writer::writeNode(Lattice *lattice, const Node *node,
+                       StringBuffer *os) const {
+  switch (node->stat) {
+    case MECAB_BOS_NODE:
+      return writeNode(lattice, bos_format_.get(), node, os);
+    case MECAB_EOS_NODE:
+      return writeNode(lattice, eos_format_.get(), node, os);
+    case MECAB_UNK_NODE:
+      return writeNode(lattice, unk_format_.get(), node, os);
+    case MECAB_NOR_NODE:
+      return writeNode(lattice, node_format_.get(), node, os);
+    case MECAB_EON_NODE:
+      return writeNode(lattice, eon_format_.get(), node, os);
+  }
+  return true;
+}
+
+bool Writer::writeNode(Lattice *lattice,
+                       const char *p,
+                       const Node *node,
+                       StringBuffer *os) const {
+  scoped_fixed_array<char, BUF_SIZE> buf;
+  scoped_fixed_array<char *, 64> ptr;
   size_t psize = 0;
 
   for (; *p; p++) {
@@ -228,11 +249,15 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
 
       case '%': {  // macros
         switch (*++p) {
-          default: CHECK_FALSE(false) << "unkonwn meta char " << *p;
+          default: {
+            const std::string error = "unknown meta char: " + *p;
+            lattice->set_what(error.c_str());
+            return false;
+          }
             // input sentence
-          case 'S': os->write(sentence, std::strlen(sentence)); break;
+          case 'S': os->write(lattice->sentence(), lattice->size()); break;
             // sentence length
-          case 'L': *os << std::strlen(sentence); break;
+          case 'L': *os << lattice->size(); break;
             // morph
           case 'm': os->write(node->surface, node->length); break;
           case 'M': os->write(reinterpret_cast<const char *>
@@ -248,8 +273,9 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
           case 'P': *os << node->prob; break;
           case 'p': {
             switch (*++p) {
-              default: CHECK_FALSE(false)
-                  << "[iseSCwcnblLh] is required after %p";
+              default:
+                lattice->set_what("[iseSCwcnblLh] is required after %p");
+                return false;
               case 'i': *os << node->id; break;  // node id
               case 'S': os->write(reinterpret_cast<const char*>
                                   (node->surface -
@@ -257,11 +283,12 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
                                   node->rlength - node->length);
                 break;  // space
                 // start position
-              case 's': *os << static_cast<int>(node->surface - sentence);
+              case 's': *os << static_cast<int>(
+                  node->surface - lattice->sentence());
                 break;
                 // end position
               case 'e': *os << static_cast<int>
-                    (node->surface - sentence + node->length);
+                    (node->surface - lattice->sentence() + node->length);
                 break;
                 // connection cost
               case 'C': *os << node->cost -
@@ -281,7 +308,9 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
               case 'L': *os << node->rlength;    break;
               case 'h': {  // Hidden Layer ID
                 switch (*++p) {
-                  default: CHECK_FALSE(false) << "lr is required after %ph";
+                  default:
+                    lattice->set_what("lr is required after %ph");
+                    return false;
                   case 'l': *os << node->lcAttr; break;   // current
                   case 'r': *os << node->rcAttr; break;   // prev
                 }
@@ -290,17 +319,22 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
               case 'p': {
                 char mode = *++p;
                 char sep = *++p;
-                if (sep == '\\') sep = getEscapedChar(*++p);
-                CHECK_FALSE(node->lpath)
-                    << "no path information, use -l option";
+                if (sep == '\\') {
+                  sep = getEscapedChar(*++p);
+                }
+                if (!node->lpath) {
+                  lattice->set_what("no path information is available");
+                  return false;
+                }
                 for (Path *path = node->lpath; path; path = path->lnext) {
                   if (path != node->lpath) *os << sep;
                   switch (mode) {
                     case 'i': *os << path->lnode->id; break;
                     case 'c': *os << path->cost; break;
                     case 'P': *os << path->prob; break;
-                    default: CHECK_FALSE(false)
-                        << "[icP] is required after %pp";
+                    default:
+                      lattice->set_what("[icP] is required after %pp");
+                      return false;
                   }
                 }
               } break;
@@ -310,24 +344,29 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
 
           case 'F':
           case 'f': {
-            CHECK_FALSE(node->feature[0] != '\0')
-                << "no feature information available";
-
+            if (node->feature[0] == '\0') {
+              lattice->set_what("no feature information available");
+              return false;
+            }
             if (!psize) {
-              std::strncpy(buf, node->feature, sizeof(buf));
-              psize = tokenizeCSV(buf, ptr, sizeof(ptr));
+              std::strncpy(buf.get(), node->feature, buf.size());
+              psize = tokenizeCSV(buf.get(), ptr.get(), ptr.size());
             }
 
             // separator
             char separator = '\t';  // default separator
             if (*p == 'F') {  // change separator
-              if (*++p == '\\')
+              if (*++p == '\\') {
                 separator = getEscapedChar(*++p);
-              else
+              } else {
                 separator = *p;
+              }
             }
 
-            CHECK_FALSE(*++p =='[') << "cannot find '['";
+            if (*++p !='[') {
+              lattice->set_what("cannot find '['");
+              return false;
+            }
             size_t n = 0;
             bool sep = false;
             bool isfil = false;
@@ -340,18 +379,26 @@ bool Writer::writeNode(StringBuffer *os, const char *p,
                   n = 10 * n +(*p - '0');
                   break;
                 case ',': case ']':
-                  CHECK_FALSE(n < psize) << "given index is out of range";
+                  if (n >= psize) {
+                    lattice->set_what("given index is out of range");
+                    return false;
+                  }
                   isfil = (ptr[n][0] != '*');
                   if (isfil) {
-                    if (sep) *os << separator;
+                    if (sep) {
+                      *os << separator;
+                    }
                     *os << ptr[n];
                   }
-                  if (*p == ']') goto last;
+                  if (*p == ']') {
+                    goto last;
+                  }
                   sep = isfil;
                   n = 0;
                   break;
                 default:
-                  CHECK_FALSE(false) << "cannot find ']'";
+                  lattice->set_what("cannot find ']'");
+                  return false;
               }
             }
           } last: break;

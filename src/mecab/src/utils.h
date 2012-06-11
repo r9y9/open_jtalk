@@ -6,22 +6,37 @@
 #ifndef MECAB_UTILS_H
 #define MECAB_UTILS_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
+#include <algorithm>
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-#include <algorithm>
 #include <string>
 #include <vector>
 #include "common.h"
 
-namespace MeCab {
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-template <class T> inline T _min(T x, T y) { return(x < y) ? x : y; }
-template <class T> inline T _max(T x, T y) { return(x > y) ? x : y; }
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#else  // HAVE_STDINT_H
+#if defined(_WIN32) && !defined(__CYGWIN__)
+#if defined(_MSC_VER) && (_MSC_VER <= 1500)
+typedef unsigned char uint8_t;
+typedef unsigned long uint32_t;
+typedef unsigned long long uint64_t;
+#else  // _MSC_VER
+#include <stdint.h>
+#endif  // _MSC_VER
+#else   // _WIN32
+typedef unsigned char uint8_t;
+typedef unsigned long uint32_t;
+typedef unsigned __int64 uint64_t;
+#endif  // _WIN32
+#endif  // HAVE_STDINT_H
+
+namespace MeCab {
 
 class Param;
 
@@ -89,6 +104,10 @@ inline void read_static(const char **ptr, T& value) {
   memcpy(&value, r, sizeof(T));
 }
 
+bool file_exists(const char *filename);
+
+int load_request_type(const Param &param);
+
 bool load_dictionary_resource(Param *);
 
 bool escape_csv_element(std::string *w);
@@ -118,8 +137,7 @@ inline size_t tokenizeCSV(char *str,
 
   for (; str < eos; ++str) {
     // skip white spaces
-    while (*str == ' ' || *str == '\t') ++str;
-    bool inquote = false;
+     while (*str == ' ' || *str == '\t') ++str;
     if (*str == '"') {
       start = ++str;
       end = start;
@@ -131,7 +149,6 @@ inline size_t tokenizeCSV(char *str,
         }
         *end++ = *str;
       }
-      inquote = true;
       str = std::find(str, eos, ',');
     } else {
       start = str;
@@ -192,13 +209,23 @@ inline double logsumexp(double x, double y, bool flg) {
 #define MINUS_LOG_EPSILON  50
 
   if (flg) return y;  // init mode
-  double vmin = _min(x, y);
-  double vmax = _max(x, y);
+  double vmin = std::min<double>(x, y);
+  double vmax = std::max<double>(x, y);
   if (vmax > vmin + MINUS_LOG_EPSILON) {
     return vmax;
   } else {
     return vmax + std::log(std::exp(vmin - vmax) + 1.0);
   }
+}
+
+inline short int tocost(double d, int n) {
+  static const short max = +32767;
+  static const short min = -32767;
+  return static_cast<short>(std::max<double>(
+                                std::min<double>(
+                                    -n * d,
+                                    static_cast<double>(max)),
+                                static_cast<double>(min)) );
 }
 
 inline char getEscapedChar(const char p) {
@@ -218,5 +245,14 @@ inline char getEscapedChar(const char p) {
 
   return '\0';  // never be here
 }
+
+// return 64 bit hash
+uint64_t fingerprint(const char *str, size_t size);
+uint64_t fingerprint(const std::string &str);
+
+#if defined(_WIN32) && !defined(__CYGWIN__)
+std::wstring Utf8ToWide(const std::string &input);
+std::string WideToUtf8(const std::wstring &input);
+#endif
 }
 #endif

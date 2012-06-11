@@ -10,7 +10,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -44,21 +44,24 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
-#include <iostream>
-#include <fstream>
 #include <cstring>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include "common.h"
-#include "utils.h"
 #include "scoped_ptr.h"
+#include "utils.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "iconv_utils.h"
 #include "char_property.h"
+#include "iconv_utils.h"
 
+/* for Open JTalk
+#if defined(_WIN32) && !defined(__CYGWIN__)
+*/
 #ifdef HAVE_WINDOWS_H /* for Open JTalk */
 #include "windows.h"
 #endif
@@ -90,6 +93,9 @@ const char * decode_charset_iconv(const char *str) {
 }
 #endif
 
+/* for Open JTalk
+#if defined(_WIN32) && !defined(__CYGWIN__)
+*/
 #ifdef HAVE_WINDOWS_H /* for Open JTalk */
 DWORD decode_charset_win32(const char *str) {
   const int charset = MeCab::decode_charset(str);
@@ -133,6 +139,9 @@ bool Iconv::open(const char* from, const char* to) {
     return false;
   }
 #else
+/* for Open JTalk
+#if defined(_WIN32) && !defined(__CYGWIN__)
+*/
 #ifdef HAVE_WINDOWS_H /* for Open JTalk */
   from_cp_ = decode_charset_win32(from);
   to_cp_ = decode_charset_win32(to);
@@ -156,7 +165,7 @@ bool Iconv::convert(std::string *str) {
     return true;
   }
 
-#if defined HAVE_ICONV /* for Open JTalk */
+#if defined HAVE_ICONV
   size_t ilen = 0;
   size_t olen = 0;
   ilen = str->size();
@@ -177,6 +186,9 @@ bool Iconv::convert(std::string *str) {
   }
   str->assign(obuf_org, olen_org - olen);
 #else
+/* for Open JTalk
+#if defined(_WIN32) && !defined(__CYGWIN__)
+*/
 #ifdef HAVE_WINDOWS_H /* for Open JTalk */
   // covert it to wide character first
   const size_t wide_len = ::MultiByteToWideChar(from_cp_, 0,
@@ -199,8 +211,8 @@ bool Iconv::convert(std::string *str) {
 
   if (to_cp_ == 1200 || to_cp_ == 1201) {
     str->resize(2 * wide_len);
-    memcpy(const_cast<char *>(str->data()),
-           reinterpret_cast<char *>(wide_str.get()), wide_len * 2);
+    std::memcpy(const_cast<char *>(str->data()),
+                reinterpret_cast<char *>(wide_str.get()), wide_len * 2);
     if (to_cp_ == 1201) {
       char *buf = const_cast<char *>(str->data());
       for (size_t i = 0; i < 2 * wide_len; i += 2) {

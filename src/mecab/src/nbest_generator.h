@@ -3,8 +3,8 @@
 //
 //  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
-#ifndef MECAB_NBEST_GENERATOR_H
-#define MECAB_NBEST_GENERATOR_H
+#ifndef MECAB_NBEST_GENERATOR_H_
+#define MECAB_NBEST_GENERATOR_H_
 
 #include <queue>
 #include "mecab.h"
@@ -33,11 +33,11 @@ class NBestGenerator {
   FreeList <QueueElement> freelist_;
 
  public:
-  explicit NBestGenerator(): freelist_(512) {}
+  explicit NBestGenerator() : freelist_(512) {}
   virtual ~NBestGenerator() {}
-  bool  set(Node *);
-  Node* next();
+  bool set(Lattice *lattice);
+  bool next();
 };
 }
 
-#endif
+#endif  // MECAB_NBEST_GENERATOR_H_

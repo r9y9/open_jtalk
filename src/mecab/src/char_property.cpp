@@ -1,20 +1,18 @@
 // MeCab -- Yet Another Part-of-Speech and Morphological Analyzer
 //
-//
 //  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
-#include <string>
 #include <fstream>
 #include <map>
 #include <vector>
 #include <set>
+#include <string>
 #include <sstream>
-#include "param.h"
-#include "mempool.h"
-#include "common.h"
 #include "char_property.h"
-#include "utils.h"
+#include "common.h"
 #include "mmap.h"
+#include "param.h"
+#include "utils.h"
 
 namespace MeCab {
 
@@ -80,7 +78,8 @@ bool CharProperty::open(const Param &param) {
 }
 
 bool CharProperty::open(const char *filename) {
-  MMAP_OPEN(char, cmmap_, std::string(filename), "r");
+  std::ostringstream error;
+  CHECK_FALSE(cmmap_->open(filename, "r"));
 
   const char *ptr = cmmap_->begin();
   unsigned int csize;
@@ -89,7 +88,7 @@ bool CharProperty::open(const char *filename) {
   size_t fsize = sizeof(unsigned int) +
       (32 * csize) + sizeof(unsigned int) * 0xffff;
 
-  CHECK_CLOSE_FALSE(fsize == cmmap_->size())
+  CHECK_FALSE(fsize == cmmap_->size())
       << "invalid file size: " << filename;
 
   clist_.clear();
@@ -104,7 +103,7 @@ bool CharProperty::open(const char *filename) {
 }
 
 void CharProperty::close() {
-  MMAP_CLOSE(char, cmmap_);
+  cmmap_->close();
 }
 
 size_t CharProperty::size() const { return clist_.size(); }
@@ -119,21 +118,24 @@ void CharProperty::set_charset(const char *ct) {
 }
 
 int CharProperty::id(const char *key) const {
-  for (int i = 0; i < static_cast<long>(clist_.size()); ++i)
-    if (std::strcmp(key, clist_[i]) == 0) return i;
+  for (int i = 0; i < static_cast<long>(clist_.size()); ++i) {
+    if (std::strcmp(key, clist_[i]) == 0) {
+      return i;
+    }
+  }
   return -1;
 }
 
 bool CharProperty::compile(const char *cfile,
                            const char *ufile,
                            const char *ofile) {
-  char line[BUF_SIZE];
-  char *col[512];
+  scoped_fixed_array<char, BUF_SIZE> line;
+  scoped_fixed_array<char *, 512> col;
   size_t id = 0;
   std::vector<Range> range;
   std::map<std::string, CharInfo> category;
   std::vector<std::string> category_ary;
-  std::ifstream ifs(cfile);
+  std::ifstream ifs(WPATH(cfile));
   std::istringstream iss(CHAR_PROPERTY_DEF_DEFAULT);
   std::istream *is = &ifs;
 
@@ -143,10 +145,12 @@ bool CharProperty::compile(const char *cfile,
     is = &iss;
   }
 
-  while (is->getline(line, sizeof(line))) {
-    if (std::strlen(line) == 0 || line[0] == '#') continue;
-    size_t size = tokenize2(line, "\t ", col, sizeof(col));
-    CHECK_DIE(size >= 2) << "format error: " << line;
+  while (is->getline(line.get(), line.size())) {
+    if (std::strlen(line.get()) == 0 || line[0] == '#') {
+      continue;
+    }
+    const size_t size = tokenize2(line.get(), "\t ", col.get(), col.size());
+    CHECK_DIE(size >= 2) << "format error: " << line.get();
 
     // 0xFFFF..0xFFFF hoge hoge hgoe #
     if (std::strncmp(col[0], "0x", 2) == 0) {
@@ -171,14 +175,16 @@ bool CharProperty::compile(const char *cfile,
           << "range error: low=" << r.low << " high=" << r.high;
 
       for (size_t i = 1; i < size; ++i) {
-        if (col[i][0] == '#') break;  // skip comments
+        if (col[i][0] == '#') {
+          break;  // skip comments
+        }
         CHECK_DIE(category.find(std::string(col[i])) != category.end())
             << "category [" << col[i] << "] is undefined";
         r.c.push_back(col[i]);
       }
       range.push_back(r);
     } else {
-      CHECK_DIE(size >= 4) << "format error: " << line;
+      CHECK_DIE(size >= 4) << "format error: " << line.get();
 
       std::string key = col[0];
       CHECK_DIE(category.find(key) == category.end())
@@ -191,7 +197,7 @@ bool CharProperty::compile(const char *cfile,
       c.length  = std::atoi(col[3]);
       c.default_type = id++;
 
-      category.insert(std::make_pair<std::string, CharInfo>(key, c));
+      category.insert(std::pair<std::string, CharInfo>(key, c));
       category_ary.push_back(key);
     }
   }
@@ -205,7 +211,7 @@ bool CharProperty::compile(const char *cfile,
       << "category [SPACE] is undefined";
 
   std::istringstream iss2(UNK_DEF_DEFAULT);
-  std::ifstream ifs2(ufile);
+  std::ifstream ifs2(WPATH(ufile));
   std::istream *is2 = &ifs2;
 
   if (!ifs2) {
@@ -215,9 +221,9 @@ bool CharProperty::compile(const char *cfile,
   }
 
   std::set<std::string> unk;
-  while (is2->getline(line, sizeof(line))) {
-    size_t n = tokenizeCSV(line, col, 2);
-    CHECK_DIE(n >= 1) << "format error: " << line;
+  while (is2->getline(line.get(), line.size())) {
+    const size_t n = tokenizeCSV(line.get(), col.get(), 2);
+    CHECK_DIE(n >= 1) << "format error: " << line.get();
     const std::string key = col[0];
     CHECK_DIE(category.find(key) != category.end())
         << "category [" << key << "] is undefined in " << cfile;
@@ -235,21 +241,22 @@ bool CharProperty::compile(const char *cfile,
   {
     std::vector<std::string> tmp;
     tmp.push_back("DEFAULT");
-    CharInfo c = encode(tmp, &category);
+    const CharInfo c = encode(tmp, &category);
     std::fill(table.begin(), table.end(), c);
   }
 
   for (std::vector<Range>::const_iterator it = range.begin();
        it != range.end();
        ++it) {
-    CharInfo c = encode(it->c, &category);
-    for (int i = it->low; i <= it->high; ++i)
+    const CharInfo c = encode(it->c, &category);
+    for (int i = it->low; i <= it->high; ++i) {
       table[i] = c;
+    }
   }
 
   // output binary table
   {
-    std::ofstream ofs(ofile, std::ios::binary|std::ios::out);
+    std::ofstream ofs(WPATH(ofile), std::ios::binary|std::ios::out);
     CHECK_DIE(ofs) << "permission denied: " << ofile;
 
     unsigned int size = static_cast<unsigned int>(category.size());

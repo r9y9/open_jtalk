@@ -4,33 +4,82 @@
 //  Copyright(C) 2001-2006 Taku Kudo <taku@chasen.org>
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 #include <fstream>
-#include "param.h"
-#include "dictionary.h"
-#include "common.h"
-#include "mempool.h"
-#include "dictionary_rewriter.h"
+#include <climits>
 #include "connector.h"
 #include "context_id.h"
-#include "utils.h"
+#include "char_property.h"
+#include "common.h"
+#include "dictionary.h"
+#include "dictionary_rewriter.h"
+#include "feature_index.h"
 #include "iconv_utils.h"
-#include "scoped_ptr.h"
-#include "writer.h"
 #include "mmap.h"
+#include "param.h"
+#include "scoped_ptr.h"
+#include "utils.h"
+#include "writer.h"
 
 namespace MeCab {
+namespace {
 
-static const unsigned int DictionaryMagicID = 0xef718f77u;
+const unsigned int DictionaryMagicID = 0xef718f77u;
+
+int toInt(const char *str) {
+  if (!str || std::strlen(str) == 0) {
+    return INT_MAX;
+  }
+  return std::atoi(str);
+}
+
+int calcCost(const std::string &w, const std::string &feature,
+             int factor,
+             DecoderFeatureIndex *fi, DictionaryRewriter *rewrite,
+             CharProperty *property) {
+  CHECK_DIE(fi);
+  CHECK_DIE(rewrite);
+  CHECK_DIE(property);
+
+  LearnerPath path;
+  LearnerNode rnode;
+  LearnerNode lnode;
+  rnode.stat  = lnode.stat = MECAB_NOR_NODE;
+  rnode.rpath = &path;
+  lnode.lpath = &path;
+  path.lnode  = &lnode;
+  path.rnode  = &rnode;
+
+  size_t mblen = 0;
+  const CharInfo cinfo = property->getCharInfo(w.c_str(),
+                                               w.c_str() + w.size(),
+                                               &mblen);
+  path.rnode->char_type = cinfo.default_type;
+  std::string ufeature, lfeature, rfeature;
+  rewrite->rewrite2(feature, &ufeature, &lfeature, &rfeature);
+  fi->buildUnigramFeature(&path, ufeature.c_str());
+  fi->calcCost(&rnode);
+  return tocost(rnode.wcost, factor);
+}
 
 int progress_bar_darts(size_t current, size_t total) {
   return progress_bar("emitting double-array", current, total);
 }
 
-bool Dictionary::open(const char *file,
-                      const char *mode) {
-  filename_ = file;
-  MMAP_OPEN(char, dmmap_, filename_, mode);
+template <typename T1, typename T2>
+struct pair_1st_cmp: public std::binary_function<bool, T1, T2> {
+  bool operator()(const std::pair<T1, T2> &x1,
+                  const std::pair<T1, T2> &x2)  {
+    return x1.first < x2.first;
+  }
+};
+}  // namespace
 
-  CHECK_CLOSE_FALSE(dmmap_->size() >= 100)
+bool Dictionary::open(const char *file, const char *mode) {
+  close();
+  filename_.assign(file);
+  CHECK_FALSE(dmmap_->open(file, mode))
+      << "no such file or directory: " << file;
+
+  CHECK_FALSE(dmmap_->size() >= 100)
       << "dictionary file is broken: " << file;
 
   const char *ptr = dmmap_->begin();
@@ -42,11 +91,11 @@ bool Dictionary::open(const char *file,
   unsigned int dummy;
 
   read_static<unsigned int>(&ptr, magic);
-  CHECK_CLOSE_FALSE((magic ^ DictionaryMagicID) == dmmap_->size())
+  CHECK_FALSE((magic ^ DictionaryMagicID) == dmmap_->size())
       << "dictionary file is broken: " << file;
 
   read_static<unsigned int>(&ptr, version_);
-  CHECK_CLOSE_FALSE(version_ == DIC_VERSION)
+  CHECK_FALSE(version_ == DIC_VERSION)
       << "incompatible version: " << version_;
 
   read_static<unsigned int>(&ptr, type_);
@@ -70,49 +119,65 @@ bool Dictionary::open(const char *file,
   feature_ = ptr;
   ptr += fsize;
 
-  CHECK_CLOSE_FALSE(ptr == dmmap_->end())
+  CHECK_FALSE(ptr == dmmap_->end())
       << "dictionary file is broken: " << file;
 
   return true;
 }
 
 void Dictionary::close() {
-  MMAP_CLOSE(char, dmmap_);
+  dmmap_->close();
 }
 
 bool Dictionary::compile(const Param &param,
                          const std::vector<std::string> &dics,
-                         const char *matrix_file,
-                         const char *matrix_bin_file,
-                         const char *left_id_file,
-                         const char *right_id_file,
-                         const char *rewrite_file,
-                         const char *pos_id_file,
                          const char *output) {
   Connector matrix;
-  scoped_ptr<DictionaryRewriter> rewrite(0);
-  scoped_ptr<POSIDGenerator> posid(0);
-  scoped_ptr<ContextID> cid(0);
-  scoped_ptr<Writer> writer(0);
-  scoped_ptr<StringBuffer> os(0);
+  scoped_ptr<DictionaryRewriter> rewrite;
+  scoped_ptr<POSIDGenerator> posid;
+  scoped_ptr<DecoderFeatureIndex> fi;
+  scoped_ptr<ContextID> cid;
+  scoped_ptr<Writer> writer;
+  scoped_ptr<Lattice> lattice;
+  scoped_ptr<StringBuffer> os;
+  scoped_ptr<CharProperty> property;
   Node node;
+
+  const std::string dicdir = param.get<std::string>("dicdir");
+
+#define DCONF(file) create_filename(dicdir, std::string(file));
+
+  const std::string matrix_file     = DCONF(MATRIX_DEF_FILE);
+  const std::string matrix_bin_file = DCONF(MATRIX_FILE);
+  const std::string left_id_file    = DCONF(LEFT_ID_FILE);
+  const std::string right_id_file   = DCONF(RIGHT_ID_FILE);
+  const std::string rewrite_file    = DCONF(REWRITE_FILE);
+  const std::string pos_id_file     = DCONF(POS_ID_FILE);
 
   std::vector<std::pair<std::string, Token*> > dic;
 
   size_t offset  = 0;
   unsigned int lexsize = 0;
-  std::string w, feature, ufeature, lfeature, rfeature, fbuf, key;
-  int lid, rid, cost;
+  std::string fbuf;
 
   const std::string from = param.get<std::string>("dictionary-charset");
   const std::string to = param.get<std::string>("charset");
   const bool wakati = param.get<bool>("wakati");
   const int type = param.get<int>("type");
   const std::string node_format = param.get<std::string>("node-format");
+  const int factor = param.get<int>("cost-factor");
+  CHECK_DIE(factor > 0)   << "cost factor needs to be positive value";
+
+  std::string model_file = param.get<std::string>("model");
+  if (model_file.empty()) {
+    model_file = DCONF(MODEL_FILE);
+  }
 
   // for backward compatibility
   std::string config_charset = param.get<std::string>("config-charset");
-  if (config_charset.empty()) config_charset = from;
+  if (config_charset.empty()) {
+    config_charset = from;
+  }
 
   CHECK_DIE(!from.empty()) << "input dictionary charset is empty";
   CHECK_DIE(!to.empty())   << "output dictionary charset is empty";
@@ -127,23 +192,24 @@ bool Dictionary::compile(const Param &param,
 
   if (!node_format.empty()) {
     writer.reset(new Writer);
+    lattice.reset(createLattice());
     os.reset(new StringBuffer);
     memset(&node, 0, sizeof(node));
   }
 
-  if (!matrix.openText(matrix_file) &&
-      !matrix.open(matrix_bin_file)) {
+  if (!matrix.openText(matrix_file.c_str()) &&
+      !matrix.open(matrix_bin_file.c_str())) {
     matrix.set_left_size(1);
     matrix.set_right_size(1);
   }
 
   posid.reset(new POSIDGenerator);
-  posid->open(pos_id_file, &config_iconv);
+  posid->open(pos_id_file.c_str(), &config_iconv);
 
   std::istringstream iss(UNK_DEF_DEFAULT);
 
   for (size_t i = 0; i < dics.size(); ++i) {
-    std::ifstream ifs(dics[i].c_str());
+    std::ifstream ifs(WPATH(dics[i].c_str()));
     std::istream *is = &ifs;
     if (!ifs) {
       if (type == MECAB_UNK_DIC) {
@@ -157,33 +223,53 @@ bool Dictionary::compile(const Param &param,
 
     std::cout << "reading " << dics[i] << " ... ";
 
-    char line[BUF_SIZE];
+    scoped_fixed_array<char, BUF_SIZE> line;
     size_t num = 0;
 
-    while (is->getline(line, sizeof(line))) {
+    while (is->getline(line.get(), line.size())) {
       char *col[8];
-      const size_t n = tokenizeCSV(line, col, 5);
-      CHECK_DIE(n == 5) << "format error: " << line;
+      const size_t n = tokenizeCSV(line.get(), col, 5);
+      CHECK_DIE(n == 5) << "format error: " << line.get();
 
-      w = col[0];
-      lid = std::atoi(col[1]);
-      rid = std::atoi(col[2]);
-      cost = std::atoi(col[3]);
-      feature = col[4];
-      int pid = posid->id(feature.c_str());
+      std::string w = col[0];
+      int lid = toInt(col[1]);
+      int rid = toInt(col[2]);
+      int cost = toInt(col[3]);
+      std::string feature = col[4];
+      const int pid = posid->id(feature.c_str());
 
-      if (lid < 0  || rid < 0) {
+      if (cost == INT_MAX) {
+        CHECK_DIE(type == MECAB_USR_DIC)
+            << "cost field should not be empty in sys/unk dic.";
         if (!rewrite.get()) {
           rewrite.reset(new DictionaryRewriter);
-          rewrite->open(rewrite_file, &config_iconv);
+          rewrite->open(rewrite_file.c_str(), &config_iconv);
+          fi.reset(new DecoderFeatureIndex);
+          CHECK_DIE(fi->open(param)) << "cannot open feature index";
+          property.reset(new CharProperty);
+          CHECK_DIE(property->open(param));
+          property->set_charset(from.c_str());
+        }
+        cost = calcCost(w, feature, factor,
+                        fi.get(), rewrite.get(), property.get());
+      }
+
+      if (lid < 0  || rid < 0 || lid == INT_MAX || rid == INT_MAX) {
+        CHECK_DIE(type == MECAB_USR_DIC)
+            << "lid/rid fields should not be empty in sys/unk dic.";
+        if (!rewrite.get()) {
+          rewrite.reset(new DictionaryRewriter);
+          rewrite->open(rewrite_file.c_str(), &config_iconv);
         }
 
+        std::string ufeature, lfeature, rfeature;
         CHECK_DIE(rewrite->rewrite(feature, &ufeature, &lfeature, &rfeature))
             << "rewrite failed: " << feature;
 
         if (!cid.get()) {
           cid.reset(new ContextID);
-          cid->open(left_id_file, right_id_file, &config_iconv);
+          cid->open(left_id_file.c_str(),
+                    right_id_file.c_str(), &config_iconv);
           CHECK_DIE(cid->left_size()  == matrix.left_size() &&
                     cid->right_size() == matrix.right_size())
               << "Context ID files("
@@ -223,20 +309,22 @@ bool Dictionary::compile(const Param &param,
         node.rlength = w.size();
         node.posid   = pid;
         node.stat    = MECAB_NOR_NODE;
+        lattice->set_sentence(w.c_str());
         CHECK_DIE(os.get());
         CHECK_DIE(writer.get());
         os->clear();
-        CHECK_DIE(writer->writeNode(&*os,
+        CHECK_DIE(writer->writeNode(lattice.get(),
                                     node_format.c_str(),
-                                    w.c_str(),
-                                    &node)) <<
+                                    &node, &*os)) <<
             "conversion error: " << feature << " with " << node_format;
         *os << '\0';
         feature = os->str();
       }
 
-      key.clear();
-      if (!wakati) key = feature + '\0';
+      std::string key;
+      if (!wakati) {
+        key = feature + '\0';
+      }
 
       Token* token  = new Token;
       token->lcAttr = lid;
@@ -245,10 +333,12 @@ bool Dictionary::compile(const Param &param,
       token->wcost = cost;
       token->feature = offset;
       token->compound = 0;
-      dic.push_back(std::make_pair<std::string, Token*>(w, token));
+      dic.push_back(std::pair<std::string, Token*>(w, token));
 
       // append to output buffer
-      if (!wakati) fbuf.append(key.data(), key.size());
+      if (!wakati) {
+        fbuf.append(key.data(), key.size());
+      }
       offset += key.size();
 
       ++num;
@@ -258,9 +348,12 @@ bool Dictionary::compile(const Param &param,
     std::cout << num << std::endl;
   }
 
-  if (wakati) fbuf.append("\0", 1);
+  if (wakati) {
+    fbuf.append("\0", 1);
+  }
 
-  std::sort(dic.begin(), dic.end());
+  std::stable_sort(dic.begin(), dic.end(),
+                   pair_1st_cmp<std::string, Token *>());
 
   size_t bsize = 0;
   size_t idx = 0;
@@ -320,7 +413,7 @@ bool Dictionary::compile(const Param &param,
   std::fill(charset, charset + sizeof(charset), '\0');
   std::strncpy(charset, to.c_str(), 31);
 
-  std::ofstream bofs(output, std::ios::binary|std::ios::out);
+  std::ofstream bofs(WPATH(output), std::ios::binary|std::ios::out);
   CHECK_DIE(bofs) << "permission denied: " << output;
 
   unsigned int magic = 0;

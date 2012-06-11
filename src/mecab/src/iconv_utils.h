@@ -10,7 +10,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -51,6 +51,9 @@
 #include <iconv.h>
 #endif
 
+/* for Open JTalk
+#if defined(_WIN32) && !defined(__CYGWIN__)
+*/
 #ifdef HAVE_WINDOWS_H /* for Open JTalk */
 #include "windows.h"
 #endif
@@ -65,6 +68,9 @@ class Iconv {
   int ic_;
 #endif
 
+/* for Open JTalk
+#if defined(_WIN32) && !defined(__CYGWIN__)
+*/
 #ifdef HAVE_WINDOWS_H /* for Open JTalk */
   DWORD from_cp_;
   DWORD to_cp_;
