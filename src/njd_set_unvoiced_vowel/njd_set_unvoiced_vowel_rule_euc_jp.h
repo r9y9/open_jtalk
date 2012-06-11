@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -53,10 +53,11 @@ NJD_SET_UNVOICED_VOWEL_RULE_H_START;
 
 /*
   無声子音: k ky s sh t ty ch ts h f hy p py
-  Rule 1 助動詞の「です」と「ます」の「す」が無声化
+  Rule 1 助動詞の「です」と「ます」の「す」が無声化 (辞書修正済)
   Rule 2 続けて無声化しない
   Rule 3 アクセント核で無声化しない
   Rule 4 無声子音(k ky s sh t ty ch ts h f hy p py)に囲まれた「i」と「u」が無声化
+         例外：s->s, s->sh, f->f, f->h, f->hy, h->f, h->h, h->hy
 */
 
 #define NJD_SET_UNVOICED_VOWEL_QUOTATION "’"
@@ -65,20 +66,73 @@ NJD_SET_UNVOICED_VOWEL_RULE_H_START;
 
 #define NJD_SET_UNVOICED_VOWEL_JODOUSHI "助動詞"
 
-static const char *njd_set_unvoiced_vowel_jodoushi_table[] = {
-   "デス", "デス’", "2",
-   "マス", "マス’", "2",
-   NULL, NULL
+static const char *njd_set_unvoiced_vowel_candidate_list1[] = {
+   "スィ",                      /* s i */
+   "ス",                        /* s u */
+   NULL
 };
 
-static const char *njd_set_unvoiced_vowel_candidate_list[] = {
+static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
+   "カ",                        /* k ky */
+   "キ",
+   "ク",
+   "ケ",
+   "コ",
+   "タ",                        /* t ty ch ts */
+   "チ",
+   "ツ",
+   "テ",
+   "ト",
+   "ハ",                        /* h f hy */
+   "ヒ",
+   "フ",
+   "ヘ",
+   "ホ",
+   "パ",                        /* p py */
+   "ピ",
+   "プ",
+   "ペ",
+   "ポ",
+   NULL
+};
+
+static const char *njd_set_unvoiced_vowel_candidate_list2[] = {
+   "フィ",                      /* f i */
+   "ヒ",                        /* h i */
+   "フ",                        /* f u */
+   NULL
+};
+
+static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
+   "カ",                        /* k ky */
+   "キ",
+   "ク",
+   "ケ",
+   "コ",
+   "サ",                        /* s sh */
+   "シ",
+   "ス",
+   "セ",
+   "ソ",
+   "タ",                        /* t ty ch ts */
+   "チ",
+   "ツ",
+   "テ",
+   "ト",
+   "パ",                        /* p py */
+   "ピ",
+   "プ",
+   "ペ",
+   "ポ",
+   NULL
+};
+
+static const char *njd_set_unvoiced_vowel_candidate_list3[] = {
    "キュ",                      /* ky u */
    "シュ",                      /* sh u */
-   "スィ",                      /* s i */
    "チュ",                      /* ch u */
    "ツィ",                      /* ts i */
    "ヒュ",                      /* hy u */
-   "フィ",                      /* f i */
    "ピュ",                      /* py u */
    "テュ",                      /* ty u */
    "トゥ",                      /* t u */
@@ -86,17 +140,14 @@ static const char *njd_set_unvoiced_vowel_candidate_list[] = {
    "キ",                        /* k i */
    "ク",                        /* k u */
    "シ",                        /* sh i */
-   "ス",                        /* s u */
    "チ",                        /* ch i */
    "ツ",                        /* ts u */
-   "ヒ",                        /* h i */
-   "フ",                        /* f u */
    "ピ",                        /* p i */
    "プ",                        /* p u */
    NULL
 };
 
-static const char *njd_set_unvoiced_vowel_next_mora_list[] = {
+static const char *njd_set_unvoiced_vowel_next_mora_list3[] = {
    "カ",                        /* k ky */
    "キ",
    "ク",
