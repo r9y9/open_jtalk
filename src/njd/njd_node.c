@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -57,60 +57,11 @@ NJD_NODE_C_START;
 
 #include "njd.h"
 
-#if defined(CHARSET_EUC_JP)
-#include "njd_rule_euc_jp.h"
-#elif defined(CHARSET_SHIFT_JIS)
-#include "njd_rule_shift_jis.h"
-#elif defined(CHARSET_UTF_8)
-#include "njd_rule_utf_8.h"
-#else
-#error CHARSET is not specified
-#endif
+static const char *nodata = "*";
 
 #define MAXBUFLEN 1024
 
-/* If head of 'str' is equal to 'pattern', return length of 'pattern'.
-   If head of 'str' is not equal to 'pattern', return '-1'. */
-static int strtopcmp(char *str, const char *pattern)
-{
-   int i;
-
-   for (i = 0;; i++) {
-      if (pattern[i] == '\0')
-         return i;
-      if (str[i] == '\0')
-         return -1;
-      if (str[i] != pattern[i])
-         return -1;
-   }
-}
-
-/* Copy 'n' mora from 'str' to 'buff' and return length of 'buff'.
-   If 'str' is not appropriate mora, return '0'. */
-static int morancpy(char *buff, char *str, int n)
-{
-   int i, j;
-   int s = 0, e = 0;
-
-   for (i = 0; i < n; i++) {
-      for (j = 0; njd_mora_list[j] != NULL; j++) {
-         e = strtopcmp(&str[s], njd_mora_list[j]);
-         if (e != -1)
-            break;
-      }
-      if (e != -1)
-         s += e;
-      else {
-         buff[0] = '\0';
-         return 0;
-      }
-   }
-   strncpy(buff, str, s);
-   buff[s] = '\0';
-   return s;
-}
-
-static void get_token_from_string(char *str, int *index, char *buff, const char d)
+static void get_token_from_string(const char *str, int *index, char *buff, char d)
 {
    char c;
    int i = 0;
@@ -147,7 +98,7 @@ void NJDNode_initialize(NJDNode * node)
    node->next = NULL;
 }
 
-void NJDNode_set_string(NJDNode * node, char *str)
+void NJDNode_set_string(NJDNode * node, const char *str)
 {
    if (node->string != NULL)
       free(node->string);
@@ -157,7 +108,7 @@ void NJDNode_set_string(NJDNode * node, char *str)
       node->string = strdup(str);
 }
 
-void NJDNode_set_pos(NJDNode * node, char *str)
+void NJDNode_set_pos(NJDNode * node, const char *str)
 {
    if (node->pos != NULL)
       free(node->pos);
@@ -167,7 +118,7 @@ void NJDNode_set_pos(NJDNode * node, char *str)
       node->pos = strdup(str);
 }
 
-void NJDNode_set_pos_group1(NJDNode * node, char *str)
+void NJDNode_set_pos_group1(NJDNode * node, const char *str)
 {
    if (node->pos_group1 != NULL)
       free(node->pos_group1);
@@ -177,7 +128,7 @@ void NJDNode_set_pos_group1(NJDNode * node, char *str)
       node->pos_group1 = strdup(str);
 }
 
-void NJDNode_set_pos_group2(NJDNode * node, char *str)
+void NJDNode_set_pos_group2(NJDNode * node, const char *str)
 {
    if (node->pos_group2 != NULL)
       free(node->pos_group2);
@@ -187,7 +138,7 @@ void NJDNode_set_pos_group2(NJDNode * node, char *str)
       node->pos_group2 = strdup(str);
 }
 
-void NJDNode_set_pos_group3(NJDNode * node, char *str)
+void NJDNode_set_pos_group3(NJDNode * node, const char *str)
 {
    if (node->pos_group3 != NULL)
       free(node->pos_group3);
@@ -197,7 +148,7 @@ void NJDNode_set_pos_group3(NJDNode * node, char *str)
       node->pos_group3 = strdup(str);
 }
 
-void NJDNode_set_ctype(NJDNode * node, char *str)
+void NJDNode_set_ctype(NJDNode * node, const char *str)
 {
    if (node->ctype != NULL)
       free(node->ctype);
@@ -207,7 +158,7 @@ void NJDNode_set_ctype(NJDNode * node, char *str)
       node->ctype = strdup(str);
 }
 
-void NJDNode_set_cform(NJDNode * node, char *str)
+void NJDNode_set_cform(NJDNode * node, const char *str)
 {
    if (node->cform != NULL)
       free(node->cform);
@@ -217,7 +168,7 @@ void NJDNode_set_cform(NJDNode * node, char *str)
       node->cform = strdup(str);
 }
 
-void NJDNode_set_orig(NJDNode * node, char *str)
+void NJDNode_set_orig(NJDNode * node, const char *str)
 {
    if (node->orig != NULL)
       free(node->orig);
@@ -227,7 +178,7 @@ void NJDNode_set_orig(NJDNode * node, char *str)
       node->orig = strdup(str);
 }
 
-void NJDNode_set_read(NJDNode * node, char *str)
+void NJDNode_set_read(NJDNode * node, const char *str)
 {
    if (node->read != NULL)
       free(node->read);
@@ -237,7 +188,7 @@ void NJDNode_set_read(NJDNode * node, char *str)
       node->read = strdup(str);
 }
 
-void NJDNode_set_pron(NJDNode * node, char *str)
+void NJDNode_set_pron(NJDNode * node, const char *str)
 {
    if (node->pron != NULL)
       free(node->pron);
@@ -266,7 +217,7 @@ void NJDNode_set_mora_size(NJDNode * node, int size)
    }
 }
 
-void NJDNode_set_chain_rule(NJDNode * node, char *str)
+void NJDNode_set_chain_rule(NJDNode * node, const char *str)
 {
    if (node->chain_rule != NULL)
       free(node->chain_rule);
@@ -281,7 +232,7 @@ void NJDNode_set_chain_flag(NJDNode * node, int flag)
    node->chain_flag = flag;
 }
 
-void NJDNode_add_read(NJDNode * node, char *str)
+void NJDNode_add_read(NJDNode * node, const char *str)
 {
    char *c;
 
@@ -298,7 +249,7 @@ void NJDNode_add_read(NJDNode * node, char *str)
    }
 }
 
-void NJDNode_add_pron(NJDNode * node, char *str)
+void NJDNode_add_pron(NJDNode * node, const char *str)
 {
    char *c;
 
@@ -334,53 +285,73 @@ void NJDNode_add_mora_size(NJDNode * node, int size)
    }
 }
 
-char *NJDNode_get_string(NJDNode * node)
+const char *NJDNode_get_string(NJDNode * node)
 {
+   if (node->string == NULL)
+      return nodata;
    return node->string;
 }
 
-char *NJDNode_get_pos(NJDNode * node)
+const char *NJDNode_get_pos(NJDNode * node)
 {
+   if (node->pos == NULL)
+      return nodata;
    return node->pos;
 }
 
-char *NJDNode_get_pos_group1(NJDNode * node)
+const char *NJDNode_get_pos_group1(NJDNode * node)
 {
+   if (node->pos_group1 == NULL)
+      return nodata;
    return node->pos_group1;
 }
 
-char *NJDNode_get_pos_group2(NJDNode * node)
+const char *NJDNode_get_pos_group2(NJDNode * node)
 {
+   if (node->pos_group2 == NULL)
+      return nodata;
    return node->pos_group2;
 }
 
-char *NJDNode_get_pos_group3(NJDNode * node)
+const char *NJDNode_get_pos_group3(NJDNode * node)
 {
+   if (node->pos_group3 == NULL)
+      return nodata;
    return node->pos_group3;
 }
 
-char *NJDNode_get_ctype(NJDNode * node)
+const char *NJDNode_get_ctype(NJDNode * node)
 {
+   if (node->ctype == NULL)
+      return nodata;
    return node->ctype;
 }
 
-char *NJDNode_get_cform(NJDNode * node)
+const char *NJDNode_get_cform(NJDNode * node)
 {
+   if (node->cform == NULL)
+      return nodata;
    return node->cform;
 }
 
-char *NJDNode_get_orig(NJDNode * node)
+const char *NJDNode_get_orig(NJDNode * node)
 {
+   if (node->orig == NULL)
+      return nodata;
    return node->orig;
 }
 
-char *NJDNode_get_read(NJDNode * node)
+const char *NJDNode_get_read(NJDNode * node)
 {
+   if (node->read == NULL)
+      return nodata;
    return node->read;
 }
 
-char *NJDNode_get_pron(NJDNode * node)
+const char *NJDNode_get_pron(NJDNode * node)
 {
+   if (node->pron == NULL)
+      return nodata;
    return node->pron;
 }
 
@@ -394,8 +365,10 @@ int NJDNode_get_mora_size(NJDNode * node)
    return node->mora_size;
 }
 
-char *NJDNode_get_chain_rule(NJDNode * node)
+const char *NJDNode_get_chain_rule(NJDNode * node)
 {
+   if (node->chain_rule == NULL)
+      return nodata;
    return node->chain_rule;
 }
 
@@ -404,21 +377,26 @@ int NJDNode_get_chain_flag(NJDNode * node)
    return node->chain_flag;
 }
 
-void NJDNode_load(NJDNode * node, char *str)
+void NJDNode_load(NJDNode * node, const char *str)
 {
    int i, j;
    int index = 0;
-   char pron[1024];
-   char buff[1024];
-   char acc[1024];
+   char buff[MAXBUFLEN];
+   char buff_string[MAXBUFLEN];
+   char buff_orig[MAXBUFLEN];
+   char buff_read[MAXBUFLEN];
+   char buff_pron[MAXBUFLEN];
+   char buff_acc[MAXBUFLEN];
    int count;
-   int *alist;
-   int *mlist;
+   int index_string;
+   int index_orig;
+   int index_read;
+   int index_pron;
+   int index_acc;
    NJDNode *prev = NULL;
 
    /* load */
-   get_token_from_string(str, &index, buff, ',');
-   NJDNode_set_string(node, buff);
+   get_token_from_string(str, &index, buff_string, ',');
    get_token_from_string(str, &index, buff, ',');
    NJDNode_set_pos(node, buff);
    get_token_from_string(str, &index, buff, ',');
@@ -431,105 +409,106 @@ void NJDNode_load(NJDNode * node, char *str)
    NJDNode_set_ctype(node, buff);
    get_token_from_string(str, &index, buff, ',');
    NJDNode_set_cform(node, buff);
+   get_token_from_string(str, &index, buff_orig, ',');
+   get_token_from_string(str, &index, buff_read, ',');
+   get_token_from_string(str, &index, buff_pron, ',');
+   get_token_from_string(str, &index, buff_acc, ',');
    get_token_from_string(str, &index, buff, ',');
-   if (strcmp(buff, "") == 0)
-      NJDNode_set_orig(node, NULL);
-   else
-      NJDNode_set_orig(node, buff);
-   get_token_from_string(str, &index, buff, ',');
-   if (strcmp(buff, "") == 0)
-      NJDNode_set_read(node, NULL);
-   else
-      NJDNode_set_read(node, buff);
-   get_token_from_string(str, &index, buff, ',');
-   strcpy(pron, buff);
-   get_token_from_string(str, &index, buff, ',');
-   strcpy(acc, buff);
-   get_token_from_string(str, &index, buff, ',');
-   if (strcmp(buff, "") == 0)
-      NJDNode_set_chain_rule(node, "-1");
-   else
-      NJDNode_set_chain_rule(node, buff);
+   NJDNode_set_chain_rule(node, buff);
 
    /* for symbol */
-   if (strstr(acc, "*") != NULL) {
+   if (strstr(buff_acc, "*") != NULL || strstr(buff_acc, "/") == NULL) {
+      NJDNode_set_string(node, buff_string);
+      NJDNode_set_orig(node, buff_orig);
+      NJDNode_set_read(node, buff_read);
+      NJDNode_set_pron(node, buff_pron);
       NJDNode_set_acc(node, 0);
       NJDNode_set_mora_size(node, 0);
-      if (strcmp(pron, "") == 0)
-         NJDNode_set_pron(node, NULL);
-      else
-         NJDNode_set_pron(node, pron);
       return;
    }
 
-   /* count chained node */
-   for (i = 0, count = 0; acc[i] != '\0'; i++)
-      if (acc[i] == '/')
+   /* count chained word */
+   for (i = 0, count = 0; buff_acc[i] != '\0'; i++)
+      if (buff_acc[i] == '/')
          count++;
 
-   /* get accent types and mora sizes */
-   alist = (int *) calloc(count, sizeof(int));
-   mlist = (int *) calloc(count, sizeof(int));
-   for (i = 0, index = 0; i < count; i++) {
-      get_token_from_string(acc, &index, buff, '/');
-      alist[i] = 0;
+   /* for single word */
+   if (count == 1) {
+      NJDNode_set_string(node, buff_string);
+      NJDNode_set_orig(node, buff_orig);
+      NJDNode_set_read(node, buff_read);
+      NJDNode_set_pron(node, buff_pron);
+      index_acc = 0;
+      get_token_from_string(buff_acc, &index_acc, buff, '/');
       if (buff[0] == '\0') {
+         j = 0;
          fprintf(stderr, "WARNING: NJDNode_load() in njd_node.c: Accent is empty.\n");
       } else {
          j = atoi(buff);
-         if (j >= 0)
-            alist[i] = j;
       }
-      get_token_from_string(acc, &index, buff, ':');
-      mlist[i] = 0;
+      NJDNode_set_acc(node, j);
+      get_token_from_string(buff_acc, &index_acc, buff, ':');
       if (buff[0] == '\0') {
+         j = 0;
          fprintf(stderr, "WARNING: NJDNode_load() in njd_node.c: Mora size is empty.\n");
       } else {
          j = atoi(buff);
-         if (j >= 0)
-            mlist[i] = j;
       }
+      NJDNode_set_mora_size(node, j);
+      return;
    }
 
-   /* set nodes to NJDNode */
-   if (count == 1) {
-      NJDNode_set_acc(node, alist[0]);
-      NJDNode_set_mora_size(node, mlist[0]);
-      if (strcmp(pron, "") == 0)
-         NJDNode_set_pron(node, NULL);
-      else
-         NJDNode_set_pron(node, pron);
-   } else {
-      for (i = 0, index = 0; i < count; i++) {
-         if (i > 0) {
-            node = (NJDNode *) calloc(1, sizeof(NJDNode));
-            NJDNode_initialize(node);
-            NJDNode_copy(node, prev);
-            NJDNode_set_string(node, "");
-            NJDNode_set_chain_flag(node, 0);
-            node->prev = prev;
-            prev->next = node;
-         }
-         j = morancpy(buff, &pron[index], mlist[i]);
-         if (j > 0) {
-            index += j;
-            NJDNode_set_acc(node, alist[i]);
-            NJDNode_set_mora_size(node, mlist[i]);
-            NJDNode_set_pron(node, buff);
-         } else {
-            fprintf(stderr,
-                    "WARNING: NJDNode_load() in njd_node.c: %s is not appropriate mora list.\n",
-                    &pron[index]);
-            NJDNode_set_acc(node, 0);
-            NJDNode_set_mora_size(node, 0);
-            NJDNode_set_pron(node, NULL);
-            break;
-         }
-         prev = node;
+   /* parse chained word */
+   index_string = 0;
+   index_orig = 0;
+   index_read = 0;
+   index_pron = 0;
+   index_acc = 0;
+   for (i = 0; i < count; i++) {
+      if (i > 0) {
+         node = (NJDNode *) calloc(1, sizeof(NJDNode));
+         NJDNode_initialize(node);
+         NJDNode_copy(node, prev);
+         NJDNode_set_chain_flag(node, 0);
+         node->prev = prev;
+         prev->next = node;
       }
+      /* orig */
+      get_token_from_string(buff_orig, &index_orig, buff, ':');
+      NJDNode_set_orig(node, buff);
+      /* string */
+      if (i + 1 < count) {
+         NJDNode_set_string(node, buff);
+         index_string += strlen(buff);
+      } else {
+         NJDNode_set_string(node, &buff_string[index_string]);
+      }
+      /* read */
+      get_token_from_string(buff_read, &index_read, buff, ':');
+      NJDNode_set_read(node, buff);
+      /* pron */
+      get_token_from_string(buff_pron, &index_pron, buff, ':');
+      NJDNode_set_pron(node, buff);
+      /* acc */
+      get_token_from_string(buff_acc, &index_acc, buff, '/');
+      if (buff[0] == '\0') {
+         j = 0;
+         fprintf(stderr, "WARNING: NJDNode_load() in njd_node.c: Accent is empty.\n");
+      } else {
+         j = atoi(buff);
+      }
+      NJDNode_set_acc(node, j);
+      /* mora size */
+      get_token_from_string(buff_acc, &index_acc, buff, ':');
+      if (buff[0] == '\0') {
+         j = 0;
+         fprintf(stderr, "WARNING: NJDNode_load() in njd_node.c: Mora size is empty.\n");
+      } else {
+         j = atoi(buff);
+      }
+      NJDNode_set_mora_size(node, j);
+      prev = node;
    }
-   free(mlist);
-   free(alist);
 }
 
 NJDNode *NJDNode_insert(NJDNode * prev, NJDNode * next, NJDNode * node)
@@ -574,27 +553,22 @@ void NJDNode_print(NJDNode * node)
 
 void NJDNode_fprint(NJDNode * node, FILE * fp)
 {
-   fprintf(fp, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d\n",
-           node->string == NULL ? "" : node->string, node->pos == NULL ? "" : node->pos,
-           node->pos_group1 == NULL ? "" : node->pos_group1,
-           node->pos_group2 == NULL ? "" : node->pos_group2,
-           node->pos_group3 == NULL ? "" : node->pos_group3, node->ctype == NULL ? "" : node->ctype,
-           node->cform == NULL ? "" : node->cform, node->orig == NULL ? "" : node->orig,
-           node->read == NULL ? "" : node->read, node->pron == NULL ? "" : node->pron, node->acc,
-           node->mora_size, node->chain_rule == NULL ? "" : node->chain_rule, node->chain_flag);
+   fprintf(fp, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d\n", NJDNode_get_string(node),
+           NJDNode_get_pos(node), NJDNode_get_pos_group1(node), NJDNode_get_pos_group2(node),
+           NJDNode_get_pos_group3(node), NJDNode_get_ctype(node), NJDNode_get_cform(node),
+           NJDNode_get_orig(node), NJDNode_get_read(node), NJDNode_get_pron(node),
+           NJDNode_get_acc(node), NJDNode_get_mora_size(node), NJDNode_get_chain_rule(node),
+           NJDNode_get_chain_flag(node));
 }
 
 void NJDNode_sprint(NJDNode * node, char *buff, const char *split_code)
 {
-   sprintf(buff, "%s%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d%s", buff,
-           node->string == NULL ? "" : node->string, node->pos == NULL ? "" : node->pos,
-           node->pos_group1 == NULL ? "" : node->pos_group1,
-           node->pos_group2 == NULL ? "" : node->pos_group2,
-           node->pos_group3 == NULL ? "" : node->pos_group3, node->ctype == NULL ? "" : node->ctype,
-           node->cform == NULL ? "" : node->cform, node->orig == NULL ? "" : node->orig,
-           node->read == NULL ? "" : node->read, node->pron == NULL ? "" : node->pron, node->acc,
-           node->mora_size, node->chain_rule == NULL ? "" : node->chain_rule, node->chain_flag,
-           split_code);
+   sprintf(buff, "%s%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d/%d,%s,%d%s", buff, NJDNode_get_string(node),
+           NJDNode_get_pos(node), NJDNode_get_pos_group1(node), NJDNode_get_pos_group2(node),
+           NJDNode_get_pos_group3(node), NJDNode_get_ctype(node), NJDNode_get_cform(node),
+           NJDNode_get_orig(node), NJDNode_get_read(node), NJDNode_get_pron(node),
+           NJDNode_get_acc(node), NJDNode_get_mora_size(node), NJDNode_get_chain_rule(node),
+           NJDNode_get_chain_flag(node), split_code);
 }
 
 void NJDNode_clear(NJDNode * node)
@@ -645,7 +619,7 @@ void NJDNode_clear(NJDNode * node)
       free(node->chain_rule);
       node->chain_rule = NULL;
    }
-   node->chain_flag = 0;
+   node->chain_flag = -1;
    node->prev = NULL;
    node->next = NULL;
 }

@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -73,39 +73,39 @@ typedef struct _NJDNode {
 } NJDNode;
 
 void NJDNode_initialize(NJDNode * node);
-void NJDNode_set_string(NJDNode * node, char *str);
-void NJDNode_set_pos(NJDNode * node, char *str);
-void NJDNode_set_pos_group1(NJDNode * node, char *str);
-void NJDNode_set_pos_group2(NJDNode * node, char *str);
-void NJDNode_set_pos_group3(NJDNode * node, char *str);
-void NJDNode_set_ctype(NJDNode * node, char *str);
-void NJDNode_set_cform(NJDNode * node, char *str);
-void NJDNode_set_orig(NJDNode * node, char *str);
-void NJDNode_set_read(NJDNode * node, char *str);
-void NJDNode_set_pron(NJDNode * node, char *str);
+void NJDNode_set_string(NJDNode * node, const char *str);
+void NJDNode_set_pos(NJDNode * node, const char *str);
+void NJDNode_set_pos_group1(NJDNode * node, const char *str);
+void NJDNode_set_pos_group2(NJDNode * node, const char *str);
+void NJDNode_set_pos_group3(NJDNode * node, const char *str);
+void NJDNode_set_ctype(NJDNode * node, const char *str);
+void NJDNode_set_cform(NJDNode * node, const char *str);
+void NJDNode_set_orig(NJDNode * node, const char *str);
+void NJDNode_set_read(NJDNode * node, const char *str);
+void NJDNode_set_pron(NJDNode * node, const char *str);
 void NJDNode_set_acc(NJDNode * node, int acc);
 void NJDNode_set_mora_size(NJDNode * node, int size);
-void NJDNode_set_chain_rule(NJDNode * node, char *str);
+void NJDNode_set_chain_rule(NJDNode * node, const char *str);
 void NJDNode_set_chain_flag(NJDNode * node, int flag);
-void NJDNode_add_read(NJDNode * node, char *str);
-void NJDNode_add_pron(NJDNode * node, char *str);
+void NJDNode_add_read(NJDNode * node, const char *str);
+void NJDNode_add_pron(NJDNode * node, const char *str);
 void NJDNode_add_acc(NJDNode * node, int acc);
 void NJDNode_add_mora_size(NJDNode * node, int size);
-char *NJDNode_get_string(NJDNode * node);
-char *NJDNode_get_pos(NJDNode * node);
-char *NJDNode_get_pos_group1(NJDNode * node);
-char *NJDNode_get_pos_group2(NJDNode * node);
-char *NJDNode_get_pos_group3(NJDNode * node);
-char *NJDNode_get_ctype(NJDNode * node);
-char *NJDNode_get_cform(NJDNode * node);
-char *NJDNode_get_orig(NJDNode * node);
-char *NJDNode_get_read(NJDNode * node);
-char *NJDNode_get_pron(NJDNode * node);
+const char *NJDNode_get_string(NJDNode * node);
+const char *NJDNode_get_pos(NJDNode * node);
+const char *NJDNode_get_pos_group1(NJDNode * node);
+const char *NJDNode_get_pos_group2(NJDNode * node);
+const char *NJDNode_get_pos_group3(NJDNode * node);
+const char *NJDNode_get_ctype(NJDNode * node);
+const char *NJDNode_get_cform(NJDNode * node);
+const char *NJDNode_get_orig(NJDNode * node);
+const char *NJDNode_get_read(NJDNode * node);
+const char *NJDNode_get_pron(NJDNode * node);
 int NJDNode_get_acc(NJDNode * node);
 int NJDNode_get_mora_size(NJDNode * node);
-char *NJDNode_get_chain_rule(NJDNode * node);
+const char *NJDNode_get_chain_rule(NJDNode * node);
 int NJDNode_get_chain_flag(NJDNode * node);
-void NJDNode_load(NJDNode * node, char *str);
+void NJDNode_load(NJDNode * node, const char *str);
 NJDNode *NJDNode_insert(NJDNode * prev, NJDNode * next, NJDNode * node);
 void NJDNode_copy(NJDNode * node1, NJDNode * node2);
 void NJDNode_print(NJDNode * node);
@@ -121,7 +121,7 @@ typedef struct _NJD {
 } NJD;
 
 void NJD_initialize(NJD * njd);
-void NJD_load(NJD * njd, char *str);
+void NJD_load(NJD * njd, const char *str);
 void NJD_load_from_fp(NJD * njd, FILE * fp);
 int NJD_get_size(NJD * njd);
 void NJD_push_node(NJD * njd, NJDNode * node);

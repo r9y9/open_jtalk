@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -59,7 +59,7 @@ NJD_C_START;
 
 #define MAXBUFLEN 1024
 
-static int get_token_from_string(char *str, int *index, char *buff, char d)
+static int get_token_from_string(const char *str, int *index, char *buff, char d)
 {
    char c;
    int i;
@@ -127,7 +127,7 @@ void NJD_initialize(NJD * njd)
    njd->tail = NULL;
 }
 
-void NJD_load(NJD * njd, char *str)
+void NJD_load(NJD * njd, const char *str)
 {
    int i = 0;
    NJDNode *node = NULL;
@@ -358,7 +358,7 @@ void NJD_remove_silent_node(NJD * njd)
    NJDNode *node;
 
    for (node = njd->head; node != NULL;)
-      if (NJDNode_get_pron(node) == NULL || strcmp(NJDNode_get_pron(node), "") == 0)
+      if (strcmp(NJDNode_get_pron(node), "*") == 0)
          node = NJD_remove_node(njd, node);
       else
          node = node->next;
