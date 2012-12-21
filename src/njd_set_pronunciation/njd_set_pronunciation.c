@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -70,7 +70,7 @@ NJD_SET_PRONUNCIATION_C_START;
 
 #define MAXBUFLEN 1024
 
-static int strtopcmp(char *str, const char *pattern)
+static int strtopcmp(const char *str, const char *pattern)
 {
    int i;
 
@@ -87,7 +87,7 @@ static int strtopcmp(char *str, const char *pattern)
 void njd_set_pronunciation(NJD * njd)
 {
    NJDNode *node;
-   char *str;
+   const char *str;
    int i, j = 0;
    int pos;
    int len;
@@ -103,7 +103,7 @@ void njd_set_pronunciation(NJD * njd)
                   NJDNode_set_pron(node, (char *) njd_set_pronunciation_symbol_list[i + 1]);
                   break;
                }
-         } else if (NJDNode_get_pron(node) == NULL) {   /* for others */
+         } else if (strcmp(NJDNode_get_pron(node), "*") == 0) { /* for others */
             str = NJDNode_get_string(node);
             len = strlen(str);
             for (pos = 0; pos < len;) {
@@ -130,10 +130,18 @@ void njd_set_pronunciation(NJD * njd)
       if (node->next != NULL
           && strcmp(NJDNode_get_pron(node->next), NJD_SET_PRONUNCIATION_U) == 0
           && strcmp(NJDNode_get_pos(node->next), NJD_SET_PRONUNCIATION_JODOUSHI) == 0
-          && (strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_DOUSHI)
-              || strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_JODOUSHI))
+          && (strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_DOUSHI) == 0
+              || strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_JODOUSHI) == 0)
           && NJDNode_get_mora_size(node) > 0) {
          NJDNode_set_pron(node->next, NJD_SET_PRONUNCIATION_CHOUON);
+      }
+      if (node->next != NULL
+          && strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_JODOUSHI) == 0
+          && strcmp(NJDNode_get_string(node->next), NJD_SET_PRONUNCIATION_QUESTION) == 0) {
+         if (strcmp(NJDNode_get_string(node), NJD_SET_PRONUNCIATION_DESU_STR) == 0)
+            NJDNode_set_pron(node, NJD_SET_PRONUNCIATION_DESU_PRON);
+         else if (strcmp(NJDNode_get_string(node), NJD_SET_PRONUNCIATION_MASU_STR) == 0)
+            NJDNode_set_pron(node, NJD_SET_PRONUNCIATION_MASU_PRON);
       }
    }
 }
