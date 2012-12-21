@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -70,7 +70,7 @@ NJD_SET_LONG_VOWEL_C_START;
 
 #define MAXBUFLEN 1024
 
-static int strtopcmp(char *str, const char *pattern)
+static int strtopcmp(const char *str, const char *pattern)
 {
    int i;
 
@@ -84,7 +84,7 @@ static int strtopcmp(char *str, const char *pattern)
    }
 }
 
-static int detect_byte(char *str)
+static int detect_byte(const char *str)
 {
    int i, byte;
 
@@ -107,7 +107,7 @@ void njd_set_long_vowel(NJD * njd)
 {
    int i, j;
    NJDNode *node;
-   char *str;
+   const char *str;
    int len;
    char buff[MAXBUFLEN];
    int byte = -1;

@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -77,7 +77,7 @@ static const char *njd_set_long_vowel_table[] = {
    "メイ", "メー",
    "レイ", "レー",
    "ゲイ", "ゲー",
-   "ゼイ", "セー",
+   "ゼイ", "ゼー",
    "デイ", "デー",
    "ベイ", "ベー",
    "ペイ", "ペー",
