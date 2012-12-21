@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(open_jtalk, 1.05, open-jtalk-users@lists.sourceforge.net)
+AC_INIT(open_jtalk, 1.06, open-jtalk-users@lists.sourceforge.net)
 AC_CONFIG_AUX_DIR([config])
-AC_COPYRIGHT(Copyright 2008-2011 Nagoya Institute of Technology)
-AM_INIT_AUTOMAKE(open_jtalk, 1.05, nostdinc no-installinfo no-installman)
+AC_COPYRIGHT(Copyright 2008-2012 Nagoya Institute of Technology)
+AM_INIT_AUTOMAKE(open_jtalk, 1.06, nostdinc no-installinfo no-installman)
 
 # Checks for C/C++ compiler
 AC_PROG_CC
@@ -72,15 +72,8 @@ AC_CHECK_SIZEOF(long long)
 AC_CHECK_SIZEOF(size_t)
 AC_TYPE_SIZE_T
 AC_LANG(C++)
-AC_ARG_ENABLE(mutex, [  --disable-mutex            trun off mutex lock [default no]])
-if test "$enable_mutex" = "no"; then
-   MECAB_WITHOUT_MUTEX_LOCK="-DMECAB_WITHOUT_MUTEX_LOCK"
-else
-   MECAB_WITHOUT_MUTEX_LOCK=""
-fi
 LIBS="$LIBS $MECAB_LIBS"
 AC_SUBST(MECAB_LIBS)
-AC_SUBST(MECAB_WITHOUT_MUTEX_LOCK)
 AC_MSG_CHECKING(whether make is GNU Make)
 if $ac_make --version 2>/dev/null | grep '^GNU Make ' >/dev/null ; then
    AC_MSG_RESULT(yes)

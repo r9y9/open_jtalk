@@ -1,6 +1,6 @@
 ===============================================================================
-               The Japanese TTS System "Open JTalk" version 1.05
-                           release December 25, 2011
+               The Japanese TTS System "Open JTalk" version 1.06
+                           release December 25, 2012
 
 
 The Open JTalk is a Japanese TTS System. It has been being developed by HTS
@@ -24,7 +24,7 @@ the conditions in the following license:
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -101,6 +101,7 @@ Synthesis System. Current members are
  (Design and Development, Main Maintainer)
  Kei Hashimoto       http://www.sp.nitech.ac.jp/~bonanza/
  Sayaka Shiota       http://www.sp.nitech.ac.jp/~sayaka/
+ Shinji Takaki       http://www.sp.nitech.ac.jp/~k-prr44/
  Heiga Zen
  Junichi Yamagishi   http://homepages.inf.ed.ac.uk/jyamagis/
  Tomoki Toda         http://spalab.naist.jp/~tomoki/index_e.html
