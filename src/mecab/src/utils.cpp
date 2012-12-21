@@ -68,8 +68,6 @@
 #include <stdlib.h>
 #endif
 
-#include <stdint.h>
-
 /* for Open JTalk
 #if defined(_WIN32) && !defined(__CYGWIN__)
 extern HINSTANCE DllInstance;

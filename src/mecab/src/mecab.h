@@ -1467,7 +1467,7 @@ MECAB_DLL_EXTERN const char*  getTaggerError();
 
 #ifdef __cplusplus
 #define MECAB_H_START extern "C" {
-#define MECAB_H_END }
+#define MECAB_H_END   }
 #else
 #define MECAB_H_START
 #define MECAB_H_END
@@ -1475,20 +1475,30 @@ MECAB_DLL_EXTERN const char*  getTaggerError();
 
 MECAB_H_START;
 
+#ifndef BOOL
+#define BOOL int
+#endif
+#ifndef TRUE
+#define TRUE 1
+#endif
+#ifndef FALSE
+#define FALSE 0
+#endif
+
 typedef struct _Mecab{
    char **feature;
    int size;
    mecab_t *mecab;
 } Mecab;
 
-void Mecab_initialize(Mecab *m);
-void Mecab_load(Mecab *m, char *dicdir);
-void Mecab_analysis(Mecab *m, char *str);
-void Mecab_print(Mecab *m);
+BOOL Mecab_initialize(Mecab *m);
+BOOL Mecab_load(Mecab *m, const char *dicdir);
+BOOL Mecab_analysis(Mecab *m, const char *str);
+BOOL Mecab_print(Mecab *m);
 int Mecab_get_size(Mecab *m);
 char **Mecab_get_feature(Mecab *m);
-void Mecab_refresh(Mecab *m);
-void Mecab_clear(Mecab *m);
+BOOL Mecab_refresh(Mecab *m);
+BOOL Mecab_clear(Mecab *m);
 
 MECAB_H_END;
 

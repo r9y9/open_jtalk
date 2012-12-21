@@ -111,7 +111,11 @@ template <class T> class Mmap {
       CHECK_FALSE(false) << "unknown open mode:" << filename;
     }
 
+#if 1 /* for Open JTalk */
+    hFile = ::CreateFileA(filename, mode1, FILE_SHARE_READ, 0,
+#else
     hFile = ::CreateFileW(WPATH(filename), mode1, FILE_SHARE_READ, 0,
+#endif
                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
     CHECK_FALSE(hFile != INVALID_HANDLE_VALUE)
         << "CreateFile() failed: " << filename;

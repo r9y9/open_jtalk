@@ -156,7 +156,9 @@ class die {
   die() {}
   ~die() {
     std::cerr << std::endl;
+    /* for Open JTalk
     exit(-1);
+    */
   }
   int operator&(std::ostream&) { return 0; }
 };
