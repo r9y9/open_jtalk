@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -70,7 +70,8 @@ NJD2JPCOMMON_C_START;
 
 #define MAXBUFLEN 1024
 
-static void convert_pos(char *buff, char *pos, char *pos_group1, char *pos_group2, char *pos_group3)
+static void convert_pos(char *buff, const char *pos, const char *pos_group1, const char *pos_group2,
+                        const char *pos_group3)
 {
    int i;
 
@@ -89,7 +90,7 @@ static void convert_pos(char *buff, char *pos, char *pos_group1, char *pos_group
    strcpy(buff, njd2jpcommon_pos_list[4]);
 }
 
-static void convert_ctype(char *buff, char *ctype)
+static void convert_ctype(char *buff, const char *ctype)
 {
    int i;
 
@@ -105,7 +106,7 @@ static void convert_ctype(char *buff, char *ctype)
    strcpy(buff, njd2jpcommon_ctype_list[1]);
 }
 
-static void convert_cform(char *buff, char *cform)
+static void convert_cform(char *buff, const char *cform)
 {
    int i;
 

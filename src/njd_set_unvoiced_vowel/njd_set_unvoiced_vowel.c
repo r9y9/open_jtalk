@@ -133,9 +133,9 @@ static void set_unvoiced_vowel(NJDNode * node, int *acc_in_accent_phrase,
    int i, j, k;
    int len;
    char buff[MAXBUFLEN];
-   char *str;
+   const char *str;
    const char *tmp;
-   char *pat;
+   const char *pat;
    int find;
 
    /* initialize */
@@ -233,7 +233,7 @@ void njd_set_unvoiced_vowel(NJD * njd)
    NJDNode *node;
 
    for (node = njd->head; node != NULL; node = node->next) {
-      if (NJDNode_get_chain_flag(node) <= 0) {
+      if (NJDNode_get_chain_flag(node) != 1) {
          acc_in_accent_phrase = NJDNode_get_acc(node);
          mora_in_accent_phrase = 0;
       }
