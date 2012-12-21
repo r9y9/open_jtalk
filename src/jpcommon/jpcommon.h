@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -121,8 +121,8 @@ typedef struct _JPCommonLabel {
 } JPCommonLabel;
 
 void JPCommonLabel_initialize(JPCommonLabel * label);
-void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos,
-                             char *ctype, char *cform, int acc, int chain_flag);
+void JPCommonLabel_push_word(JPCommonLabel * label, const char *pron, const char *pos,
+                             const char *ctype, const char *cform, int acc, int chain_flag);
 void JPCommonLabel_make(JPCommonLabel * label);
 int JPCommonLabel_get_size(JPCommonLabel * label);
 char **JPCommonLabel_get_feature(JPCommonLabel * label);
@@ -144,16 +144,16 @@ typedef struct _JPCommonNode {
 } JPCommonNode;
 
 void JPCommonNode_initialize(JPCommonNode * node);
-void JPCommonNode_set_pron(JPCommonNode * node, char *str);
-void JPCommonNode_set_pos(JPCommonNode * node, char *str);
-void JPCommonNode_set_ctype(JPCommonNode * node, char *str);
-void JPCommonNode_set_cform(JPCommonNode * node, char *str);
+void JPCommonNode_set_pron(JPCommonNode * node, const char *str);
+void JPCommonNode_set_pos(JPCommonNode * node, const char *str);
+void JPCommonNode_set_ctype(JPCommonNode * node, const char *str);
+void JPCommonNode_set_cform(JPCommonNode * node, const char *str);
 void JPCommonNode_set_acc(JPCommonNode * node, int acc);
 void JPCommonNode_set_chain_flag(JPCommonNode * node, int flag);
-char *JPCommonNode_get_pron(JPCommonNode * node);
-char *JPCommonNode_get_pos(JPCommonNode * node);
-char *JPCommonNode_get_ctype(JPCommonNode * node);
-char *JPCommonNode_get_cform(JPCommonNode * node);
+const char *JPCommonNode_get_pron(JPCommonNode * node);
+const char *JPCommonNode_get_pos(JPCommonNode * node);
+const char *JPCommonNode_get_ctype(JPCommonNode * node);
+const char *JPCommonNode_get_cform(JPCommonNode * node);
 int JPCommonNode_get_acc(JPCommonNode * node);
 int JPCommonNode_get_chain_flag(JPCommonNode * node);
 void JPCommonNode_print(JPCommonNode * node);

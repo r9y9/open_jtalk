@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -64,33 +64,33 @@ void JPCommonNode_initialize(JPCommonNode * node)
    node->ctype = NULL;
    node->cform = NULL;
    node->acc = 0;
-   node->chain_flag = 0;
+   node->chain_flag = -1;
    node->prev = NULL;
    node->next = NULL;
 }
 
-void JPCommonNode_set_pron(JPCommonNode * node, char *str)
+void JPCommonNode_set_pron(JPCommonNode * node, const char *str)
 {
    if (node->pron != NULL)
       free(node->pron);
    node->pron = strdup(str);
 }
 
-void JPCommonNode_set_pos(JPCommonNode * node, char *str)
+void JPCommonNode_set_pos(JPCommonNode * node, const char *str)
 {
    if (node->pos != NULL)
       free(node->pos);
    node->pos = strdup(str);
 }
 
-void JPCommonNode_set_ctype(JPCommonNode * node, char *str)
+void JPCommonNode_set_ctype(JPCommonNode * node, const char *str)
 {
    if (node->ctype != NULL)
       free(node->ctype);
    node->ctype = strdup(str);
 }
 
-void JPCommonNode_set_cform(JPCommonNode * node, char *str)
+void JPCommonNode_set_cform(JPCommonNode * node, const char *str)
 {
    if (node->cform != NULL)
       free(node->cform);
@@ -107,22 +107,22 @@ void JPCommonNode_set_chain_flag(JPCommonNode * node, int flag)
    node->chain_flag = flag;
 }
 
-char *JPCommonNode_get_pron(JPCommonNode * node)
+const char *JPCommonNode_get_pron(JPCommonNode * node)
 {
    return node->pron;
 }
 
-char *JPCommonNode_get_pos(JPCommonNode * node)
+const char *JPCommonNode_get_pos(JPCommonNode * node)
 {
    return node->pos;
 }
 
-char *JPCommonNode_get_ctype(JPCommonNode * node)
+const char *JPCommonNode_get_ctype(JPCommonNode * node)
 {
    return node->ctype;
 }
 
-char *JPCommonNode_get_cform(JPCommonNode * node)
+const char *JPCommonNode_get_cform(JPCommonNode * node)
 {
    return node->cform;
 }
@@ -177,7 +177,7 @@ void JPCommonNode_clear(JPCommonNode * node)
       node->cform = NULL;
    }
    node->acc = 0;
-   node->chain_flag = 0;
+   node->chain_flag = -1;
    node->prev = NULL;
    node->next = NULL;
 }

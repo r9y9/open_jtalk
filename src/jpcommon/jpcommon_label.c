@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -68,8 +68,12 @@ JPCOMMON_LABEL_C_START;
 #endif
 
 #define MAXBUFLEN 1024
+#define MAX_S     19
+#define MAX_M     49
+#define MAX_L     99
+#define MAX_LL    199
 
-static int strtopcmp(char *str, const char *pattern)
+static int strtopcmp(const char *str, const char *pattern)
 {
    int i;
 
@@ -81,6 +85,15 @@ static int strtopcmp(char *str, const char *pattern)
       if (str[i] != pattern[i])
          return -1;
    }
+}
+
+static int limit(int in, int min, int max)
+{
+   if (in <= min)
+      return min;
+   if (in >= max)
+      return max;
+   return in;
 }
 
 static void JPCommonLabelPhoneme_initialize(JPCommonLabelPhoneme * p, const char *phoneme,
@@ -133,10 +146,10 @@ static void JPCommonLabelMora_clear(JPCommonLabelMora * m)
    free(m->mora);
 }
 
-static void JPCommonLabelWord_initialize(JPCommonLabelWord * w, const char *pron, char *pos,
-                                         char *ctype, char *cform, JPCommonLabelMora * head,
-                                         JPCommonLabelMora * tail, JPCommonLabelWord * prev,
-                                         JPCommonLabelWord * next)
+static void JPCommonLabelWord_initialize(JPCommonLabelWord * w, const char *pron, const char *pos,
+                                         const char *ctype, const char *cform,
+                                         JPCommonLabelMora * head, JPCommonLabelMora * tail,
+                                         JPCommonLabelWord * prev, JPCommonLabelWord * next)
 {
    int i, find;
 
@@ -195,7 +208,7 @@ static void JPCommonLabelWord_clear(JPCommonLabelWord * w)
 }
 
 static void JPCommonLabelAccentPhrase_initialize(JPCommonLabelAccentPhrase * a, int acc,
-                                                 char *emotion, JPCommonLabelWord * head,
+                                                 const char *emotion, JPCommonLabelWord * head,
                                                  JPCommonLabelWord * tail,
                                                  JPCommonLabelAccentPhrase * prev,
                                                  JPCommonLabelAccentPhrase * next,
@@ -252,6 +265,7 @@ static int count_mora_in_accent_phrase(JPCommonLabelMora * m)
 {
    int i;
    JPCommonLabelMora *index;
+
    for (i = 0, index = m->up->up->head->head; index != NULL; index = index->next) {
       i++;
       if (index == m->up->up->tail->tail)
@@ -410,8 +424,8 @@ static void JPCommonLabel_insert_pause(JPCommonLabel * label)
    }
 }
 
-void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char *ctype, char *cform,
-                             int acc, int chain_flag)
+void JPCommonLabel_push_word(JPCommonLabel * label, const char *pron, const char *pos,
+                             const char *ctype, const char *cform, int acc, int chain_flag)
 {
    int i;
    int find;
@@ -436,6 +450,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
          fprintf(stderr,
                  "WARNING: JPCommonLabel_push_word() in jpcommon_label.c: First mora should not be question flag.\n");
       }
+      label->short_pause_flag = 1;
       return;
    }
 
@@ -572,6 +587,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
       /* first word */
       label->accent_tail =
           (JPCommonLabelAccentPhrase *) calloc(1, sizeof(JPCommonLabelAccentPhrase));
+
       label->breath_tail = (JPCommonLabelBreathGroup *) calloc(1, sizeof(JPCommonLabelBreathGroup));
       label->word_tail->up = label->accent_tail;
       JPCommonLabelAccentPhrase_initialize(label->accent_tail, acc, NULL, label->word_tail,
@@ -585,8 +601,8 @@ void JPCommonLabel_push_word(JPCommonLabel * label, char *pron, char *pos, char 
       label->word_tail->up = label->accent_tail;
       label->accent_tail->tail = label->word_tail;
    } else
-       if (strcmp
-           (label->word_tail->prev->tail->tail->next->phoneme, JPCOMMON_PHONEME_SHORT_PAUSE) != 0) {
+       if (strcmp(label->word_tail->prev->tail->tail->next->phoneme, JPCOMMON_PHONEME_SHORT_PAUSE)
+           != 0) {
       /* different accent phrase && common phrase */
       label->accent_tail->next =
           (JPCommonLabelAccentPhrase *) calloc(1, sizeof(JPCommonLabelAccentPhrase));
@@ -663,8 +679,9 @@ void JPCommonLabel_make(JPCommonLabel * label)
          tmp2 =
              p->up->up->up->accent ==
              0 ? count_mora_in_accent_phrase(p->up) : p->up->up->up->accent;
-         sprintf(label->feature[i], "%s/A:%d+%d+%d", label->feature[i], tmp1 - tmp2, tmp1,
-                 count_mora_in_accent_phrase(p->up) - tmp1 + 1);
+         sprintf(label->feature[i], "%s/A:%d+%d+%d", label->feature[i],
+                 limit(tmp1 - tmp2, -MAX_M, MAX_M), limit(tmp1, 1, MAX_M),
+                 limit(count_mora_in_accent_phrase(p->up) - tmp1 + 1, 1, MAX_M));
       }
       /* for B: */
       if (short_pause_flag == 1)
@@ -709,9 +726,9 @@ void JPCommonLabel_make(JPCommonLabel * label)
          sprintf(label->feature[i], "%s/E:xx_xx!xx_xx", label->feature[i]);
       else
          sprintf(label->feature[i], "%s/E:%d_%d!%s_xx", label->feature[i],
-                 count_mora_in_accent_phrase(a->head->head),
-                 a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent,
-                 a->emotion == NULL ? "xx" : a->emotion);
+                 limit(count_mora_in_accent_phrase(a->head->head), 1, MAX_M),
+                 limit(a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent, 1,
+                       MAX_M), a->emotion == NULL ? "0" : a->emotion);
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1 || a == NULL)
          sprintf(label->feature[i], "%s-xx", label->feature[i]);
       else
@@ -729,11 +746,12 @@ void JPCommonLabel_make(JPCommonLabel * label)
          tmp1 = index_accent_phrase_in_breath_group(a);
          tmp2 = index_mora_in_breath_group(a->head->head);
          sprintf(label->feature[i], "%s/F:%d_%d#%s_xx@%d_%d|%d_%d", label->feature[i],
-                 count_mora_in_accent_phrase(a->head->head),
-                 a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent,
-                 a->emotion == NULL ? "xx" : a->emotion, tmp1,
-                 count_accent_phrase_in_breath_group(a) - tmp1 + 1, tmp2,
-                 count_mora_in_breath_group(a->head->head) - tmp2 + 1);
+                 limit(count_mora_in_accent_phrase(a->head->head), 1, MAX_M),
+                 limit(a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent, 1,
+                       MAX_M), a->emotion == NULL ? "0" : a->emotion, limit(tmp1, 1, MAX_M),
+                 limit(count_accent_phrase_in_breath_group(a) - tmp1 + 1, 1, MAX_M), limit(tmp2, 1,
+                                                                                           MAX_L),
+                 limit(count_mora_in_breath_group(a->head->head) - tmp2 + 1, 1, MAX_L));
       }
       /* for G: */
       if (short_pause_flag == 1)
@@ -746,9 +764,9 @@ void JPCommonLabel_make(JPCommonLabel * label)
          sprintf(label->feature[i], "%s/G:xx_xx%%xx_xx", label->feature[i]);
       else
          sprintf(label->feature[i], "%s/G:%d_%d%%%s_xx", label->feature[i],
-                 count_mora_in_accent_phrase(a->head->head),
-                 a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent,
-                 a->emotion == NULL ? "xx" : a->emotion);
+                 limit(count_mora_in_accent_phrase(a->head->head), 1, MAX_M),
+                 limit(a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent, 1,
+                       MAX_M), a->emotion == NULL ? "0" : a->emotion);
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1 || a == NULL)
          sprintf(label->feature[i], "%s-xx", label->feature[i]);
       else
@@ -766,8 +784,8 @@ void JPCommonLabel_make(JPCommonLabel * label)
          sprintf(label->feature[i], "%s/H:xx_xx", label->feature[i]);
       else
          sprintf(label->feature[i], "%s/H:%d_%d", label->feature[i],
-                 count_accent_phrase_in_breath_group(b->head),
-                 count_mora_in_breath_group(b->head->head->head));
+                 limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
+                 limit(count_mora_in_breath_group(b->head->head->head), 1, MAX_L));
       /* for I: */
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1)
          b = NULL;
@@ -779,12 +797,16 @@ void JPCommonLabel_make(JPCommonLabel * label)
          tmp1 = index_breath_group_in_utterance(b);
          tmp2 = index_accent_phrase_in_utterance(b->head);
          tmp3 = index_mora_in_utterance(b->head->head->head);
-         sprintf(label->feature[i], "%s/I:%d-%d@%d+%d&%d-%d|%d+%d",
-                 label->feature[i], count_accent_phrase_in_breath_group(b->head),
-                 count_mora_in_breath_group(b->head->head->head), tmp1,
-                 count_breath_group_in_utterance(b) - tmp1 + 1, tmp2,
-                 count_accent_phrase_in_utterance(b->head) - tmp2 + 1, tmp3,
-                 count_mora_in_utterance(b->head->head->head) - tmp3 + 1);
+         sprintf(label->feature[i], "%s/I:%d-%d@%d+%d&%d-%d|%d+%d", label->feature[i],
+                 limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
+                 limit(count_mora_in_breath_group(b->head->head->head), 1, MAX_L), limit(tmp1, 1,
+                                                                                         MAX_S),
+                 limit(count_breath_group_in_utterance(b) - tmp1 + 1, 1, MAX_S), limit(tmp2, 1,
+                                                                                       MAX_M),
+                 limit(count_accent_phrase_in_utterance(b->head) - tmp2 + 1, 1, MAX_M), limit(tmp3,
+                                                                                              1,
+                                                                                              MAX_LL),
+                 limit(count_mora_in_utterance(b->head->head->head) - tmp3 + 1, 1, MAX_LL));
       }
       /* for J: */
       if (short_pause_flag == 1)
@@ -797,13 +819,13 @@ void JPCommonLabel_make(JPCommonLabel * label)
          sprintf(label->feature[i], "%s/J:xx_xx", label->feature[i]);
       else
          sprintf(label->feature[i], "%s/J:%d_%d", label->feature[i],
-                 count_accent_phrase_in_breath_group(b->head),
-                 count_mora_in_breath_group(b->head->head->head));
+                 limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
+                 limit(count_mora_in_breath_group(b->head->head->head), 1, MAX_L));
       /* for K: */
       sprintf(label->feature[i], "%s/K:%d+%d-%d", label->feature[i],
-              count_breath_group_in_utterance(label->breath_head),
-              count_accent_phrase_in_utterance(label->accent_head),
-              count_mora_in_utterance(label->mora_head));
+              limit(count_breath_group_in_utterance(label->breath_head), 1, MAX_S),
+              limit(count_accent_phrase_in_utterance(label->accent_head), 1, MAX_M),
+              limit(count_mora_in_utterance(label->mora_head), 1, MAX_LL));
 
       if (0 < i && i < label->size - 2)
          p = p->next;

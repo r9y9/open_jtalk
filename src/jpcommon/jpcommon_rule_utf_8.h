@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2011  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -269,6 +269,7 @@ static const char *jpcommon_pos_list[] = {
    "名詞-非自立", "22",
    "名詞-普通名詞", "02",
    "連体詞", "07",
+   "フィラー", "25",
    NULL, NULL
 };
 
