@@ -291,7 +291,7 @@ int main(int argc, char **argv)
    if (argc == 1)
       usage();
 
-   /* initialize and Open JTalk */
+   /* initialize Open JTalk */
    Open_JTalk_initialize(&open_jtalk);
 
    /* get dictionary directory */
