@@ -242,6 +242,8 @@ static void usage()
    fprintf(stderr,
            "    -b  f          : postfiltering coefficient                               [  0.0][ 0.0-- 1.0]\n");
    fprintf(stderr,
+           "    -r  f          : speech speed rate                                       [  1.0][ 0.0--    ]\n");
+   fprintf(stderr,
            "    -fm f          : additional half-tone                                    [  0.0][    --    ]\n");
    fprintf(stderr,
            "    -u  f          : voiced/unvoiced threshold                               [  0.5][ 0.0-- 1.0]\n");
