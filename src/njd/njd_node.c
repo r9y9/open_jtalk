@@ -415,6 +415,11 @@ void NJDNode_load(NJDNode * node, const char *str)
    get_token_from_string(str, &index, buff_acc, ',');
    get_token_from_string(str, &index, buff, ',');
    NJDNode_set_chain_rule(node, buff);
+   get_token_from_string(str, &index, buff, ',');
+   if (strcmp(buff, "1") == 0)
+      NJDNode_set_chain_flag(node, 1);
+   else if (strcmp(buff, "0") == 0)
+      NJDNode_set_chain_flag(node, 0);
 
    /* for symbol */
    if (strstr(buff_acc, "*") != NULL || strstr(buff_acc, "/") == NULL) {
