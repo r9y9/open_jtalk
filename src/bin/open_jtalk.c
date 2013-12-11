@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2012  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -202,8 +202,8 @@ static int Open_JTalk_synthesis(Open_JTalk * open_jtalk, const char *txt, FILE *
 static void usage()
 {
    fprintf(stderr, "The Japanese TTS System \"Open JTalk\"\n");
-   fprintf(stderr, "Version 1.06 (http://open-jtalk.sourceforge.net/)\n");
-   fprintf(stderr, "Copyright (C) 2008-2012 Nagoya Institute of Technology\n");
+   fprintf(stderr, "Version 1.07 (http://open-jtalk.sourceforge.net/)\n");
+   fprintf(stderr, "Copyright (C) 2008-2013 Nagoya Institute of Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    fprintf(stderr, "\n");
    fprintf(stderr, "%s", HTS_COPYRIGHT);

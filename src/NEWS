@@ -1,3 +1,9 @@
+Versin 1.07:
+ * add ASCII header for no multibyte environment.
+ * add pronunciation rules for digit.
+ * update dictionary.
+ * fix some bugs.
+
 Version 1.06:
  * support new HTS voice format.
  * add some accent phrasing rules.
