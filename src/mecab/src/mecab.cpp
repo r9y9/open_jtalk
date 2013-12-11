@@ -70,19 +70,31 @@ BOOL Mecab_initialize(Mecab *m){
 }
 
 BOOL Mecab_load(Mecab *m, const char *dicdir){
-  const int argc = 3;
-  char **argv = (char **) malloc(sizeof(char *) * 3);
+  int i;
+  int argc = 3;
+  char **argv;
+
+  if(m == NULL)
+    return FALSE;
+
+  if(m->mecab != NULL)
+    Mecab_clear(m);
+
+  if(dicdir == NULL || strlen(dicdir) == 0)
+    return FALSE;
+
+  argv = (char **) malloc(sizeof(char *) * argc);
 
   argv[0] = strdup("mecab");
   argv[1] = strdup("-d");
   argv[2] = strdup(dicdir);
-  if(m->mecab != NULL)
-    Mecab_clear(m);
+
   m->mecab = mecab_new(argc, argv);
-  free(argv[0]);
-  free(argv[1]);
-  free(argv[2]);
+
+  for(i = 0;i < argc;i++)
+    free(argv[i]);
   free(argv);
+
   if(m->mecab == NULL){
     fprintf(stderr,"ERROR: Mecab_load() in mecab.cpp: Cannot open %s.\n",dicdir);
     return FALSE;
