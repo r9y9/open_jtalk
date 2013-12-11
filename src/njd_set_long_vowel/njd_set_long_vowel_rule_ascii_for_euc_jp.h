@@ -38,119 +38,72 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
-#ifndef NJD_SET_LONG_VOWEL_C
-#define NJD_SET_LONG_VOWEL_C
+#ifndef NJD_SET_LONG_VOWEL_RULE_H
+#define NJD_SET_LONG_VOWEL_RULE_H
 
 #ifdef __cplusplus
-#define NJD_SET_LONG_VOWEL_C_START extern "C" {
-#define NJD_SET_LONG_VOWEL_C_END   }
+#define NJD_SET_LONG_VOWEL_RULE_H_START extern "C" {
+#define NJD_SET_LONG_VOWEL_RULE_H_END   }
 #else
-#define NJD_SET_LONG_VOWEL_C_START
-#define NJD_SET_LONG_VOWEL_C_END
+#define NJD_SET_LONG_VOWEL_RULE_H_START
+#define NJD_SET_LONG_VOWEL_RULE_H_END
 #endif                          /* __CPLUSPLUS */
 
-NJD_SET_LONG_VOWEL_C_START;
+NJD_SET_LONG_VOWEL_RULE_H_START;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+static const char njd_set_long_vowel_kanji_range[] = {
+#ifdef CHARSET_EUC_JP
+   2, 0xA1, 0xFE,
+   3, 0x8F, 0x8F,
+#endif                          /* CHARSET_EUC_JP */
+#ifdef CHARSET_SHIFT_JIS
+   2, 0x81, 0xFC,
+#endif                          /* CHARSET_SHIFT_JIS */
+#ifdef CHARSET_UTF_8
+   2, 0xC0, 0xDF,
+   3, 0xE0, 0xEF,
+   4, 0xF0, 0xF7,
+#endif                          /* CHARSET_UTF_8 */
+   -1, -1, -1
+};
 
-#include "njd.h"
-#include "njd_set_long_vowel.h"
+static const char *njd_set_long_vowel_table[] = {
+   "\xa5\xa8\xa5\xa4", "\xa5\xa8\xa1\xbc",
+   "\xa5\xb1\xa5\xa4", "\xa5\xb1\xa1\xbc",
+   "\xa5\xbb\xa5\xa4", "\xa5\xbb\xa1\xbc",
+   "\xa5\xc6\xa5\xa4", "\xa5\xc6\xa1\xbc",
+   "\xa5\xcd\xa5\xa4", "\xa5\xcd\xa1\xbc",
+   "\xa5\xd8\xa5\xa4", "\xa5\xd8\xa1\xbc",
+   "\xa5\xe1\xa5\xa4", "\xa5\xe1\xa1\xbc",
+   "\xa5\xec\xa5\xa4", "\xa5\xec\xa1\xbc",
+   "\xa5\xb2\xa5\xa4", "\xa5\xb2\xa1\xbc",
+   "\xa5\xbc\xa5\xa4", "\xa5\xbc\xa1\xbc",
+   "\xa5\xc7\xa5\xa4", "\xa5\xc7\xa1\xbc",
+   "\xa5\xd9\xa5\xa4", "\xa5\xd9\xa1\xbc",
+   "\xa5\xda\xa5\xa4", "\xa5\xda\xa1\xbc",
+   "\xa5\xf1\xa5\xa4", "\xa5\xf1\xa1\xbc",
+   /*
+      "\xa5\xf4\xa5\xa7\xa5\xa4", "\xa5\xf4\xa5\xa7\xa1\xbc",
+      "\xa5\xea\xa5\xa7\xa5\xa4", "\xa5\xea\xa5\xa7\xa1\xbc",
+      "\xa5\xdf\xa5\xa7\xa5\xa4", "\xa5\xdf\xa5\xa7\xa1\xbc",
+      "\xa5\xd5\xa5\xa7\xa5\xa4", "\xa5\xd5\xa5\xa7\xa1\xbc",
+      "\xa5\xd4\xa5\xa7\xa5\xa4", "\xa5\xd4\xa5\xa7\xa1\xbc",
+      "\xa5\xd3\xa5\xa7\xa5\xa4", "\xa5\xd3\xa5\xa7\xa1\xbc",
+      "\xa5\xd2\xa5\xa7\xa5\xa4", "\xa5\xd2\xa5\xa7\xa1\xbc",
+      "\xa5\xcb\xa5\xa7\xa5\xa4", "\xa5\xcb\xa5\xa7\xa1\xbc",
+      "\xa5\xc7\xa5\xa7\xa5\xa4", "\xa5\xc7\xa5\xa7\xa1\xbc",
+      "\xa5\xc4\xa5\xa7\xa5\xa4", "\xa5\xc4\xa5\xa7\xa1\xbc",
+      "\xa5\xc1\xa5\xa7\xa5\xa4", "\xa5\xc1\xa5\xa7\xa1\xbc",
+      "\xa5\xb8\xa5\xa7\xa5\xa4", "\xa5\xb8\xa5\xa7\xa1\xbc",
+      "\xa5\xb7\xa5\xa7\xa5\xa4", "\xa5\xb7\xa5\xa7\xa1\xbc",
+      "\xa5\xae\xa5\xa7\xa5\xa4", "\xa5\xae\xa5\xa7\xa1\xbc",
+      "\xa5\xad\xa5\xa7\xa5\xa4", "\xa5\xad\xa5\xa7\xa1\xbc",
+      "\xa5\xa6\xa5\xa7\xa5\xa4", "\xa5\xa6\xa5\xa7\xa1\xbc",
+      "\xa5\xa4\xa5\xa7\xa5\xa4", "\xa5\xa4\xa5\xa7\xa1\xbc",
+    */
+   NULL, NULL
+};
 
-#ifdef ASCII_HEADER
-#if defined(CHARSET_EUC_JP)
-#include "njd_set_long_vowel_rule_ascii_for_euc_jp.h"
-#elif defined(CHARSET_SHIFT_JIS)
-#include "njd_set_long_vowel_rule_ascii_for_shift_jis.h"
-#elif defined(CHARSET_UTF_8)
-#include "njd_set_long_vowel_rule_ascii_for_utf_8.h"
-#else
-#error CHARSET is not specified
-#endif
-#else
-#if defined(CHARSET_EUC_JP)
-#include "njd_set_long_vowel_rule_euc_jp.h"
-#elif defined(CHARSET_SHIFT_JIS)
-#include "njd_set_long_vowel_rule_shift_jis.h"
-#elif defined(CHARSET_UTF_8)
-#include "njd_set_long_vowel_rule_utf_8.h"
-#else
-#error CHARSET is not specified
-#endif
-#endif
+NJD_SET_LONG_VOWEL_RULE_H_END;
 
-#define MAXBUFLEN 1024
-
-static int strtopcmp(const char *str, const char *pattern)
-{
-   int i;
-
-   for (i = 0;; i++) {
-      if (pattern[i] == '\0')
-         return i;
-      if (str[i] == '\0')
-         return -1;
-      if (str[i] != pattern[i])
-         return -1;
-   }
-}
-
-static int detect_byte(const char *str)
-{
-   int i, byte;
-
-   byte = -1;
-   for (i = 0; njd_set_long_vowel_kanji_range[i] > 0; i += 3) {
-      if (njd_set_long_vowel_kanji_range[i + 1] <= str[0]
-          && njd_set_long_vowel_kanji_range[i + 2] >= str[0]) {
-         byte = njd_set_long_vowel_kanji_range[i];
-         break;
-      }
-   }
-   if (byte < 0) {
-      fprintf(stderr, "ERROR: detect_byte() in njd_set_long_vowel.c: Wrong character.\n");
-      exit(1);
-   }
-   return byte;
-}
-
-void njd_set_long_vowel(NJD * njd)
-{
-   int i, j;
-   NJDNode *node;
-   const char *str;
-   int len;
-   char buff[MAXBUFLEN];
-   int byte = -1;
-
-   for (node = njd->head; node != NULL; node = node->next) {
-      /* initialize */
-      str = NJDNode_get_pron(node);
-      len = strlen(str);
-      buff[0] = '\0';
-      /* search */
-      for (i = 0; i < len; i += byte) {
-         byte = -1;
-         for (j = 0; njd_set_long_vowel_table[j] != NULL; j += 2) {
-            byte = strtopcmp(&str[i], njd_set_long_vowel_table[j]);
-            if (byte > 0) {
-               /* find */
-               strcat(buff, njd_set_long_vowel_table[j + 1]);
-               break;
-            }
-         }
-         /* not found */
-         if (byte < 0) {
-            byte = detect_byte(&str[i]);
-            strncat(buff, &str[i], byte);
-         }
-      }
-      /* finish */
-      NJDNode_set_pron(node, buff);
-   }
-}
-
-NJD_SET_LONG_VOWEL_C_END;
-
-#endif                          /* !NJD_SET_LONG_VOWEL_C */
+#endif                          /* !NJD_SET_LONG_VOWEL_RULE_H */

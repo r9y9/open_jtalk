@@ -58,6 +58,17 @@ NJD2JPCOMMON_C_START;
 #include "njd.h"
 #include "jpcommon.h"
 
+#ifdef ASCII_HEADER
+#if defined(CHARSET_EUC_JP)
+#include "njd2jpcommon_rule_ascii_for_euc_jp.h"
+#elif defined(CHARSET_SHIFT_JIS)
+#include "njd2jpcommon_rule_ascii_for_shift_jis.h"
+#elif defined(CHARSET_UTF_8)
+#include "njd2jpcommon_rule_ascii_for_utf_8.h"
+#else
+#error CHARSET is not specified
+#endif
+#else
 #if defined(CHARSET_EUC_JP)
 #include "njd2jpcommon_rule_euc_jp.h"
 #elif defined(CHARSET_SHIFT_JIS)
@@ -66,6 +77,7 @@ NJD2JPCOMMON_C_START;
 #include "njd2jpcommon_rule_utf_8.h"
 #else
 #error CHARSET is not specified
+#endif
 #endif
 
 #define MAXBUFLEN 1024

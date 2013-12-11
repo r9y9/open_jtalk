@@ -58,7 +58,17 @@ NJD_SET_ACCENT_TYPE_C_START;
 #include "njd.h"
 #include "njd_set_accent_type.h"
 
-
+#ifdef ASCII_HEADER
+#if defined(CHARSET_EUC_JP)
+#include "njd_set_accent_type_rule_ascii_for_euc_jp.h"
+#elif defined(CHARSET_SHIFT_JIS)
+#include "njd_set_accent_type_rule_ascii_for_shift_jis.h"
+#elif defined(CHARSET_UTF_8)
+#include "njd_set_accent_type_rule_ascii_for_utf_8.h"
+#else
+#error CHARSET is not specified
+#endif
+#else
 #if defined(CHARSET_EUC_JP)
 #include "njd_set_accent_type_rule_euc_jp.h"
 #elif defined(CHARSET_SHIFT_JIS)
@@ -67,6 +77,7 @@ NJD_SET_ACCENT_TYPE_C_START;
 #include "njd_set_accent_type_rule_utf_8.h"
 #else
 #error CHARSET is not specified
+#endif
 #endif
 
 #define MAXBUFLEN 1024
