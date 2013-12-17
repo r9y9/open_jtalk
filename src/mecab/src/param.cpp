@@ -50,6 +50,9 @@
 #include "param.h"
 #include "string_buffer.h"
 #include "utils.h"
+#ifdef __ANDROID__ /* for Open JTalk */
+#include "ctype.h"
+#endif /* __ANDROID__ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
