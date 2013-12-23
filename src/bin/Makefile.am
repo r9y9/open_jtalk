@@ -17,8 +17,7 @@ INCLUDES = -I @top_srcdir@/text2mecab \
            -I @top_srcdir@/njd_set_long_vowel \
            -I @top_srcdir@/njd2jpcommon \
            -I @top_srcdir@/jpcommon \
-           -I @HTS_ENGINE_HEADER_DIR@ \
-           @HTS_EMBEDDED@ @AUDIO_PLAY@
+           -I @HTS_ENGINE_HEADER_DIR@
 
 bin_PROGRAMS = open_jtalk
 
