@@ -644,6 +644,7 @@ void JPCommonLabel_push_word(JPCommonLabel * label, const char *pron, const char
 void JPCommonLabel_make(JPCommonLabel * label)
 {
    int i, tmp1, tmp2, tmp3;
+   char buff[MAXBUFLEN];
    JPCommonLabelPhoneme *p;
    JPCommonLabelWord *w;
    JPCommonLabelAccentPhrase *a;
@@ -685,16 +686,16 @@ void JPCommonLabel_make(JPCommonLabel * label)
               phoneme_list[i + 2], phoneme_list[i + 3], phoneme_list[i + 4]);
       /* for A: */
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1)
-         sprintf(label->feature[i], "%s/A:xx+xx+xx", label->feature[i]);
+         sprintf(buff, "/A:xx+xx+xx");
       else {
          tmp1 = index_mora_in_accent_phrase(p->up);
          tmp2 =
              p->up->up->up->accent ==
              0 ? count_mora_in_accent_phrase(p->up) : p->up->up->up->accent;
-         sprintf(label->feature[i], "%s/A:%d+%d+%d", label->feature[i],
-                 limit(tmp1 - tmp2, -MAX_M, MAX_M), limit(tmp1, 1, MAX_M),
+         sprintf(buff, "/A:%d+%d+%d", limit(tmp1 - tmp2, -MAX_M, MAX_M), limit(tmp1, 1, MAX_M),
                  limit(count_mora_in_accent_phrase(p->up) - tmp1 + 1, 1, MAX_M));
       }
+      strcat(label->feature[i], buff);
       /* for B: */
       if (short_pause_flag == 1)
          w = p->prev->up->up;
@@ -705,15 +706,16 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          w = p->up->up->prev;
       if (w == NULL)
-         sprintf(label->feature[i], "%s/B:xx-xx_xx", label->feature[i]);
+         sprintf(buff, "/B:xx-xx_xx");
       else
-         sprintf(label->feature[i], "%s/B:%s-%s_%s", label->feature[i], w->pos, w->ctype, w->cform);
+         sprintf(buff, "/B:%s-%s_%s", w->pos, w->ctype, w->cform);
+      strcat(label->feature[i], buff);
       /* for C: */
       if (i == 0 || i == label->size - 1 || short_pause_flag)
-         sprintf(label->feature[i], "%s/C:xx_xx+xx", label->feature[i]);
+         sprintf(buff, "/C:xx_xx+xx");
       else
-         sprintf(label->feature[i], "%s/C:%s_%s+%s", label->feature[i], p->up->up->pos,
-                 p->up->up->ctype, p->up->up->cform);
+         sprintf(buff, "/C:%s_%s+%s", p->up->up->pos, p->up->up->ctype, p->up->up->cform);
+      strcat(label->feature[i], buff);
       /* for D: */
       if (short_pause_flag == 1)
          w = p->next->up->up;
@@ -724,9 +726,10 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          w = p->up->up->next;
       if (w == NULL)
-         sprintf(label->feature[i], "%s/D:xx+xx_xx", label->feature[i]);
+         sprintf(buff, "/D:xx+xx_xx");
       else
-         sprintf(label->feature[i], "%s/D:%s+%s_%s", label->feature[i], w->pos, w->ctype, w->cform);
+         sprintf(buff, "/D:%s+%s_%s", w->pos, w->ctype, w->cform);
+      strcat(label->feature[i], buff);
       /* for E: */
       if (short_pause_flag == 1)
          a = p->prev->up->up->up;
@@ -735,29 +738,31 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          a = p->up->up->up->prev;
       if (a == NULL)
-         sprintf(label->feature[i], "%s/E:xx_xx!xx_xx", label->feature[i]);
+         sprintf(buff, "/E:xx_xx!xx_xx");
       else
-         sprintf(label->feature[i], "%s/E:%d_%d!%s_xx", label->feature[i],
+         sprintf(buff, "/E:%d_%d!%s_xx",
                  limit(count_mora_in_accent_phrase(a->head->head), 1, MAX_M),
                  limit(a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent, 1,
                        MAX_M), a->emotion == NULL ? "0" : a->emotion);
+      strcat(label->feature[i], buff);
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1 || a == NULL)
-         sprintf(label->feature[i], "%s-xx", label->feature[i]);
+         sprintf(buff, "-xx");
       else
-         sprintf(label->feature[i], "%s-%d", label->feature[i],
+         sprintf(buff, "-%d",
                  strcmp(a->tail->tail->tail->next->phoneme,
                         JPCOMMON_PHONEME_SHORT_PAUSE) == 0 ? 0 : 1);
+      strcat(label->feature[i], buff);
       /* for F: */
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1)
          a = NULL;
       else
          a = p->up->up->up;
       if (a == NULL)
-         sprintf(label->feature[i], "%s/F:xx_xx#xx_xx@xx_xx|xx_xx", label->feature[i]);
+         sprintf(buff, "/F:xx_xx#xx_xx@xx_xx|xx_xx");
       else {
          tmp1 = index_accent_phrase_in_breath_group(a);
          tmp2 = index_mora_in_breath_group(a->head->head);
-         sprintf(label->feature[i], "%s/F:%d_%d#%s_xx@%d_%d|%d_%d", label->feature[i],
+         sprintf(buff, "/F:%d_%d#%s_xx@%d_%d|%d_%d",
                  limit(count_mora_in_accent_phrase(a->head->head), 1, MAX_M),
                  limit(a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent, 1,
                        MAX_M), a->emotion == NULL ? "0" : a->emotion, limit(tmp1, 1, MAX_M),
@@ -765,6 +770,7 @@ void JPCommonLabel_make(JPCommonLabel * label)
                                                                                            MAX_L),
                  limit(count_mora_in_breath_group(a->head->head) - tmp2 + 1, 1, MAX_L));
       }
+      strcat(label->feature[i], buff);
       /* for G: */
       if (short_pause_flag == 1)
          a = p->next->up->up->up;
@@ -773,18 +779,20 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          a = p->up->up->up->next;
       if (a == NULL)
-         sprintf(label->feature[i], "%s/G:xx_xx%%xx_xx", label->feature[i]);
+         sprintf(buff, "/G:xx_xx%%xx_xx");
       else
-         sprintf(label->feature[i], "%s/G:%d_%d%%%s_xx", label->feature[i],
+         sprintf(buff, "/G:%d_%d%%%s_xx",
                  limit(count_mora_in_accent_phrase(a->head->head), 1, MAX_M),
                  limit(a->accent == 0 ? count_mora_in_accent_phrase(a->head->head) : a->accent, 1,
                        MAX_M), a->emotion == NULL ? "0" : a->emotion);
+      strcat(label->feature[i], buff);
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1 || a == NULL)
-         sprintf(label->feature[i], "%s-xx", label->feature[i]);
+         sprintf(buff, "-xx");
       else
-         sprintf(label->feature[i], "%s-%d", label->feature[i],
+         sprintf(buff, "-%d",
                  strcmp(a->head->head->head->prev->phoneme,
                         JPCOMMON_PHONEME_SHORT_PAUSE) == 0 ? 0 : 1);
+      strcat(label->feature[i], buff);
       /* for H: */
       if (short_pause_flag == 1)
          b = p->prev->up->up->up->up;
@@ -793,23 +801,23 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          b = p->up->up->up->up->prev;
       if (b == NULL)
-         sprintf(label->feature[i], "%s/H:xx_xx", label->feature[i]);
+         sprintf(buff, "/H:xx_xx");
       else
-         sprintf(label->feature[i], "%s/H:%d_%d", label->feature[i],
-                 limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
+         sprintf(buff, "/H:%d_%d", limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
                  limit(count_mora_in_breath_group(b->head->head->head), 1, MAX_L));
+      strcat(label->feature[i], buff);
       /* for I: */
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1)
          b = NULL;
       else
          b = p->up->up->up->up;
       if (b == NULL)
-         sprintf(label->feature[i], "%s/I:xx-xx@xx+xx&xx-xx|xx+xx", label->feature[i]);
+         sprintf(buff, "/I:xx-xx@xx+xx&xx-xx|xx+xx");
       else {
          tmp1 = index_breath_group_in_utterance(b);
          tmp2 = index_accent_phrase_in_utterance(b->head);
          tmp3 = index_mora_in_utterance(b->head->head->head);
-         sprintf(label->feature[i], "%s/I:%d-%d@%d+%d&%d-%d|%d+%d", label->feature[i],
+         sprintf(buff, "/I:%d-%d@%d+%d&%d-%d|%d+%d",
                  limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
                  limit(count_mora_in_breath_group(b->head->head->head), 1, MAX_L), limit(tmp1, 1,
                                                                                          MAX_S),
@@ -820,6 +828,7 @@ void JPCommonLabel_make(JPCommonLabel * label)
                                                                                               MAX_LL),
                  limit(count_mora_in_utterance(b->head->head->head) - tmp3 + 1, 1, MAX_LL));
       }
+      strcat(label->feature[i], buff);
       /* for J: */
       if (short_pause_flag == 1)
          b = p->next->up->up->up->up;
@@ -828,16 +837,17 @@ void JPCommonLabel_make(JPCommonLabel * label)
       else
          b = p->up->up->up->up->next;
       if (b == NULL)
-         sprintf(label->feature[i], "%s/J:xx_xx", label->feature[i]);
+         sprintf(buff, "/J:xx_xx");
       else
-         sprintf(label->feature[i], "%s/J:%d_%d", label->feature[i],
-                 limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
+         sprintf(buff, "/J:%d_%d", limit(count_accent_phrase_in_breath_group(b->head), 1, MAX_M),
                  limit(count_mora_in_breath_group(b->head->head->head), 1, MAX_L));
+      strcat(label->feature[i], buff);
       /* for K: */
-      sprintf(label->feature[i], "%s/K:%d+%d-%d", label->feature[i],
+      sprintf(buff, "/K:%d+%d-%d",
               limit(count_breath_group_in_utterance(label->breath_head), 1, MAX_S),
               limit(count_accent_phrase_in_utterance(label->accent_head), 1, MAX_M),
               limit(count_mora_in_utterance(label->mora_head), 1, MAX_LL));
+      strcat(label->feature[i], buff);
 
       if (0 < i && i < label->size - 2)
          p = p->next;
