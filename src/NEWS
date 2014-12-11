@@ -4,6 +4,7 @@ Version 1.08:
  * modify unvoicing rules
  * assume unknown words as filler
  * update dictionary.
+ * update MeCab to version 0.996.
  * fix some bugs.
 
 Version 1.07:

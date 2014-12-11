@@ -438,6 +438,41 @@ const char *mecab_lattice_nbest_tostr2(mecab_lattice_t *lattice,
       lattice)->enumNBestAsString(N, buf, size);
 }
 
+int mecab_lattice_has_constraint(mecab_lattice_t *lattice) {
+  return static_cast<bool>(reinterpret_cast<MeCab::Lattice *>(
+                               lattice)->has_constraint());
+}
+
+int mecab_lattice_get_boundary_constraint(mecab_lattice_t *lattice,
+                                          size_t pos) {
+  return reinterpret_cast<MeCab::Lattice *>(
+      lattice)->boundary_constraint(pos);
+}
+
+const char *mecab_lattice_get_feature_constraint(mecab_lattice_t *lattice,
+                                                 size_t pos) {
+  return reinterpret_cast<MeCab::Lattice *>(
+      lattice)->feature_constraint(pos);
+}
+
+void mecab_lattice_set_boundary_constraint(mecab_lattice_t *lattice,
+                                           size_t pos, int boundary_type) {
+  return reinterpret_cast<MeCab::Lattice *>(
+      lattice)->set_boundary_constraint(pos, boundary_type);
+}
+
+void mecab_lattice_set_feature_constraint(mecab_lattice_t *lattice,
+                                          size_t begin_pos, size_t end_pos,
+                                          const char *feature) {
+  return reinterpret_cast<MeCab::Lattice *>(
+      lattice)->set_feature_constraint(begin_pos, end_pos, feature);
+}
+
+void mecab_lattice_set_result(mecab_lattice_t *lattice,
+                              const char *result) {
+  return reinterpret_cast<MeCab::Lattice *>(lattice)->set_result(result);
+}
+
 const char *mecab_lattice_strerror(mecab_lattice_t *lattice) {
   return reinterpret_cast<MeCab::Lattice *>(lattice)->what();
 }

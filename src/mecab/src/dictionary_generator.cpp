@@ -82,8 +82,8 @@ class DictionaryGenerator {
     const std::map<std::string, int> &left =  cid.left_ids();
     const std::map<std::string, int> &right = cid.right_ids();
 
-    CHECK_DIE(left.size())  << "left id size is empty";
-    CHECK_DIE(right.size()) << "right id size is empty";
+    CHECK_DIE(left.size() > 0)  << "left id size is empty";
+    CHECK_DIE(right.size() > 0) << "right id size is empty";
 
     ofs << right.size() << ' ' << left.size() << std::endl;
 

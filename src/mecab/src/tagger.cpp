@@ -5,6 +5,7 @@
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 #include <cstring>
 #include <iostream>
+#include <iterator>
 #include "common.h"
 #include "connector.h"
 #include "mecab.h"
@@ -46,6 +47,8 @@ const MeCab::Option long_options[] = {
     "partial parsing mode (default false)" },
   { "marginal",           'm',  0, 0,
     "output marginal probability (default false)" },
+  { "max-grouping-size",  'M',  "24",
+    "INT",  "maximum grouping size for unknown words (default 24)" },
   { "node-format",        'F',  "%m\\t%H\\n", "STR",
     "use STR as the user-defined node format" },
   { "unk-format",        'U',  "%m\\t%H\\n", "STR",
@@ -108,8 +111,9 @@ class ModelImpl: public Model {
 
   Node *lookup(const char *begin, const char *end,
                Lattice *lattice) const {
-    return viterbi_->tokenizer()->lookup(begin, end,
-                                         lattice->allocator());
+    return viterbi_->tokenizer()->lookup<false>(
+        begin, end,
+        lattice->allocator(), lattice);
   }
 
   Tagger *createTagger() const;
@@ -279,6 +283,18 @@ class LatticeImpl : public Lattice {
     return allocator_->newNode();
   }
 
+  bool has_constraint() const;
+  int boundary_constraint(size_t pos) const;
+  const char *feature_constraint(size_t begin_pos) const;
+
+  void set_boundary_constraint(size_t pos,
+                               int boundary_constraint_type);
+
+  void set_feature_constraint(size_t begin_pos, size_t end_pos,
+                              const char *feature);
+
+  void set_result(const char *result);
+
   const char *what() const { return what_.c_str(); }
 
   void set_what(const char *str) {
@@ -302,6 +318,8 @@ class LatticeImpl : public Lattice {
   std::string                 what_;
   std::vector<Node *>         end_nodes_;
   std::vector<Node *>         begin_nodes_;
+  std::vector<const char *>   feature_constraint_;
+  std::vector<unsigned char>  boundary_constraint_;
   const Writer               *writer_;
   scoped_ptr<StringBuffer>    ostrs_;
   scoped_ptr<Allocator<Node, Path> > allocator_;
@@ -375,7 +393,7 @@ bool ModelImpl::swap(Model *model) {
   setGlobalError("atomic model replacement is not supported");
   return false;
 #else
-  ModelImpl *m = dynamic_cast<ModelImpl *>(model_data.get());
+  ModelImpl *m = static_cast<ModelImpl *>(model_data.get());
   if (!m) {
     setGlobalError("Invalid model is passed");
     return false;
@@ -731,6 +749,8 @@ void LatticeImpl::clear() {
   }
   begin_nodes_.clear();
   end_nodes_.clear();
+  feature_constraint_.clear();
+  boundary_constraint_.clear();
   size_ = 0;
   theta_ = kDefaultTheta;
   Z_ = 0.0;
@@ -773,6 +793,73 @@ bool LatticeImpl::next() {
 
   Viterbi::buildResultForNBest(this);
   return true;
+}
+
+void LatticeImpl::set_result(const char *result) {
+  char *str = allocator()->strdup(result, std::strlen(result));
+  std::vector<char *> lines;
+  const size_t lsize = tokenize(str, "\n",
+                                std::back_inserter(lines),
+                                std::strlen(result));
+  CHECK_DIE(lsize == lines.size());
+
+  std::string sentence;
+  std::vector<std::string> surfaces, features;
+  for (size_t i = 0; i < lines.size(); ++i) {
+    if (::strcmp("EOS", lines[i]) == 0) {
+      break;
+    }
+    char *cols[2];
+    if (tokenize(lines[i], "\t", cols, 2) != 2) {
+      break;
+    }
+    sentence += cols[0];
+    surfaces.push_back(cols[0]);
+    features.push_back(cols[1]);
+  }
+
+  CHECK_DIE(features.size() == surfaces.size());
+
+  set_sentence(allocator()->strdup(sentence.c_str(), sentence.size()));
+
+  Node *bos_node = allocator()->newNode();
+  bos_node->surface = const_cast<const char *>(BOS_KEY);  // dummy
+  bos_node->feature = "BOS/EOS";
+  bos_node->isbest = 1;
+  bos_node->stat = MECAB_BOS_NODE;
+
+  Node *eos_node = allocator()->newNode();
+  eos_node->surface = const_cast<const char *>(BOS_KEY);  // dummy
+  eos_node->feature = "BOS/EOS";
+  eos_node->isbest = 1;
+  eos_node->stat = MECAB_EOS_NODE;
+
+  bos_node->surface = sentence_;
+  end_nodes_[0] = bos_node;
+
+  size_t offset = 0;
+  Node *prev = bos_node;
+  for (size_t i = 0; i < surfaces.size(); ++i) {
+    Node *node = allocator()->newNode();
+    node->prev = prev;
+    prev->next = node;
+    node->surface = sentence_ + offset;
+    node->length = surfaces[i].size();
+    node->rlength = surfaces[i].size();
+    node->isbest = 1;
+    node->stat = MECAB_NOR_NODE;
+    node->wcost = 0;
+    node->cost = 0;
+    node->feature = allocator()->strdup(features[i].c_str(),
+                                        features[i].size());
+    begin_nodes_[offset] = node;
+    end_nodes_[offset + node->length] = node;
+    offset += node->length;
+    prev = node;
+  }
+
+  prev->next = eos_node;
+  eos_node->prev = prev;
 }
 
 // default implementation of Lattice formatter.
@@ -897,6 +984,53 @@ const char *LatticeImpl::enumNBestAsStringInternal(size_t N,
   }
 
   return os->str();
+}
+
+bool LatticeImpl::has_constraint() const {
+  return !boundary_constraint_.empty();
+}
+
+int LatticeImpl::boundary_constraint(size_t pos) const {
+  if (!boundary_constraint_.empty()) {
+    return boundary_constraint_[pos];
+  }
+  return MECAB_ANY_BOUNDARY;
+}
+
+const char *LatticeImpl::feature_constraint(size_t begin_pos) const {
+  if (!feature_constraint_.empty()) {
+    return feature_constraint_[begin_pos];
+  }
+  return 0;
+}
+
+void LatticeImpl::set_boundary_constraint(size_t pos,
+                                          int boundary_constraint_type) {
+  if (boundary_constraint_.empty()) {
+    boundary_constraint_.resize(size() + 4, MECAB_ANY_BOUNDARY);
+  }
+  boundary_constraint_[pos] = boundary_constraint_type;
+}
+
+void LatticeImpl::set_feature_constraint(size_t begin_pos, size_t end_pos,
+                                         const char *feature) {
+  if (begin_pos >= end_pos || !feature) {
+    return;
+  }
+
+  if (feature_constraint_.empty()) {
+    feature_constraint_.resize(size() + 4, 0);
+  }
+
+  end_pos = std::min(end_pos, size());
+
+  set_boundary_constraint(begin_pos, MECAB_TOKEN_BOUNDARY);
+  set_boundary_constraint(end_pos, MECAB_TOKEN_BOUNDARY);
+  for (size_t i = begin_pos + 1; i < end_pos; ++i) {
+    set_boundary_constraint(i, MECAB_INSIDE_TOKEN);
+  }
+
+  feature_constraint_[begin_pos] = feature;
 }
 }  // namespace
 

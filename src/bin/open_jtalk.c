@@ -211,14 +211,14 @@ static int Open_JTalk_synthesis(Open_JTalk * open_jtalk, const char *txt, FILE *
 static void usage()
 {
    fprintf(stderr, "The Japanese TTS System \"Open JTalk\"\n");
-   fprintf(stderr, "Version 1.07 (http://open-jtalk.sourceforge.net/)\n");
-   fprintf(stderr, "Copyright (C) 2008-2013 Nagoya Institute of Technology\n");
+   fprintf(stderr, "Version 1.08 (http://open-jtalk.sourceforge.net/)\n");
+   fprintf(stderr, "Copyright (C) 2008-2014 Nagoya Institute of Technology\n");
    fprintf(stderr, "All rights reserved.\n");
    fprintf(stderr, "\n");
    fprintf(stderr, "%s", HTS_COPYRIGHT);
    fprintf(stderr, "\n");
    fprintf(stderr, "Yet Another Part-of-Speech and Morphological Analyzer \"Mecab\"\n");
-   fprintf(stderr, "Version 0.994 (http://mecab.sourceforge.net/)\n");
+   fprintf(stderr, "Version 0.996 (http://mecab.sourceforge.net/)\n");
    fprintf(stderr, "Copyright (C) 2001-2008 Taku Kudo\n");
    fprintf(stderr, "              2004-2008 Nippon Telegraph and Telephone Corporation\n");
    fprintf(stderr, "All rights reserved.\n");

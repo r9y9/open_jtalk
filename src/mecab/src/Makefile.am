@@ -66,7 +66,6 @@ libmecab_a_SOURCES = char_property.cpp \
                      utils.h \
                      viterbi.cpp \
                      viterbi.h \
-                     viterbisub.h \
                      winmain.h \
                      writer.cpp \
                      writer.h

@@ -68,6 +68,8 @@
 #include <stdlib.h>
 #endif
 
+#include <stdint.h>
+
 /* for Open JTalk
 #if defined(_WIN32) && !defined(__CYGWIN__)
 extern HINSTANCE DllInstance;
@@ -399,7 +401,7 @@ bool load_dictionary_resource(Param *param) {
     vt = ::GetModuleFileNameW(DllInstance, v.get(), size);
     if (vt != 0) {
       scoped_fixed_array<wchar_t, _MAX_DRIVE> drive;
-      scoped_fixed_array<wchar_t, _MAX_DRIVE> dir;
+      scoped_fixed_array<wchar_t, _MAX_DIR> dir;
       _wsplitpath(v.get(), drive.get(), dir.get(), NULL, NULL);
       const std::wstring path =
           std::wstring(drive.get()) + std::wstring(dir.get()) + L"mecabrc";
@@ -455,7 +457,7 @@ namespace {
 
 #else   // defined(_MSC_VER)
 
-#define FORCE_INLINE __attribute__((always_inline))
+#define FORCE_INLINE inline __attribute__((always_inline))
 
 inline uint32_t rotl32 ( uint32_t x, uint8_t r ) {
   return (x << r) | (x >> (32 - r));

@@ -187,7 +187,7 @@ struct mecab_node_t {
   unsigned int          id;
 
   /**
-   * length of the surface form/.
+   * length of the surface form.
    */
   unsigned short        length;
 
@@ -217,7 +217,7 @@ struct mecab_node_t {
   unsigned char         char_type;
 
   /**
-   * statis of this model.
+   * status of this model.
    * This value is MECAB_NOR_NODE, MECAB_UNK_NODE, MECAB_BOS_NODE, MECAB_EOS_NODE, or MECAB_EON_NODE.
    */
   unsigned char         stat;
@@ -317,6 +317,8 @@ enum {
   MECAB_NBEST             = 2,
   /**
    * Set this flag if you want to enable a partial parsing mode.
+   * When this flag is set, the input |sentence| needs to be written
+   * in partial parsing format.
    */
   MECAB_PARTIAL           = 4,
   /**
@@ -341,6 +343,26 @@ enum {
    * sentence into internal buffer.
    */
   MECAB_ALLOCATE_SENTENCE = 64
+};
+
+/**
+ * Parameters for MeCab::Lattice::boundary_constraint_type
+ */
+enum {
+  /**
+   * The token boundary is not specified.
+   */
+  MECAB_ANY_BOUNDARY = 0,
+
+  /**
+   * The position is a strong token boundary.
+   */
+  MECAB_TOKEN_BOUNDARY = 1,
+
+  /**
+   * The position is not a token boundary.
+   */
+  MECAB_INSIDE_TOKEN = 2
 };
 
 /* C interface  */
@@ -692,6 +714,37 @@ extern "C" {
   MECAB_DLL_EXTERN const char      *mecab_lattice_nbest_tostr2(mecab_lattice_t *lattice, size_t N, char *buf, size_t size);
 
   /**
+   * C wrapper of MeCab::Lattice::has_constraint()
+   */
+  MECAB_DLL_EXTERN int             mecab_lattice_has_constraint(mecab_lattice_t *lattice);
+
+  /**
+   * C wrapper of MeCab::Lattice::boundary_constraint(pos)
+   */
+  MECAB_DLL_EXTERN int             mecab_lattice_get_boundary_constraint(mecab_lattice_t *lattice, size_t pos);
+
+
+  /**
+   * C wrapper of MeCab::Lattice::feature_constraint(pos)
+   */
+  MECAB_DLL_EXTERN const char     *mecab_lattice_get_feature_constraint(mecab_lattice_t *lattice, size_t pos);
+
+  /**
+   * C wrapper of MeCab::Lattice::boundary_constraint(pos, type)
+   */
+  MECAB_DLL_EXTERN void            mecab_lattice_set_boundary_constraint(mecab_lattice_t *lattice, size_t pos, int boundary_type);
+
+  /**
+   * C wrapper of MeCab::Lattice::set_feature_constraint(begin_pos, end_pos, feature)
+   */
+  MECAB_DLL_EXTERN void            mecab_lattice_set_feature_constraint(mecab_lattice_t *lattice, size_t begin_pos, size_t end_pos, const char *feature);
+
+  /**
+   * C wrapper of MeCab::Lattice::set_result(result);
+   */
+  MECAB_DLL_EXTERN void            mecab_lattice_set_result(mecab_lattice_t *lattice, const char *result);
+
+  /**
    * C wrapper of MeCab::Lattice::what()
    */
   MECAB_DLL_EXTERN const char      *mecab_lattice_strerror(mecab_lattice_t *lattice);
@@ -990,6 +1043,49 @@ public:
    */
   virtual const char *enumNBestAsString(size_t N, char *buf, size_t size) = 0;
 #endif
+
+  /**
+   * Returns true if any parsing constraint is set
+   */
+  virtual bool has_constraint() const = 0;
+
+  /**
+   * Returns the boundary constraint at the position.
+   * @param pos the position of constraint
+   * @return boundary constraint type
+   */
+  virtual int boundary_constraint(size_t pos) const = 0;
+
+  /**
+   * Returns the token constraint at the position.
+   * @param pos the beginning position of constraint.
+   * @return constrained node starting at the position.
+   */
+  virtual const char *feature_constraint(size_t pos) const = 0;
+
+  /**
+   * Set parsing constraint for partial parsing mode.
+   * @param pos the position of the boundary
+   * @param boundary_constraint_type the type of boundary
+   */
+  virtual void set_boundary_constraint(size_t pos,
+                                       int boundary_constraint_type) = 0;
+
+  /**
+   * Set parsing constraint for partial parsing mode.
+   * @param begin_pos the starting position of the constrained token.
+   * @param end_pos the the ending position of the constrained token.
+   * @param feature the feature of the constrained token.
+   */
+  virtual void set_feature_constraint(
+      size_t begin_pos, size_t end_pos,
+      const char *feature) = 0;
+
+  /**
+   * Set golden parsing results for unittesting.
+   * @param result the parsing result written in the standard mecab output.
+   */
+  virtual void set_result(const char *result) = 0;
 
   /**
    * Return error string.

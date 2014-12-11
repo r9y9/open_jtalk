@@ -35,15 +35,14 @@ class Viterbi {
   virtual ~Viterbi();
 
  private:
-  bool viterbiWithAllPath(Lattice *lattice) const;
-  bool viterbi(Lattice *lattice) const;
+  template <bool IsAllPath, bool IsPartial> bool viterbi(Lattice *lattice) const;
 
   static bool forwardbackward(Lattice *lattice);
   static bool initPartial(Lattice *lattice);
   static bool initNBest(Lattice *lattice);
-  static Node *filterNode(Node *constrained_node, Node *node);
   static bool buildBestLattice(Lattice *lattice);
   static bool buildAllLattice(Lattice *lattice);
+  static bool buildAlternative(Lattice *lattice);
 
   scoped_ptr<Tokenizer<Node, Path> > tokenizer_;
   scoped_ptr<Connector> connector_;
