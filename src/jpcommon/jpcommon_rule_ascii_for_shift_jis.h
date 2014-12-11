@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -161,6 +161,7 @@ static const char *jpcommon_mora_list[] = {
    "\x83\x65\x83\x87", "ty", "o",
    "\x83\x65\x83\x85", "ty", "u",
    "\x83\x65\x83\x83", "ty", "a",
+   "\x83\x65\x83\x46", "ty", "e",
    "\x83\x65\x83\x42", "t", "i",
    "\x83\x65", "t", "e",
    "\x83\x64", "z", "u",
@@ -255,7 +256,7 @@ static const char *jpcommon_pos_list[] = {
    "\x90\xda\x93\xaa\x8e\xab-\x8c\x60\x97\x65\x8e\x8c\x93\x49", "16",
    "\x90\xda\x93\xaa\x8e\xab-\x93\xae\x8e\x8c\x93\x49", "16",
    "\x90\xda\x93\xaa\x8e\xab-\x96\xbc\x8e\x8c\x93\x49", "16",
-   "\x90\xda\x94\xf6\x8e\xab-\x8c\x60\x8f\xf3\x8e\x8c\x93\x49", "16",
+   "\x90\xda\x94\xf6\x8e\xab-\x8c\x60\x8f\xf3\x8e\x8c\x93\x49", "15",
    "\x90\xda\x94\xf6\x8e\xab-\x8c\x60\x97\x65\x8e\x8c\x93\x49", "15",
    "\x90\xda\x94\xf6\x8e\xab-\x93\xae\x8e\x8c\x93\x49", "15",
    "\x90\xda\x94\xf6\x8e\xab-\x96\xbc\x8e\x8c\x93\x49", "15",

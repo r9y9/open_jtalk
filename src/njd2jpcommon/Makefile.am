@@ -5,7 +5,7 @@ DISTCLEANFILES = *.log *.out *~
 
 MAINTAINERCLEANFILES = Makefile.in
 
-INCLUDES = -I @top_srcdir@/njd -I @top_srcdir@/jpcommon @CHARSET@
+AM_CPPFLAGS = -I @top_srcdir@/njd -I @top_srcdir@/jpcommon @CHARSET@
 
 noinst_LIBRARIES = libnjd2jpcommon.a
 

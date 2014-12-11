@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -106,6 +106,10 @@ static int Open_JTalk_load(Open_JTalk * open_jtalk, char *dn_mecab, char *fn_voi
       return 0;
    }
    if (HTS_Engine_load(&open_jtalk->engine, &fn_voice, 1) != TRUE) {
+      Open_JTalk_clear(open_jtalk);
+      return 0;
+   }
+   if (strcmp(HTS_Engine_get_fullcontext_label_format(&open_jtalk->engine), "HTS_TTS_JPN") != 0) {
       Open_JTalk_clear(open_jtalk);
       return 0;
    }

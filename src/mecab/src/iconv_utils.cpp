@@ -10,7 +10,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -150,7 +150,9 @@ bool Iconv::open(const char* from, const char* to) {
   }
   ic_ = from_cp_;
 #else
+/* for Open JTalk
   std::cerr << "iconv_open is not supported" << std::endl;
+*/
 #endif
 #endif
 

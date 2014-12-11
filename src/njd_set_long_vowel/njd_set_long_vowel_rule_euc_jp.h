@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -82,25 +82,6 @@ static const char *njd_set_long_vowel_table[] = {
    "ベイ", "ベー",
    "ペイ", "ペー",
    "ヱイ", "ヱー",
-   /*
-      "ヴェイ", "ヴェー",
-      "リェイ", "リェー",
-      "ミェイ", "ミェー",
-      "フェイ", "フェー",
-      "ピェイ", "ピェー",
-      "ビェイ", "ビェー",
-      "ヒェイ", "ヒェー",
-      "ニェイ", "ニェー",
-      "デェイ", "デェー",
-      "ツェイ", "ツェー",
-      "チェイ", "チェー",
-      "ジェイ", "ジェー",
-      "シェイ", "シェー",
-      "ギェイ", "ギェー",
-      "キェイ", "キェー",
-      "ウェイ", "ウェー",
-      "イェイ", "イェー",
-    */
    NULL, NULL
 };
 

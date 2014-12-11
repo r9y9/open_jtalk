@@ -5,7 +5,7 @@ DISTCLEANFILES = *.log *.out *~
 
 MAINTAINERCLEANFILES = Makefile.in
 
-INCLUDES = -I @top_srcdir@/njd @CHARSET@
+AM_CPPFLAGS = -I @top_srcdir@/njd @CHARSET@
 
 noinst_LIBRARIES = libnjd_set_long_vowel.a
 

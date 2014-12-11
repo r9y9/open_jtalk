@@ -5,7 +5,7 @@ DISTCLEANFILES = *.log *.out *~
 
 MAINTAINERCLEANFILES = Makefile.in
 
-INCLUDES = @CHARSET@
+AM_CPPFLAGS = @CHARSET@
 
 noinst_LIBRARIES = libjpcommon.a
 

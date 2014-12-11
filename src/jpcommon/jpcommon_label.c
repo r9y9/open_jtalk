@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -787,9 +787,9 @@ void JPCommonLabel_make(JPCommonLabel * label)
                        MAX_M), a->emotion == NULL ? "0" : a->emotion);
       strcat(label->feature[i], buff);
       if (i == 0 || i == label->size - 1 || short_pause_flag == 1 || a == NULL)
-         sprintf(buff, "-xx");
+         sprintf(buff, "_xx");
       else
-         sprintf(buff, "-%d",
+         sprintf(buff, "_%d",
                  strcmp(a->head->head->head->prev->phoneme,
                         JPCOMMON_PHONEME_SHORT_PAUSE) == 0 ? 0 : 1);
       strcat(label->feature[i], buff);

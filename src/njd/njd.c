@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -285,49 +285,8 @@ void NJD_push_node(NJD * njd, NJDNode * node)
    njd->tail = node;
 }
 
-void NJD_insert_node(NJD * njd, NJDNode * prev, NJDNode * next, NJDNode * node)
-{
-   NJDNode *tail;               /* for additional node sequence */
-
-   if (prev == NULL && next == NULL) {
-      fprintf(stderr, "ERROR: NJD_insert_node() in njd.c: NJDNodes are not specified.\n");
-      exit(1);
-   }
-   tail = node;
-   while (tail->next != NULL)
-      tail = tail->next;
-   if (prev == NULL) {
-      if (next != njd->head) {
-         fprintf(stderr, "ERROR: NJD_insert_node() in njd.c: NJDNodes are wrong.\n");
-         exit(1);
-      }
-      tail->next = njd->head;
-      node->prev = NULL;
-      njd->head->prev = tail;
-      njd->head = node;
-   } else if (next == NULL) {
-      if (prev != njd->tail) {
-         fprintf(stderr, "ERROR: NJD_insert_node() in njd.c: NJDNodes are wrong.\n");
-         exit(1);
-      }
-      tail->next = NULL;
-      node->prev = njd->tail;
-      njd->tail->next = node;
-      njd->tail = tail;
-   } else {
-      if (prev->next != next || prev != next->prev) {
-         fprintf(stderr, "ERROR: NJD_insert_node() in njd.c: NJDNodes are wrong.\n");
-         exit(1);
-      }
-      prev->next = node;
-      node->prev = prev;
-      next->prev = tail;
-      tail->next = next;
-   }
-}
-
 /* remove node and return next node */
-NJDNode *NJD_remove_node(NJD * njd, NJDNode * node)
+static NJDNode *NJD_remove_node(NJD * njd, NJDNode * node)
 {
    NJDNode *next;
 

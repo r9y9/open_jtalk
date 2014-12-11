@@ -1,4 +1,11 @@
-Versin 1.07:
+Version 1.08:
+ * modify digit rules
+ * modify unvoicing rules
+ * assume unknown words as filler
+ * update dictionary.
+ * fix some bugs.
+
+Version 1.07:
  * add ASCII header for no multibyte environment.
  * add pronunciation rules for digit.
  * update dictionary.
