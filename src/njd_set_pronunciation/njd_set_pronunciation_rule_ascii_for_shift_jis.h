@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -142,6 +142,7 @@ static const char *njd_set_pronunciation_list[] = {
    "\x83\x65\x83\x87", "\x83\x65\x83\x87", "1",
    "\x83\x65\x83\x85", "\x83\x65\x83\x85", "1",
    "\x83\x65\x83\x83", "\x83\x65\x83\x83", "1",
+   "\x83\x65\x83\x46", "\x83\x65\x83\x46", "1",
    "\x83\x65\x83\x42", "\x83\x65\x83\x42", "1",
    "\x83\x65", "\x83\x65", "1",
    "\x83\x64", "\x83\x64", "1",
@@ -293,6 +294,7 @@ static const char *njd_set_pronunciation_list[] = {
    "\x82\xc4\x82\xe5", "\x83\x65\x83\x87", "1",
    "\x82\xc4\x82\xe3", "\x83\x65\x83\x85", "1",
    "\x82\xc4\x82\xe1", "\x83\x65\x83\x83", "1",
+   "\x82\xc4\x82\xa5", "\x83\x65\x83\x46", "1",
    "\x82\xc4\x82\xa1", "\x83\x65\x83\x42", "1",
    "\x82\xc4", "\x83\x65", "1",
    "\x82\xc3", "\x83\x64", "1",
@@ -512,6 +514,8 @@ static const char *njd_set_pronunciation_symbol_list[] = {
    "\x81\x7c", "\x81\x41",
    NULL, NULL
 };
+
+#define NJD_SET_PRONUNCIATION_FILLER "\x83\x74\x83\x42\x83\x89\x81\x5b"
 
 #define NJD_SET_PRONUNCIATION_U        "\x83\x45"
 #define NJD_SET_PRONUNCIATION_DOUSHI   "\x93\xae\x8e\x8c"

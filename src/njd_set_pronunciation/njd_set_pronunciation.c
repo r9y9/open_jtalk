@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -133,6 +133,10 @@ void njd_set_pronunciation(NJD * njd)
                   pos++;
                }
             }
+            NJDNode_set_pos(node, NJD_SET_PRONUNCIATION_FILLER);
+            NJDNode_set_pos_group1(node, NULL);
+            NJDNode_set_pos_group2(node, NULL);
+            NJDNode_set_pos_group3(node, NULL);
          }
       }
    }

@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -142,6 +142,7 @@ static const char *njd_set_pronunciation_list[] = {
    "テョ", "テョ", "1",
    "テュ", "テュ", "1",
    "テャ", "テャ", "1",
+   "テェ", "テェ", "1",
    "ティ", "ティ", "1",
    "テ", "テ", "1",
    "ヅ", "ヅ", "1",
@@ -293,6 +294,7 @@ static const char *njd_set_pronunciation_list[] = {
    "てょ", "テョ", "1",
    "てゅ", "テュ", "1",
    "てゃ", "テャ", "1",
+   "てぇ", "テェ", "1",
    "てぃ", "ティ", "1",
    "て", "テ", "1",
    "づ", "ヅ", "1",
@@ -512,6 +514,8 @@ static const char *njd_set_pronunciation_symbol_list[] = {
    "−", "、",
    NULL, NULL
 };
+
+#define NJD_SET_PRONUNCIATION_FILLER "フィラー"
 
 #define NJD_SET_PRONUNCIATION_U        "ウ"
 #define NJD_SET_PRONUNCIATION_DOUSHI   "動詞"
