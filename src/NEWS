@@ -1,4 +1,5 @@
 Version 1.08:
+ * add '-g' option for changing volume.
  * modify digit rules
  * modify unvoicing rules
  * assume unknown words as filler

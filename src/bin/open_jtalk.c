@@ -156,6 +156,11 @@ static void Open_JTalk_set_gv_weight(Open_JTalk * open_jtalk, size_t i, double f
    HTS_Engine_set_gv_weight(&open_jtalk->engine, i, f);
 }
 
+static void Open_JTalk_set_volume(Open_JTalk * open_jtalk, double f)
+{
+   HTS_Engine_set_volume(&open_jtalk->engine, f);
+}
+
 static void Open_JTalk_set_audio_buff_size(Open_JTalk * open_jtalk, size_t i)
 {
    HTS_Engine_set_audio_buff_size(&open_jtalk->engine, i);
@@ -255,10 +260,8 @@ static void usage()
            "    -jm f          : weight of GV for spectrum                               [  1.0][ 0.0--    ]\n");
    fprintf(stderr,
            "    -jf f          : weight of GV for log F0                                 [  1.0][ 0.0--    ]\n");
-#ifdef HTS_MELP
    fprintf(stderr,
-           "    -jl f          : weight of GV for low-pass filter                        [  1.0][ 0.0--    ]\n");
-#endif                          /* HTS_MELP */
+           "    -g  f          : volume (dB)                                             [  0.0][    --    ]\n");
    fprintf(stderr,
            "    -z  i          : audio buffer size (if i==0, turn off)                   [    0][   0--    ]\n");
    fprintf(stderr, "  infile:\n");
@@ -402,15 +405,14 @@ int main(int argc, char **argv)
             case 'p':
                Open_JTalk_set_gv_weight(&open_jtalk, 1, atof(*++argv));
                break;
-#ifdef HTS_MELP
-            case 'l':
-               Open_JTalk_set_gv_weight(&open_jtalk, 2, atof(*++argv));
-               break;
-#endif                          /* HTS_MELP */
             default:
                fprintf(stderr, "Error: Invalid option '-j%c'.\n", *(*argv + 2));
                exit(1);
             }
+            --argc;
+            break;
+         case 'g':
+            Open_JTalk_set_volume(&open_jtalk, atof(*++argv));
             --argc;
             break;
          case 'z':
