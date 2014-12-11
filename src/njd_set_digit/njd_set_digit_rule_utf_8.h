@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -64,7 +64,8 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_TEN1 "．"
 #define NJD_SET_DIGIT_TEN2 "・"
 #define NJD_SET_DIGIT_TEN_FEATURE "．,名詞,接尾,助数詞,*,*,*,．,テン,テン,0/2,*,-1"
-#define NJD_SET_DIGIT_ZERO "〇"
+#define NJD_SET_DIGIT_ZERO1 "〇"
+#define NJD_SET_DIGIT_ZERO2 "０"
 #define NJD_SET_DIGIT_ZERO_BEFORE_DP "レー"
 #define NJD_SET_DIGIT_ZERO_AFTER_DP "ゼロ"
 #define NJD_SET_DIGIT_TWO "二"
@@ -79,6 +80,15 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_NICHIKAN "日間"
 #define NJD_SET_DIGIT_ONE "一"
 #define NJD_SET_DIGIT_TSUITACHI "一日,名詞,副詞可能,*,*,*,*,一日,ツイタチ,ツイタチ,4/4,*"
+#define NJD_SET_DIGIT_FOUR "四"
+#define NJD_SET_DIGIT_TEN "十"
+#define NJD_SET_DIGIT_JUYOKKA "十四日,名詞,副詞可能,*,*,*,*,十四日,ジュウヨッカ,ジューヨッカ,1/5,*"
+#define NJD_SET_DIGIT_JUYOKKAKAN "十四日間,名詞,副詞可能,*,*,*,*,十四日間,ジュウヨッカカン,ジューヨッカカン,5/7,*"
+#define NJD_SET_DIGIT_NIJU "二十,名詞,副詞可能,*,*,*,*,二十,ニジュウ,ニジュー,1/3,*"
+#define NJD_SET_DITIT_YOKKA "四日,名詞,副詞可能,*,*,*,*,四日,ヨッカ,ヨッカ,0/3,*,0"
+#define NJD_SET_DIGIT_YOKKAKAN "四日間,名詞,副詞可能,*,*,*,*,四日間,ヨッカカン,ヨッカカン,3/5,*,0"
+#define NJD_SET_DITIT_HATSUKA "二十日,名詞,副詞可能,*,*,*,*,二十日,ハツカ,ハツカ,0/3,*"
+#define NJD_SET_DIGIT_HATSUKAKAN "二十日間,名詞,副詞可能,*,*,*,*,二十日間,ハツカカン,ハツカカン,3/5,*"
 
 static const char *njd_set_digit_rule_numeral_list1[] = {
    "○", "0", "〇",
@@ -110,7 +120,7 @@ static const char *njd_set_digit_rule_numeral_list1[] = {
    "はち", "8", "八",
    "きゅう", "9", "九",
    "〇", "0", "〇",
-   "０", "0", "〇",
+   "０", "0", "０",
    "壱", "1", "一",
    "弐", "2", "二",
    "貳", "2", "二",
@@ -211,9 +221,9 @@ static const char *njd_set_digit_rule_conv_table1b[] = {
 
 static const char *njd_set_digit_rule_numerative_class1c1[] = {
    /* from paper */
-   "時", "時間", "人",
+   "人",
    /* from dictionary */
-   "時限", "時半", "人月", "人前", "人組",
+   "人月", "人前", "人組",
    NULL
 };
 
@@ -232,6 +242,8 @@ static const char *njd_set_digit_rule_numerative_class1c2[] = {
 };
 
 static const char *njd_set_digit_rule_conv_table1c2[] = {
+   "四", "ヨ", "0", "1",
+   "七", "シチ", "1", "2",
    "九", "ク", "0", "1",
    NULL, NULL, NULL, NULL
 };
@@ -582,15 +594,15 @@ static const char *njd_set_digit_rule_conv_table4[] = {
 
 static const char *njd_set_digit_rule_conv_table5[] = {
    "一", "一日,名詞,副詞可能,*,*,*,*,一日,イチニチ,イチニチ,4/4,*",
-   "二", "二日,名詞,副詞可能,*,*,*,*,二日,フツカ,フツカ,3/3,*",
-   "三", "三日,名詞,副詞可能,*,*,*,*,三日,ミッカ,ミッカ,3/3,*",
-   "四", "四日,名詞,副詞可能,*,*,*,*,四日,ヨッカ,ヨッカ,3/3,*",
-   "五", "五日,名詞,副詞可能,*,*,*,*,五日,イツカ,イツカ,3/3,*",
-   "六", "六日,名詞,副詞可能,*,*,*,*,六日,ムイカ,ムイカ,3/3,*",
-   "七", "七日,名詞,副詞可能,*,*,*,*,七日,ナノカ,ナノカ,3/3,*",
-   "八", "八日,名詞,副詞可能,*,*,*,*,八日,ヨウカ,ヨウカ,3/3,*",
-   "九", "九日,名詞,副詞可能,*,*,*,*,九日,ココノカ,ココノカ,4/4,*",
-   "十", "十日,名詞,副詞可能,*,*,*,*,十日,トウカ,トーカ,3/3,*",
+   "二", "二日,名詞,副詞可能,*,*,*,*,二日,フツカ,フツカ,0/3,*",
+   "三", "三日,名詞,副詞可能,*,*,*,*,三日,ミッカ,ミッカ,0/3,*",
+   "四", "四日,名詞,副詞可能,*,*,*,*,四日,ヨッカ,ヨッカ,0/3,*",
+   "五", "五日,名詞,副詞可能,*,*,*,*,五日,イツカ,イツカ,0/3,*",
+   "六", "六日,名詞,副詞可能,*,*,*,*,六日,ムイカ,ムイカ,0/3,*",
+   "七", "七日,名詞,副詞可能,*,*,*,*,七日,ナノカ,ナノカ,0/3,*",
+   "八", "八日,名詞,副詞可能,*,*,*,*,八日,ヨウカ,ヨウカ,0/3,*",
+   "九", "九日,名詞,副詞可能,*,*,*,*,九日,ココノカ,ココノカ,0/4,*",
+   "十", "十日,名詞,副詞可能,*,*,*,*,十日,トウカ,トーカ,0/3,*",
    NULL, NULL
 };
 static const char *njd_set_digit_rule_conv_table6[] = {
