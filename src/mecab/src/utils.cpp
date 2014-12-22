@@ -66,9 +66,11 @@
 #endif /* for Open JTalk */
 #include <windows.h>
 #include <stdlib.h>
+#else
+#include <stdint.h>  /* for Open JTalk */
 #endif
 
-#include <stdint.h>
+
 
 /* for Open JTalk
 #if defined(_WIN32) && !defined(__CYGWIN__)
