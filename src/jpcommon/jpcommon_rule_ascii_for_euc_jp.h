@@ -161,7 +161,6 @@ static const char *jpcommon_mora_list[] = {
    "\xa5\xc6\xa5\xe7", "ty", "o",
    "\xa5\xc6\xa5\xe5", "ty", "u",
    "\xa5\xc6\xa5\xe3", "ty", "a",
-   "\xa5\xc6\xa5\xa7", "ty", "e",
    "\xa5\xc6\xa5\xa3", "t", "i",
    "\xa5\xc6", "t", "e",
    "\xa5\xc5", "z", "u",

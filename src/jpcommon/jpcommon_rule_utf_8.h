@@ -161,7 +161,6 @@ static const char *jpcommon_mora_list[] = {
    "テョ", "ty", "o",
    "テュ", "ty", "u",
    "テャ", "ty", "a",
-   "テェ", "ty", "e",
    "ティ", "t", "i",
    "テ", "t", "e",
    "ヅ", "z", "u",

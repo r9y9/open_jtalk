@@ -161,7 +161,6 @@ static const char *jpcommon_mora_list[] = {
    "\x83\x65\x83\x87", "ty", "o",
    "\x83\x65\x83\x85", "ty", "u",
    "\x83\x65\x83\x83", "ty", "a",
-   "\x83\x65\x83\x46", "ty", "e",
    "\x83\x65\x83\x42", "t", "i",
    "\x83\x65", "t", "e",
    "\x83\x64", "z", "u",
