@@ -1,8 +1,8 @@
 Version 1.08:
  * add '-g' option for changing volume.
- * modify digit rules
- * modify unvoicing rules
- * assume unknown words as filler
+ * modify digit rules.
+ * modify unvoicing rules.
+ * assume unknown words as filler.
  * update dictionary.
  * update MeCab to version 0.996.
  * fix some bugs.
