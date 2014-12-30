@@ -1,7 +1,7 @@
 #
 #   Japanese charcter category map
 #
-#   $Id: char.def,v 1.1 2009/12/16 16:01:01 uratec Exp $;
+#   $Id: char.def,v 1.2 2014/12/30 04:58:28 uratec Exp $;
 #
 
 ###################################################################################
@@ -34,7 +34,7 @@ CYRILLIC       1 1 0
 
 # SPACE
 0x0020 SPACE  # DO NOT REMOVE THIS LINE, 0x0020 is reserved for SPACE
-0x00D0 SPACE
+0x000D SPACE
 0x0009 SPACE
 0x000B SPACE
 0x000A SPACE
