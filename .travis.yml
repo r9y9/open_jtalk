@@ -1,0 +1,26 @@
+language: cpp
+
+compiler:
+  - gcc
+  - clang
+
+# TODO: should install a tagged version
+before_install:
+  - cd $HOME
+  - git clone https://github.com/r9y9/hts_engine_API.git && cd hts_engine_API/src
+  - ./waf configure build
+  - sudo ./waf install
+  - cd $TRAVIS_BUILD_DIR
+
+# Just check if build success or not for now
+script:
+  - cd src
+  - ./waf configure
+  - ./waf build
+
+notifications:
+  email: false
+
+os:
+  - linux
+  - osx
