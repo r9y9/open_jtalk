@@ -9,5 +9,5 @@ def build(bld):
         source=bld.path.ant_glob('*.cpp'),
         target="mecab_open_jtalk",
         vnum=bld.env['VERSION'],
-        lib=['iconv'],
+        lib=['pthread'],
         includes=['.'])
