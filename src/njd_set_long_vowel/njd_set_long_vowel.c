@@ -118,10 +118,9 @@ static int detect_byte(const char *str)
 void njd_set_long_vowel(NJD * njd)
 {
 #if 1
-   {                            /* long vowel estimator is deprecated */
-      return;
-   }
-#endif
+   /* long vowel estimator is deprecated */
+   return;
+#else
    int i, j;
    NJDNode *node;
    const char *str;
@@ -154,6 +153,7 @@ void njd_set_long_vowel(NJD * njd)
       /* finish */
       NJDNode_set_pron(node, buff);
    }
+#endif
 }
 
 NJD_SET_LONG_VOWEL_C_END;
