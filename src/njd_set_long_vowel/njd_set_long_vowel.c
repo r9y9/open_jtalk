@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -117,6 +117,11 @@ static int detect_byte(const char *str)
 
 void njd_set_long_vowel(NJD * njd)
 {
+#if 1
+   {                            /* long vowel estimator is deprecated */
+      return;
+   }
+#endif
    int i, j;
    NJDNode *node;
    const char *str;

@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -136,7 +136,6 @@ static const char *njd_set_pronunciation_list[] = {
    "デョ", "デョ", "1",
    "デュ", "デュ", "1",
    "デャ", "デャ", "1",
-   "デェ", "デェ", "1",
    "ディ", "ディ", "1",
    "デ", "デ", "1",
    "テョ", "テョ", "1",
@@ -211,6 +210,14 @@ static const char *njd_set_pronunciation_list[] = {
    "ィ", "ィ", "1",
    "ア", "ア", "1",
    "ァ", "ァ", "1",
+   "ヴょ", "ヴョ", "1", /* none in this charcode */
+   "ヴゅ", "ヴュ", "1", /* none in this charcode */
+   "ヴゃ", "ヴャ", "1", /* none in this charcode */
+   "ヴぉ", "ヴォ", "1", /* none in this charcode */
+   "ヴぇ", "ヴェ", "1", /* none in this charcode */
+   "ヴぃ", "ヴィ", "1", /* none in this charcode */
+   "ヴぁ", "ヴァ", "1", /* none in this charcode */
+   "ヴ", "ヴ", "1", /* none in this charcode */
    "ん", "ン", "1",
    "を", "ヲ", "1",
    "ゑ", "ヱ", "1",
@@ -287,7 +294,6 @@ static const char *njd_set_pronunciation_list[] = {
    "でょ", "デョ", "1",
    "でゅ", "デュ", "1",
    "でゃ", "デャ", "1",
-   "でぇ", "デェ", "1",
    "でぃ", "ディ", "1",
    "で", "デ", "1",
    "てょ", "テョ", "1",
@@ -387,7 +393,7 @@ static const char *njd_set_pronunciation_list[] = {
    "ｄ", "ディー", "2",
    "ｃ", "シー", "2",
    "ｂ", "ビー", "2",
-   "ａ", "エイ", "2",
+   "ａ", "エー", "2",
    "Ｚ", "ズィー", "2",
    "Ｙ", "ワイ", "2",
    "Ｘ", "エックス", "4",
@@ -413,7 +419,7 @@ static const char *njd_set_pronunciation_list[] = {
    "Ｄ", "ディー", "2",
    "Ｃ", "シー", "2",
    "Ｂ", "ビー", "2",
-   "Ａ", "エイ", "2",
+   "Ａ", "エー", "2",
    "ー", "ー", "1",
    NULL, NULL, NULL
 };
@@ -422,94 +428,7 @@ static const char *njd_set_pronunciation_list[] = {
 #define NJD_SET_PRONUNCIATION_KAZU "数"
 
 static const char *njd_set_pronunciation_symbol_list[] = {
-   "　", "、",
-   "、", "、",
-   "。", "、",
-   "，", "、",
-   "．", "、",
-   "・", "、",
-   "：", "、",
-   "；", "、",
    "？", "？",
-   "！", "、",
-   "゛", "、",
-   "゜", "、",
-   "´", "、",
-   "｀", "、",
-   "¨", "、",
-   "＾", "、",
-   "￣", "、",
-   "＿", "、",
-   "ヽ", "、",
-   "ヾ", "、",
-   "ゝ", "、",
-   "ゞ", "、",
-   "〃", "、",
-   "仝", "、",
-   "々", "、",
-   "々々", "、",
-   "〆", "、",
-   "〇", "、",
-   "―", "、",
-   "――", "、",
-   "‐", "、",
-   "／", "、",
-   "＼", "、",
-   "～", "、",
-   "∥", "、",
-   "｜", "、",
-   "…", "、",
-   "‥", "、",
-   "‘", "、",
-   "’", "、",
-   "“", "、",
-   "”", "、",
-   "（", "、",
-   "）", "、",
-   "〔", "、",
-   "〕", "、",
-   "［", "、",
-   "］", "、",
-   "｛", "、",
-   "｝", "、",
-   "〈", "、",
-   "〉", "、",
-   "《", "、",
-   "》", "、",
-   "「", "、",
-   "」", "、",
-   "『", "、",
-   "』", "、",
-   "【", "、",
-   "】", "、",
-   "－－", "、",
-   "＝", "、",
-   "＜", "、",
-   "＞", "、",
-   "′", "、",
-   "＊", "、",
-   "☆", "、",
-   "★", "、",
-   "○", "、",
-   "●", "、",
-   "◎", "、",
-   "◇", "、",
-   "◆", "、",
-   "□", "、",
-   "■", "、",
-   "△", "、",
-   "▲", "、",
-   "▽", "、",
-   "▼", "、",
-   "※", "、",
-   "→", "、",
-   "←", "、",
-   "↑", "、",
-   "↓", "、",
-   "〓", "、",
-   "─", "、",
-   "──", "、",
-   "－", "、",
    NULL, NULL
 };
 
@@ -525,6 +444,8 @@ static const char *njd_set_pronunciation_symbol_list[] = {
 #define NJD_SET_PRONUNCIATION_MASU_STR  "ます"
 #define NJD_SET_PRONUNCIATION_DESU_PRON "デス"
 #define NJD_SET_PRONUNCIATION_MASU_PRON "マス"
+
+#define NJD_SET_PRONUNCIATION_TOUTEN "、"
 
 NJD_SET_PRONUNCIATION_RULE_H_END;
 

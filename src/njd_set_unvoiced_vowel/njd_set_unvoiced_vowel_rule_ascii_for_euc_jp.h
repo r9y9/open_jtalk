@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -77,28 +77,28 @@ NJD_SET_UNVOICED_VOWEL_RULE_H_START;
 #define NJD_SET_UNVOICED_VOWEL_SU "\xa5\xb9"
 
 static const char *njd_set_unvoiced_vowel_candidate_list1[] = {
-   "\xa5\xb9\xa5\xa3",                      /* s i */
-   "\xa5\xb9",                        /* s u */
+   "\xa5\xb9\xa5\xa3",                    /* s i */
+   "\xa5\xb9",                       /* s u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
-   "\xa5\xab",                        /* k ky */
+   "\xa5\xab",                       /* k ky */
    "\xa5\xad",
    "\xa5\xaf",
    "\xa5\xb1",
    "\xa5\xb3",
-   "\xa5\xbf",                        /* t ty ch ts */
+   "\xa5\xbf",                       /* t ty ch ts */
    "\xa5\xc1",
    "\xa5\xc4",
    "\xa5\xc6",
    "\xa5\xc8",
-   "\xa5\xcf",                        /* h f hy */
+   "\xa5\xcf",                       /* h f hy */
    "\xa5\xd2",
    "\xa5\xd5",
    "\xa5\xd8",
    "\xa5\xdb",
-   "\xa5\xd1",                        /* p py */
+   "\xa5\xd1",                       /* p py */
    "\xa5\xd4",
    "\xa5\xd7",
    "\xa5\xda",
@@ -107,29 +107,29 @@ static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
 };
 
 static const char *njd_set_unvoiced_vowel_candidate_list2[] = {
-   "\xa5\xd5\xa5\xa3",                      /* f i */
-   "\xa5\xd2",                        /* h i */
-   "\xa5\xd5",                        /* f u */
+   "\xa5\xd5\xa5\xa3",                    /* f i */
+   "\xa5\xd2",                       /* h i */
+   "\xa5\xd5",                       /* f u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
-   "\xa5\xab",                        /* k ky */
+   "\xa5\xab",                       /* k ky */
    "\xa5\xad",
    "\xa5\xaf",
    "\xa5\xb1",
    "\xa5\xb3",
-   "\xa5\xb5",                        /* s sh */
+   "\xa5\xb5",                       /* s sh */
    "\xa5\xb7",
    "\xa5\xb9",
    "\xa5\xbb",
    "\xa5\xbd",
-   "\xa5\xbf",                        /* t ty ch ts */
+   "\xa5\xbf",                       /* t ty ch ts */
    "\xa5\xc1",
    "\xa5\xc4",
    "\xa5\xc6",
    "\xa5\xc8",
-   "\xa5\xd1",                        /* p py */
+   "\xa5\xd1",                       /* p py */
    "\xa5\xd4",
    "\xa5\xd7",
    "\xa5\xda",
@@ -138,47 +138,47 @@ static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
 };
 
 static const char *njd_set_unvoiced_vowel_candidate_list3[] = {
-   "\xa5\xad\xa5\xe5",                      /* ky u */
-   "\xa5\xb7\xa5\xe5",                      /* sh u */
-   "\xa5\xc1\xa5\xe5",                      /* ch u */
-   "\xa5\xc4\xa5\xa3",                      /* ts i */
-   "\xa5\xd2\xa5\xe5",                      /* hy u */
-   "\xa5\xd4\xa5\xe5",                      /* py u */
-   "\xa5\xc6\xa5\xe5",                      /* ty u */
-   "\xa5\xc8\xa5\xa5",                      /* t u */
-   "\xa5\xc6\xa5\xa3",                      /* t i */
-   "\xa5\xad",                        /* k i */
-   "\xa5\xaf",                        /* k u */
-   "\xa5\xb7",                        /* sh i */
-   "\xa5\xc1",                        /* ch i */
-   "\xa5\xc4",                        /* ts u */
-   "\xa5\xd4",                        /* p i */
-   "\xa5\xd7",                        /* p u */
+   "\xa5\xad\xa5\xe5",                    /* ky u */
+   "\xa5\xb7\xa5\xe5",                    /* sh u */
+   "\xa5\xc1\xa5\xe5",                    /* ch u */
+   "\xa5\xc4\xa5\xa3",                    /* ts i */
+   "\xa5\xd2\xa5\xe5",                    /* hy u */
+   "\xa5\xd4\xa5\xe5",                    /* py u */
+   "\xa5\xc6\xa5\xe5",                    /* ty u */
+   "\xa5\xc8\xa5\xa5",                    /* t u */
+   "\xa5\xc6\xa5\xa3",                    /* t i */
+   "\xa5\xad",                       /* k i */
+   "\xa5\xaf",                       /* k u */
+   "\xa5\xb7",                       /* sh i */
+   "\xa5\xc1",                       /* ch i */
+   "\xa5\xc4",                       /* ts u */
+   "\xa5\xd4",                       /* p i */
+   "\xa5\xd7",                       /* p u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list3[] = {
-   "\xa5\xab",                        /* k ky */
+   "\xa5\xab",                       /* k ky */
    "\xa5\xad",
    "\xa5\xaf",
    "\xa5\xb1",
    "\xa5\xb3",
-   "\xa5\xb5",                        /* s sh */
+   "\xa5\xb5",                       /* s sh */
    "\xa5\xb7",
    "\xa5\xb9",
    "\xa5\xbb",
    "\xa5\xbd",
-   "\xa5\xbf",                        /* t ty ch ts */
+   "\xa5\xbf",                       /* t ty ch ts */
    "\xa5\xc1",
    "\xa5\xc4",
    "\xa5\xc6",
    "\xa5\xc8",
-   "\xa5\xcf",                        /* h f hy */
+   "\xa5\xcf",                       /* h f hy */
    "\xa5\xd2",
    "\xa5\xd5",
    "\xa5\xd8",
    "\xa5\xdb",
-   "\xa5\xd1",                        /* p py */
+   "\xa5\xd1",                       /* p py */
    "\xa5\xd4",
    "\xa5\xd7",
    "\xa5\xda",
@@ -271,13 +271,11 @@ static const char *njd_set_unvoiced_vowel_mora_list[] = {
    "\xa5\xc7\xa5\xe7",
    "\xa5\xc7\xa5\xe5",
    "\xa5\xc7\xa5\xe3",
-   "\xa5\xc7\xa5\xa7",
    "\xa5\xc7\xa5\xa3",
    "\xa5\xc7",
    "\xa5\xc6\xa5\xe7",
    "\xa5\xc6\xa5\xe5",
    "\xa5\xc6\xa5\xe3",
-   "\xa5\xc6\xa5\xa7",
    "\xa5\xc6\xa5\xa3",
    "\xa5\xc6",
    "\xa5\xc5",

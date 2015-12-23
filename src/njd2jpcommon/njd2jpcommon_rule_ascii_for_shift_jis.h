@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -55,6 +55,7 @@ static const char *njd2jpcommon_pos_list[] = {
    "\x82\xbb\x82\xcc\x91\xbc", "\x8a\xd4\x93\x8a", "*", "*", "\x82\xbb\x82\xcc\x91\xbc",
    "\x83\x74\x83\x42\x83\x89\x81\x5b", "*", "*", "*", "\x8a\xb4\x93\xae\x8e\x8c",
    "\x8a\xb4\x93\xae\x8e\x8c", "*", "*", "*", "\x8a\xb4\x93\xae\x8e\x8c",
+   "\x8b\x4c\x8d\x86", "*", "*", "*", "\x8b\x4c\x8d\x86",
    "\x8b\x4c\x8d\x86", "\x83\x41\x83\x8b\x83\x74\x83\x40\x83\x78\x83\x62\x83\x67", "*", "*", "\x8b\x4c\x8d\x86",
    "\x8b\x4c\x8d\x86", "\x88\xea\x94\xca", "*", "*", "\x8b\x4c\x8d\x86",
    "\x8b\x4c\x8d\x86", "\x8a\x87\x8c\xca\x8a\x4a", "*", "*", "\x8b\x4c\x8d\x86",

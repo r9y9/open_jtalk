@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -108,14 +108,8 @@ void njd_set_pronunciation(NJD * njd)
       if (NJDNode_get_mora_size(node) == 0) {
          NJDNode_set_read(node, NULL);
          NJDNode_set_pron(node, NULL);
-         if (strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_KIGOU) == 0 || strcmp(NJDNode_get_pos_group1(node), NJD_SET_PRONUNCIATION_KAZU) == 0) {        /* for symbol */
-            for (i = 0; njd_set_pronunciation_symbol_list[i] != NULL; i += 2)
-               if (strcmp(NJDNode_get_string(node), njd_set_pronunciation_symbol_list[i]) == 0) {
-                  NJDNode_set_read(node, (char *) njd_set_pronunciation_symbol_list[i + 1]);
-                  NJDNode_set_pron(node, (char *) njd_set_pronunciation_symbol_list[i + 1]);
-                  break;
-               }
-         } else if (strcmp(NJDNode_get_pron(node), "*") == 0) { /* for others */
+         /* if the word is kana, set them as filler */
+         {
             str = NJDNode_get_string(node);
             len = strlen(str);
             for (pos = 0; pos < len;) {
@@ -137,6 +131,22 @@ void njd_set_pronunciation(NJD * njd)
             NJDNode_set_pos_group1(node, NULL);
             NJDNode_set_pos_group2(node, NULL);
             NJDNode_set_pos_group3(node, NULL);
+         }
+         /* if known symbol, set the pronunciation */
+         if (strcmp(NJDNode_get_pron(node), "*") == 0) {
+            for (i = 0; njd_set_pronunciation_symbol_list[i] != NULL; i += 2) {
+               if (strcmp(NJDNode_get_string(node), njd_set_pronunciation_symbol_list[i]) == 0) {
+                  NJDNode_set_read(node, (char *) njd_set_pronunciation_symbol_list[i + 1]);
+                  NJDNode_set_pron(node, (char *) njd_set_pronunciation_symbol_list[i + 1]);
+                  break;
+               }
+            }
+         }
+         /* if the word is not kana, set pause symbol */
+         if (strcmp(NJDNode_get_pron(node), "*") == 0) {
+            NJDNode_set_read(node, NJD_SET_PRONUNCIATION_TOUTEN);
+            NJDNode_set_pron(node, NJD_SET_PRONUNCIATION_TOUTEN);
+            NJDNode_set_pos(node, NJD_SET_PRONUNCIATION_KIGOU);
          }
       }
    }

@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -155,7 +155,6 @@ static const char *jpcommon_mora_list[] = {
    "デョ", "dy", "o",
    "デュ", "dy", "u",
    "デャ", "dy", "a",
-   "デェ", "dy", "e",
    "ディ", "d", "i",
    "デ", "d", "e",
    "テョ", "ty", "o",

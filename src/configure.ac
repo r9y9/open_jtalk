@@ -1,8 +1,8 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(open_jtalk, 1.08, open-jtalk-users@lists.sourceforge.net)
+AC_INIT(open_jtalk, 1.09, open-jtalk-users@lists.sourceforge.net)
 AC_CONFIG_AUX_DIR([config])
-AC_COPYRIGHT(Copyright 2008-2014 Nagoya Institute of Technology)
+AC_COPYRIGHT(Copyright 2008-2015 Nagoya Institute of Technology)
 AM_INIT_AUTOMAKE
 
 # Checks for C/C++ compiler
@@ -256,7 +256,7 @@ esac
 AC_ARG_WITH(charset,
             [  --with-charset          specify charset (EUC-JP/SHIFT_JIS/UTF-8)],
             [charset=$withval],
-            [charset='euc-jp'])
+            [charset='UTF-8'])
 AC_MSG_CHECKING(charset)
 AC_MSG_RESULT($charset)
 AC_SUBST(MECAB_CHARSET)
@@ -278,6 +278,8 @@ fi
 AC_SUBST(CHARSET)
 if test x$charset = xeucjp -o x$charset = xeuc-jp -o x$charset = xeuc_jp -o x$charset = xEUCJP -o x$charset = xEUC-JP -o x$charset = xEUC_JP ; then
    CHARSET="-D CHARSET_EUC_JP"
+   CFLAGS="$CFLAGS -finput-charset=EUC-JP -fexec-charset=EUC-JP "
+   CXXFLAGS="$CXXFLAGS -finput-charset=EUC-JP -fexec-charset=EUC-JP "
 elif test x$charset = xsjis -o x$charset = xshift-jis -o x$charset = xshift_jis -o x$charset = xSJIS -o x$charset = xSHIFT-JIS -o x$charset = xSHIFT_JIS ; then
    CHARSET="-D CHARSET_SHIFT_JIS"
    CFLAGS="$CFLAGS -finput-charset=cp932 -fexec-charset=cp932 "

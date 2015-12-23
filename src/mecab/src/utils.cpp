@@ -10,7 +10,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -66,11 +66,12 @@
 #endif /* for Open JTalk */
 #include <windows.h>
 #include <stdlib.h>
-#else
-#include <stdint.h>  /* for Open JTalk */
 #endif
 
-
+/* for Open JTalk */
+#if !defined(_WIN32) || defined(__CYGWIN__)
+#include <stdint.h>
+#endif
 
 /* for Open JTalk
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -339,6 +340,7 @@ int load_request_type(const Param &param) {
 bool load_dictionary_resource(Param *param) {
   std::string rcfile = param->get<std::string>("rcfile");
 
+  /* for Open JTalk
 #ifdef HAVE_GETENV
   if (rcfile.empty()) {
     const char *homedir = getenv("HOME");
@@ -398,7 +400,6 @@ bool load_dictionary_resource(Param *param) {
     }
   }
 
-  /* for Open JTalk
   if (rcfile.empty()) {
     vt = ::GetModuleFileNameW(DllInstance, v.get(), size);
     if (vt != 0) {
@@ -412,10 +413,8 @@ bool load_dictionary_resource(Param *param) {
       }
     }
   }
-  */
 #endif
 
-  /* for Open JTalk
   if (rcfile.empty()) {
     rcfile = MECAB_DEFAULT_RC;
   }

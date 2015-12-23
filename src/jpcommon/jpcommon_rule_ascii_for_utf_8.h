@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -155,7 +155,6 @@ static const char *jpcommon_mora_list[] = {
    "\xe3\x83\x87\xe3\x83\xa7", "dy", "o",
    "\xe3\x83\x87\xe3\x83\xa5", "dy", "u",
    "\xe3\x83\x87\xe3\x83\xa3", "dy", "a",
-   "\xe3\x83\x87\xe3\x82\xa7", "dy", "e",
    "\xe3\x83\x87\xe3\x82\xa3", "d", "i",
    "\xe3\x83\x87", "d", "e",
    "\xe3\x83\x86\xe3\x83\xa7", "ty", "o",

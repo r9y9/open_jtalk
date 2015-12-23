@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -55,6 +55,7 @@ static const char *njd2jpcommon_pos_list[] = {
    "その他", "間投", "*", "*", "その他",
    "フィラー", "*", "*", "*", "感動詞",
    "感動詞", "*", "*", "*", "感動詞",
+   "記号", "*", "*", "*", "記号",
    "記号", "アルファベット", "*", "*", "記号",
    "記号", "一般", "*", "*", "記号",
    "記号", "括弧開", "*", "*", "記号",

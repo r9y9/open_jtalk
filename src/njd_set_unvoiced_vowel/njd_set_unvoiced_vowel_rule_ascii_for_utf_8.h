@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -77,28 +77,28 @@ NJD_SET_UNVOICED_VOWEL_RULE_H_START;
 #define NJD_SET_UNVOICED_VOWEL_SU "\xe3\x82\xb9"
 
 static const char *njd_set_unvoiced_vowel_candidate_list1[] = {
-   "\xe3\x82\xb9\xe3\x82\xa3",                      /* s i */
-   "\xe3\x82\xb9",                        /* s u */
+   "\xe3\x82\xb9\xe3\x82\xa3",                    /* s i */
+   "\xe3\x82\xb9",                       /* s u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
-   "\xe3\x82\xab",                        /* k ky */
+   "\xe3\x82\xab",                       /* k ky */
    "\xe3\x82\xad",
    "\xe3\x82\xaf",
    "\xe3\x82\xb1",
    "\xe3\x82\xb3",
-   "\xe3\x82\xbf",                        /* t ty ch ts */
+   "\xe3\x82\xbf",                       /* t ty ch ts */
    "\xe3\x83\x81",
    "\xe3\x83\x84",
    "\xe3\x83\x86",
    "\xe3\x83\x88",
-   "\xe3\x83\x8f",                        /* h f hy */
+   "\xe3\x83\x8f",                       /* h f hy */
    "\xe3\x83\x92",
    "\xe3\x83\x95",
    "\xe3\x83\x98",
    "\xe3\x83\x9b",
-   "\xe3\x83\x91",                        /* p py */
+   "\xe3\x83\x91",                       /* p py */
    "\xe3\x83\x94",
    "\xe3\x83\x97",
    "\xe3\x83\x9a",
@@ -107,29 +107,29 @@ static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
 };
 
 static const char *njd_set_unvoiced_vowel_candidate_list2[] = {
-   "\xe3\x83\x95\xe3\x82\xa3",                      /* f i */
-   "\xe3\x83\x92",                        /* h i */
-   "\xe3\x83\x95",                        /* f u */
+   "\xe3\x83\x95\xe3\x82\xa3",                    /* f i */
+   "\xe3\x83\x92",                       /* h i */
+   "\xe3\x83\x95",                       /* f u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
-   "\xe3\x82\xab",                        /* k ky */
+   "\xe3\x82\xab",                       /* k ky */
    "\xe3\x82\xad",
    "\xe3\x82\xaf",
    "\xe3\x82\xb1",
    "\xe3\x82\xb3",
-   "\xe3\x82\xb5",                        /* s sh */
+   "\xe3\x82\xb5",                       /* s sh */
    "\xe3\x82\xb7",
    "\xe3\x82\xb9",
    "\xe3\x82\xbb",
    "\xe3\x82\xbd",
-   "\xe3\x82\xbf",                        /* t ty ch ts */
+   "\xe3\x82\xbf",                       /* t ty ch ts */
    "\xe3\x83\x81",
    "\xe3\x83\x84",
    "\xe3\x83\x86",
    "\xe3\x83\x88",
-   "\xe3\x83\x91",                        /* p py */
+   "\xe3\x83\x91",                       /* p py */
    "\xe3\x83\x94",
    "\xe3\x83\x97",
    "\xe3\x83\x9a",
@@ -138,47 +138,47 @@ static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
 };
 
 static const char *njd_set_unvoiced_vowel_candidate_list3[] = {
-   "\xe3\x82\xad\xe3\x83\xa5",                      /* ky u */
-   "\xe3\x82\xb7\xe3\x83\xa5",                      /* sh u */
-   "\xe3\x83\x81\xe3\x83\xa5",                      /* ch u */
-   "\xe3\x83\x84\xe3\x82\xa3",                      /* ts i */
-   "\xe3\x83\x92\xe3\x83\xa5",                      /* hy u */
-   "\xe3\x83\x94\xe3\x83\xa5",                      /* py u */
-   "\xe3\x83\x86\xe3\x83\xa5",                      /* ty u */
-   "\xe3\x83\x88\xe3\x82\xa5",                      /* t u */
-   "\xe3\x83\x86\xe3\x82\xa3",                      /* t i */
-   "\xe3\x82\xad",                        /* k i */
-   "\xe3\x82\xaf",                        /* k u */
-   "\xe3\x82\xb7",                        /* sh i */
-   "\xe3\x83\x81",                        /* ch i */
-   "\xe3\x83\x84",                        /* ts u */
-   "\xe3\x83\x94",                        /* p i */
-   "\xe3\x83\x97",                        /* p u */
+   "\xe3\x82\xad\xe3\x83\xa5",                    /* ky u */
+   "\xe3\x82\xb7\xe3\x83\xa5",                    /* sh u */
+   "\xe3\x83\x81\xe3\x83\xa5",                    /* ch u */
+   "\xe3\x83\x84\xe3\x82\xa3",                    /* ts i */
+   "\xe3\x83\x92\xe3\x83\xa5",                    /* hy u */
+   "\xe3\x83\x94\xe3\x83\xa5",                    /* py u */
+   "\xe3\x83\x86\xe3\x83\xa5",                    /* ty u */
+   "\xe3\x83\x88\xe3\x82\xa5",                    /* t u */
+   "\xe3\x83\x86\xe3\x82\xa3",                    /* t i */
+   "\xe3\x82\xad",                       /* k i */
+   "\xe3\x82\xaf",                       /* k u */
+   "\xe3\x82\xb7",                       /* sh i */
+   "\xe3\x83\x81",                       /* ch i */
+   "\xe3\x83\x84",                       /* ts u */
+   "\xe3\x83\x94",                       /* p i */
+   "\xe3\x83\x97",                       /* p u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list3[] = {
-   "\xe3\x82\xab",                        /* k ky */
+   "\xe3\x82\xab",                       /* k ky */
    "\xe3\x82\xad",
    "\xe3\x82\xaf",
    "\xe3\x82\xb1",
    "\xe3\x82\xb3",
-   "\xe3\x82\xb5",                        /* s sh */
+   "\xe3\x82\xb5",                       /* s sh */
    "\xe3\x82\xb7",
    "\xe3\x82\xb9",
    "\xe3\x82\xbb",
    "\xe3\x82\xbd",
-   "\xe3\x82\xbf",                        /* t ty ch ts */
+   "\xe3\x82\xbf",                       /* t ty ch ts */
    "\xe3\x83\x81",
    "\xe3\x83\x84",
    "\xe3\x83\x86",
    "\xe3\x83\x88",
-   "\xe3\x83\x8f",                        /* h f hy */
+   "\xe3\x83\x8f",                       /* h f hy */
    "\xe3\x83\x92",
    "\xe3\x83\x95",
    "\xe3\x83\x98",
    "\xe3\x83\x9b",
-   "\xe3\x83\x91",                        /* p py */
+   "\xe3\x83\x91",                       /* p py */
    "\xe3\x83\x94",
    "\xe3\x83\x97",
    "\xe3\x83\x9a",
@@ -271,13 +271,11 @@ static const char *njd_set_unvoiced_vowel_mora_list[] = {
    "\xe3\x83\x87\xe3\x83\xa7",
    "\xe3\x83\x87\xe3\x83\xa5",
    "\xe3\x83\x87\xe3\x83\xa3",
-   "\xe3\x83\x87\xe3\x82\xa7",
    "\xe3\x83\x87\xe3\x82\xa3",
    "\xe3\x83\x87",
    "\xe3\x83\x86\xe3\x83\xa7",
    "\xe3\x83\x86\xe3\x83\xa5",
    "\xe3\x83\x86\xe3\x83\xa3",
-   "\xe3\x83\x86\xe3\x82\xa7",
    "\xe3\x83\x86\xe3\x82\xa3",
    "\xe3\x83\x86",
    "\xe3\x83\x85",

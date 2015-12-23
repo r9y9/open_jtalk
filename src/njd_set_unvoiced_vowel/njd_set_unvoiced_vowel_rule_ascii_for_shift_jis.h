@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -77,28 +77,28 @@ NJD_SET_UNVOICED_VOWEL_RULE_H_START;
 #define NJD_SET_UNVOICED_VOWEL_SU "\x83\x58"
 
 static const char *njd_set_unvoiced_vowel_candidate_list1[] = {
-   "\x83\x58\x83\x42",                      /* s i */
-   "\x83\x58",                        /* s u */
+   "\x83\x58\x83\x42",                    /* s i */
+   "\x83\x58",                       /* s u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
-   "\x83\x4a",                        /* k ky */
+   "\x83\x4a",                       /* k ky */
    "\x83\x4c",
    "\x83\x4e",
    "\x83\x50",
    "\x83\x52",
-   "\x83\x5e",                        /* t ty ch ts */
+   "\x83\x5e",                       /* t ty ch ts */
    "\x83\x60",
    "\x83\x63",
    "\x83\x65",
    "\x83\x67",
-   "\x83\x6e",                        /* h f hy */
+   "\x83\x6e",                       /* h f hy */
    "\x83\x71",
    "\x83\x74",
    "\x83\x77",
    "\x83\x7a",
-   "\x83\x70",                        /* p py */
+   "\x83\x70",                       /* p py */
    "\x83\x73",
    "\x83\x76",
    "\x83\x79",
@@ -107,29 +107,29 @@ static const char *njd_set_unvoiced_vowel_next_mora_list1[] = {
 };
 
 static const char *njd_set_unvoiced_vowel_candidate_list2[] = {
-   "\x83\x74\x83\x42",                      /* f i */
-   "\x83\x71",                        /* h i */
-   "\x83\x74",                        /* f u */
+   "\x83\x74\x83\x42",                    /* f i */
+   "\x83\x71",                       /* h i */
+   "\x83\x74",                       /* f u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
-   "\x83\x4a",                        /* k ky */
+   "\x83\x4a",                       /* k ky */
    "\x83\x4c",
    "\x83\x4e",
    "\x83\x50",
    "\x83\x52",
-   "\x83\x54",                        /* s sh */
+   "\x83\x54",                       /* s sh */
    "\x83\x56",
    "\x83\x58",
    "\x83\x5a",
    "\x83\x5c",
-   "\x83\x5e",                        /* t ty ch ts */
+   "\x83\x5e",                       /* t ty ch ts */
    "\x83\x60",
    "\x83\x63",
    "\x83\x65",
    "\x83\x67",
-   "\x83\x70",                        /* p py */
+   "\x83\x70",                       /* p py */
    "\x83\x73",
    "\x83\x76",
    "\x83\x79",
@@ -138,47 +138,47 @@ static const char *njd_set_unvoiced_vowel_next_mora_list2[] = {
 };
 
 static const char *njd_set_unvoiced_vowel_candidate_list3[] = {
-   "\x83\x4c\x83\x85",                      /* ky u */
-   "\x83\x56\x83\x85",                      /* sh u */
-   "\x83\x60\x83\x85",                      /* ch u */
-   "\x83\x63\x83\x42",                      /* ts i */
-   "\x83\x71\x83\x85",                      /* hy u */
-   "\x83\x73\x83\x85",                      /* py u */
-   "\x83\x65\x83\x85",                      /* ty u */
-   "\x83\x67\x83\x44",                      /* t u */
-   "\x83\x65\x83\x42",                      /* t i */
-   "\x83\x4c",                        /* k i */
-   "\x83\x4e",                        /* k u */
-   "\x83\x56",                        /* sh i */
-   "\x83\x60",                        /* ch i */
-   "\x83\x63",                        /* ts u */
-   "\x83\x73",                        /* p i */
-   "\x83\x76",                        /* p u */
+   "\x83\x4c\x83\x85",                    /* ky u */
+   "\x83\x56\x83\x85",                    /* sh u */
+   "\x83\x60\x83\x85",                    /* ch u */
+   "\x83\x63\x83\x42",                    /* ts i */
+   "\x83\x71\x83\x85",                    /* hy u */
+   "\x83\x73\x83\x85",                    /* py u */
+   "\x83\x65\x83\x85",                    /* ty u */
+   "\x83\x67\x83\x44",                    /* t u */
+   "\x83\x65\x83\x42",                    /* t i */
+   "\x83\x4c",                       /* k i */
+   "\x83\x4e",                       /* k u */
+   "\x83\x56",                       /* sh i */
+   "\x83\x60",                       /* ch i */
+   "\x83\x63",                       /* ts u */
+   "\x83\x73",                       /* p i */
+   "\x83\x76",                       /* p u */
    NULL
 };
 
 static const char *njd_set_unvoiced_vowel_next_mora_list3[] = {
-   "\x83\x4a",                        /* k ky */
+   "\x83\x4a",                       /* k ky */
    "\x83\x4c",
    "\x83\x4e",
    "\x83\x50",
    "\x83\x52",
-   "\x83\x54",                        /* s sh */
+   "\x83\x54",                       /* s sh */
    "\x83\x56",
    "\x83\x58",
    "\x83\x5a",
    "\x83\x5c",
-   "\x83\x5e",                        /* t ty ch ts */
+   "\x83\x5e",                       /* t ty ch ts */
    "\x83\x60",
    "\x83\x63",
    "\x83\x65",
    "\x83\x67",
-   "\x83\x6e",                        /* h f hy */
+   "\x83\x6e",                       /* h f hy */
    "\x83\x71",
    "\x83\x74",
    "\x83\x77",
    "\x83\x7a",
-   "\x83\x70",                        /* p py */
+   "\x83\x70",                       /* p py */
    "\x83\x73",
    "\x83\x76",
    "\x83\x79",
@@ -271,13 +271,11 @@ static const char *njd_set_unvoiced_vowel_mora_list[] = {
    "\x83\x66\x83\x87",
    "\x83\x66\x83\x85",
    "\x83\x66\x83\x83",
-   "\x83\x66\x83\x46",
    "\x83\x66\x83\x42",
    "\x83\x66",
    "\x83\x65\x83\x87",
    "\x83\x65\x83\x85",
    "\x83\x65\x83\x83",
-   "\x83\x65\x83\x46",
    "\x83\x65\x83\x42",
    "\x83\x65",
    "\x83\x64",
