@@ -325,6 +325,20 @@ bool Dictionary::compile(const Param &param,
     size_t num = 0;
 
     while (is->getline(line.get(), line.size())) {
+#if 1 /* for Open JTalk */
+      {
+        /* if there is CR code, it should be removed */
+        char *tmpstr = line.get();
+        if(tmpstr != NULL){
+          size_t tmplen = strlen(tmpstr);
+          if(tmplen > 0){
+            if(tmpstr[tmplen-1] == '\r'){
+              tmpstr[tmplen-1] = '\0';
+            }
+          }
+        }
+      }
+#endif
       char *col[8];
       const size_t n = tokenizeCSV(line.get(), col, 5);
       CHECK_DIE(n == 5) << "format error: " << line.get();
