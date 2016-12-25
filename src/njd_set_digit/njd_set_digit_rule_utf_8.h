@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2016  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -306,7 +306,7 @@ static const char *njd_set_digit_rule_numerative_class1g[] = {
    "株", "冠", "巻", "缶", "貫", "貫目", "間", "基", "期", "期生", "機", "気圧", "季", "騎",
    "客", "脚", "球", "級", "橋", "局", "曲", "極", "重ね", "斤", "金", "句", "区", "躯", "計",
    "桁", "ケタ", "校", "港", "行", "項", "組", "件", "軒", "言", "戸", "湖", "光年", "石",
-   "ぴき", "ぺん", "波", "派", "敗", "杯", "拍", "泊", "版", "犯", "班", "匹", "匹", "筆", "俵",
+   "ぴき", "ぺん", "波", "派", "敗", "杯", "拍", "泊", "版", "犯", "班", "匹", "疋", "筆", "俵",
    "票", "品", "分間", "分目", "片", "片", "篇", "編", "辺", "遍", "歩", "歩", "報", "方", "方",
    "法", "本立て", "頭身",
    NULL
@@ -420,7 +420,7 @@ static const char *njd_set_digit_rule_conv_table2b[] = {
 
 static const char *njd_set_digit_rule_numerative_class2c[] = {
    /* from paper */
-   "本", "匹", "票", "俵", "箱",
+   "本", "匹", "疋", "票", "俵", "箱",
    /* from dictionary */
    "本立て", "杯", "針", "柱",
    NULL

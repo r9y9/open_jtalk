@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2016  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -306,7 +306,7 @@ static const char *njd_set_digit_rule_numerative_class1g[] = {
    "Š”", "Š¥", "Šª", "ŠÊ", "ŠÑ", "ŠÑ–Ú", "ŠÔ", "Šî", "Šú", "Šú¶", "‹@", "‹Cˆ³", "‹G", "‹R",
    "‹q", "‹r", "‹…", "‹‰", "‹´", "‹Ç", "‹È", "‹É", "d‚Ë", "‹Ò", "‹à", "‹å", "‹æ", "‹ë", "Œv",
    "Œ…", "ƒPƒ^", "Z", "`", "s", "€", "‘g", "Œ", "Œ¬", "Œ¾", "ŒË", "ŒÎ", "Œõ”N", "Î",
-   "‚Ò‚«", "‚Ø‚ñ", "”g", "”h", "”s", "”t", "”", "”‘", "”Å", "”Æ", "”Ç", "•C", "•C", "•M", "•U",
+   "‚Ò‚«", "‚Ø‚ñ", "”g", "”h", "”s", "”t", "”", "”‘", "”Å", "”Æ", "”Ç", "•C", "•D", "•M", "•U",
    "•[", "•i", "•ªŠÔ", "•ª–Ú", "•Ğ", "•Ğ", "•Ñ", "•Ò", "•Ó", "•Õ", "•à", "•à", "•ñ", "•û", "•û",
    "–@", "–{—§‚Ä", "“ªg",
    NULL
@@ -420,7 +420,7 @@ static const char *njd_set_digit_rule_conv_table2b[] = {
 
 static const char *njd_set_digit_rule_numerative_class2c[] = {
    /* from paper */
-   "–{", "•C", "•[", "•U", "” ",
+   "–{", "•C", "•D", "•[", "•U", "” ",
    /* from dictionary */
    "–{—§‚Ä", "”t", "j", "’Œ",
    NULL
