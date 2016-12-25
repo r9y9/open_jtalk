@@ -11,7 +11,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2015  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2016  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -1584,7 +1584,9 @@ MECAB_H_START;
 typedef struct _Mecab{
    char **feature;
    int size;
-   mecab_t *mecab;
+   void *model;
+   void *tagger;
+   void *lattice;
 } Mecab;
 
 BOOL Mecab_initialize(Mecab *m);

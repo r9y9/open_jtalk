@@ -8,6 +8,7 @@ MAINTAINERCLEANFILES = Makefile.in mecab-dict-index
 AM_CPPFLAGS = -D DIC_VERSION=@DIC_VERSION@ \
               @MECAB_USE_UTF8_ONLY@ \
               -D MECAB_DEFAULT_RC="\"@MECAB_DEFAULT_RC@\"" \
+              -D MECAB_DEFAULT_CHARSET="\"@MECAB_DEFAULT_CHARSET@\"" \
               -D PACKAGE="\"@PACKAGE@\"" \
               -D VERSION="\"@VERSION@\""
 
