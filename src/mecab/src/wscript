@@ -1,0 +1,13 @@
+def configure(conf):
+    pass
+
+
+def build(bld):
+    bld.install_files('${HPREFIX}/mecab', bld.path.ant_glob('*.h'))
+
+    bld.shlib(
+        source=bld.path.ant_glob('*.cpp'),
+        target="mecab_open_jtalk",
+        vnum=bld.env['VERSION'],
+        lib=['pthread'],
+        includes=['.'])

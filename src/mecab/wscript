@@ -1,0 +1,102 @@
+# coding: utf-8
+from __future__ import division, print_function, absolute_import
+
+APPNAME = 'mecab_open_jtalk'
+
+import sys
+import re
+import waflib
+
+subdirs = [
+    'src',
+]
+
+top = '.'
+out = 'build'
+
+
+def configure(conf):
+    conf.load('compiler_cxx')
+
+    for header_name in [
+        "string.h",
+        "stdlib.h",
+        "unistd.h",
+        "fcntl.h",
+        "stdint.h",
+        "sys/stat.h",
+        "sys/mman.h",
+        "sys/times.h",
+        "dirent.h",
+        "ctype.h",
+        "sys/types.h",
+        "pthread.h",
+    ]:
+        conf.check_cc(header_name=header_name)
+
+    # TODO: windows; windows.h, io.h?
+
+    if conf.env.COMPILER_CXX != 'msvc':
+        conf.env.append_unique(
+            'CXXFLAGS',
+            ['-O3', '-Wall', '-fno-common'])
+
+    conf.define('PACKAGE', APPNAME)
+    conf.define('VERSION', conf.env['VERSION'])
+
+    conf.env.append_unique('CXXFLAGS', [
+        '-DHAVE_CONFIG_H',
+        '-DDIC_VERSION=102',
+        '-DMECAB_DEFAULT_RC="dummy"'
+        '-DMECAB_USE_UTF8_ONLY',
+    ])
+
+    conf.recurse(subdirs)
+
+    print("""
+mecab for open_jtalk has been configured as follows:
+
+[Build information]
+Package:                 {0}
+build (compile on):      {1}
+host endian:             {2}
+Compiler:                {3}
+Compiler version:        {4}
+CXXFLAGS:                {5}
+""".format(
+        APPNAME + '-' + conf.env['VERSION'],
+        conf.env.DEST_CPU + '-' + conf.env.DEST_OS,
+        sys.byteorder,
+        conf.env.COMPILER_CXX,
+        '.'.join(conf.env.CC_VERSION),
+        ' '.join(conf.env.CXXFLAGS)
+    ))
+
+    conf.write_config_header('src/config.h')
+
+
+def build(bld):
+    bld.recurse(subdirs)
+
+    libs = []
+    for tasks in bld.get_build_iterator():
+        if tasks == []:
+            break
+        for task in tasks:
+            if isinstance(task.generator, waflib.TaskGen.task_gen) and 'cxxshlib' in task.generator.features:
+                libs.append(task.generator.target)
+    ls = ''
+    for l in set(libs):
+        ls = ls + ' -l' + l
+    ls += ' -lm'
+
+    bld.install_files('${HPREFIX}/mecab', 'src/config.h')
+
+    bld(source='mecab_open_jtalk.pc.in',
+        prefix=bld.env['PREFIX'],
+        exec_prefix='${prefix}',
+        libdir=bld.env['LIBDIR'],
+        libs=ls,
+        includedir='${prefix}/include',
+        PACKAGE=APPNAME,
+        VERSION=bld.env['VERSION'])
