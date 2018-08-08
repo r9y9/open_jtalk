@@ -15,8 +15,9 @@ before_install:
 # Just check if build success or not for now
 script:
   - cd src
-  - ./waf configure
-  - ./waf build
+  - mkdir -p build && cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON ..
+  - make -j
 
 notifications:
   email: false
