@@ -94,7 +94,12 @@ endif()
 
 # find HTSEngine
 find_path(HTS_ENGINE_INCLUDE_DIR HTS_engine.h)
-find_library(HTS_ENGINE_LIB HTSEngine)
+find_library(HTS_ENGINE_LIB hts_engine_API)
+if(NOT HTS_ENGINE_LIB)
+  # fallback
+  find_library(HTS_ENGINE_LIB HTSEngine)
+endif()
+
 if(HTS_ENGINE_INCLUDE_DIR AND HTS_ENGINE_LIB)
   target_link_libraries(openjtalk ${HTS_ENGINE_LIB})
   include_directories(openjtalk ${HTS_ENGINE_INCLUDE_DIR})
