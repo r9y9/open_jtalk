@@ -14,7 +14,7 @@ set(PACKAGE_VERSION ${OPEN_JTALK_VERSION})
 set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
 
 # build configuration
-project(open_jtalk)
+project(openjtalk)
 aux_source_directory(jpcommon libjpcommon_source)
 aux_source_directory(mecab/src libmecab_source)
 aux_source_directory(mecab2njd libmecab2njd_source)
@@ -31,14 +31,14 @@ include_directories(jpcommon mecab/src mecab2njd njd njd2jpcommon njd_set_accent
                     njd_set_accent_type njd_set_digit njd_set_long_vowel
                     njd_set_pronunciation njd_set_unvoiced_vowel text2mecab)
 
-add_library(open_jtalk ${libjpcommon_source} ${libmecab_source} ${libmecab2njd_source}
+add_library(openjtalk ${libjpcommon_source} ${libmecab_source} ${libmecab2njd_source}
                       ${libnjd_source} ${libnjd2jpcommon_source}
                       ${libnjd_set_accent_phrase_source} ${libnjd_set_accent_type_source}
                       ${libnjd_set_digit_source} ${libnjd_set_long_vowel_source}
                       ${libnjd_set_pronunciation_source} ${libnjd_set_unvoiced_vowel_source}
                       ${libtext2mecab_source})
-set_target_properties(open_jtalk PROPERTIES VERSION ${OPEN_JTALK_VERSION})
-set_target_properties(open_jtalk PROPERTIES SO_VERSION ${OPEN_JTALK_VERSION})
+set_target_properties(openjtalk PROPERTIES VERSION ${OPEN_JTALK_VERSION})
+set_target_properties(openjtalk PROPERTIES SO_VERSION ${OPEN_JTALK_VERSION})
 
 # generate mecab/config.h
 include(CheckIncludeFiles)
@@ -96,8 +96,8 @@ endif()
 find_path(HTS_ENGINE_INCLUDE_DIR HTS_engine.h)
 find_library(HTS_ENGINE_LIB HTSEngine)
 if(HTS_ENGINE_INCLUDE_DIR AND HTS_ENGINE_LIB)
-  target_link_libraries(open_jtalk ${HTS_ENGINE_LIB})
-  include_directories(open_jtalk ${HTS_ENGINE_INCLUDE_DIR})
+  target_link_libraries(openjtalk ${HTS_ENGINE_LIB})
+  include_directories(openjtalk ${HTS_ENGINE_INCLUDE_DIR})
 else()
   message(FATAL_ERROR "Required HTSEngine not found")
 endif()
@@ -124,10 +124,10 @@ endif()
 
 # installation
 if(NOT MSVC)
-  install(TARGETS open_jtalk DESTINATION lib)
+  install(TARGETS openjtalk DESTINATION lib)
   install(FILES jpcommon/jpcommon.h mecab/src/mecab.h mecab2njd/mecab2njd.h njd/njd.h njd2jpcommon/njd2jpcommon.h
           njd_set_accent_phrase/njd_set_accent_phrase.h njd_set_accent_type/njd_set_accent_type.h
           njd_set_digit/njd_set_digit.h njd_set_long_vowel/njd_set_long_vowel.h njd_set_pronunciation/njd_set_pronunciation.h
           njd_set_unvoiced_vowel/njd_set_unvoiced_vowel.h text2mecab/text2mecab.h
-          DESTINATION include/open_jtalk)
+          DESTINATION include/openjtalk)
 endif()
