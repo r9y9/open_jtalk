@@ -61,6 +61,7 @@ check_include_files(sys/stat.h HAVE_SYS_STAT_H)
 check_include_files(sys/times.h HAVE_SYS_TIMES_H)
 check_include_files(sys/types.h HAVE_SYS_TYPES_H)
 check_include_files(unistd.h HAVE_UNISTD_H)
+check_include_files(windows.h HAVE_WINDOWS_H)
 check_function_exists(getenv HAVE_GETENV)
 check_function_exists(getpagesize HAVE_GETPAGESIZE)
 check_function_exists(mmap HAVE_MMAP)
@@ -116,13 +117,22 @@ if(${CHARSET} STREQUAL "sjis")
   foreach(flag CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
     set(${flag} "${${flag}} -finput-charset=cp932 -fexec-charset=cp932")
   endforeach()
+  target_compile_options(openjtalk
+    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:.932;/execution-charset:.932>
+  )
 elseif(${CHARSET} STREQUAL "eucjp")
   add_definitions(-DCHARSET_EUC_JP -DMECAB_CHARSET=euc-jp)
+  target_compile_options(openjtalk
+    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:euc-jp;/execution-charset:euc-jp>
+  )
 elseif(${CHARSET} STREQUAL "utf8")
   add_definitions(-DCHARSET_UTF_8 -DMECAB_CHARSET=utf-8 -DMECAB_UTF8_USE_ONLY)
   foreach(flag CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
     set(${flag} "${${flag}} -finput-charset=UTF-8 -fexec-charset=UTF-8")
   endforeach()
+  target_compile_options(openjtalk
+    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:UTF-8;/execution-charset:UTF-8>
+  )
 else()
   message(FATAL_ERROR "Encoding ${CHARSET} not recognized. You can set sjis/eucjp/utf8")
 endif()
