@@ -1,0 +1,66 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ '1.10' ]
+  pull_request:
+    branches: [ '1.10' ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        build_type: [ Release ]
+        config:
+          - os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            config_generator_type: single
+          - os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+            config_generator_type: single
+          - os: macos-latest
+            cc: gcc
+            cxx: g++
+            config_generator_type: single
+          - os: macos-latest
+            cc: clang
+            cxx: clang++
+            config_generator_type: single
+          - os: windows-latest
+            cc: cl
+            cxx: cl
+            config_generator_type: multiple
+
+    runs-on: ${{ matrix.config.os }}
+
+    env:
+      CC: ${{ matrix.config.cc }}
+      CXX: ${{ matrix.config.cxx }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: r9y9/hts_engine_API
+          path: hts_engine_API
+      - name: Configure hts_engine_API
+        working-directory: ./hts_engine_API/src
+        run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -S . -B build
+      - name: Build hts_engine_API
+        working-directory: ./hts_engine_API/src
+        run: cmake --build build --config ${{ matrix.build_type }}
+      - uses: actions/checkout@v2
+        with:
+          path: open_jtalk
+      - name: Configure open_jtalk (single_config)
+        if: ${{ matrix.config.config_generator_type != 'multiple' }}
+        working-directory: ./open_jtalk/src
+        run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -D HTS_ENGINE_INCLUDE_DIR=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=../../hts_engine_API/src/build/lib -S . -B build
+      - name: Configure open_jtalk (multi_config)
+        if: ${{ matrix.config.config_generator_type == 'multiple' }}
+        working-directory: ./open_jtalk/src
+        run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -D HTS_ENGINE_INCLUDE_DIR=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=../../hts_engine_API/src/build/lib/${{ matrix.build_type }} -S . -B build
+      - name: Build open_jtalk
+        working-directory: ./open_jtalk/src
+        run: cmake --build build --config ${{ matrix.build_type }}
