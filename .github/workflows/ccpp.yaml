@@ -44,23 +44,23 @@ jobs:
         with:
           repository: r9y9/hts_engine_API
           path: hts_engine_API
-      - name: Configure hts_engine_API
-        working-directory: ./hts_engine_API/src
-        run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -S . -B build
       - name: Build hts_engine_API
         working-directory: ./hts_engine_API/src
-        run: cmake --build build --config ${{ matrix.build_type }}
+        run: |
+          cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -S . -B build
+          cmake --build build --config ${{ matrix.build_type }}
+      - name: Library Path
+        id: library_path
+        uses: haya14busa/action-cond@v1
+        with:
+          cond: ${{ matrix.config.config_generator_type == 'multiple' }}
+          if_true: ../../hts_engine_API/src/build/lib/${{ matrix.build_type }}
+          if_false: ../../hts_engine_API/src/build/lib
       - uses: actions/checkout@v2
         with:
           path: open_jtalk
-      - name: Configure open_jtalk (single_config)
-        if: ${{ matrix.config.config_generator_type != 'multiple' }}
-        working-directory: ./open_jtalk/src
-        run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -D CMAKE_INCLUDE_PATH=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=../../hts_engine_API/src/build/lib -S . -B build
-      - name: Configure open_jtalk (multi_config)
-        if: ${{ matrix.config.config_generator_type == 'multiple' }}
-        working-directory: ./open_jtalk/src
-        run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -D CMAKE_INCLUDE_PATH=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=../../hts_engine_API/src/build/lib/${{ matrix.build_type }} -S . -B build
       - name: Build open_jtalk
         working-directory: ./open_jtalk/src
-        run: cmake --build build --config ${{ matrix.build_type }}
+        run: |
+          cmake -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D BUILD_SHARED_LIBS=ON -D CMAKE_INCLUDE_PATH=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=${{ steps.library_path.outputs.value }} -S . -B build
+          cmake --build build --config ${{ matrix.build_type }}
