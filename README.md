@@ -1,5 +1,7 @@
 # open_jtalk
 
+[![C/C++ CI](https://github.com/r9y9/open_jtalk/actions/workflows/ccpp.yaml/badge.svg)](https://github.com/r9y9/open_jtalk/actions/workflows/ccpp.yaml)
+
 A fork of open_jtalk
 
 ## Why
