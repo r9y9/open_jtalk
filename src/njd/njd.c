@@ -286,7 +286,7 @@ void NJD_push_node(NJD * njd, NJDNode * node)
 }
 
 /* remove node and return next node */
-static NJDNode *NJD_remove_node(NJD * njd, NJDNode * node)
+NJDNode *NJD_remove_node(NJD * njd, NJDNode * node)
 {
    NJDNode *next;
 

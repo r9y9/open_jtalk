@@ -4,7 +4,7 @@
 /*           http://open-jtalk.sourceforge.net/                      */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2008-2016  Nagoya Institute of Technology          */
+/*  Copyright (c) 2008-2018  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -226,6 +226,11 @@ static void usage()
    fprintf(stderr, "NAIST Japanese Dictionary\n");
    fprintf(stderr, "Version 0.6.1-20090630 (http://naist-jdic.sourceforge.jp/)\n");
    fprintf(stderr, "Copyright (C) 2009 Nara Institute of Science and Technology\n");
+   fprintf(stderr, "All rights reserved.\n");
+   fprintf(stderr, "\n");
+   fprintf(stderr, "UniDic\n");
+   fprintf(stderr, "Version 2.2.0 (https://unidic.ninjal.ac.jp/)\n");
+   fprintf(stderr, "Copyright (C) 2011-2017 The UniDic Consortium\n");
    fprintf(stderr, "All rights reserved.\n");
    fprintf(stderr, "\n");
    fprintf(stderr, "open_jtalk - The Japanese TTS system \"Open JTalk\"\n");

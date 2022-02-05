@@ -21,7 +21,7 @@ SYMBOL	       1 1 0
 NUMERIC	       1 1 0
 ALPHA	       1 1 0
 HIRAGANA       0 1 2 
-KATAKANA       1 1 2
+KATAKANA       0 1 2
 KANJINUMERIC   1 1 0
 GREEK	       1 1 0
 CYRILLIC       1 1 0
