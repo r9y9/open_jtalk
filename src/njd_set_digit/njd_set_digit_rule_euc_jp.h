@@ -51,6 +51,8 @@
 
 NJD_SET_DIGIT_RULE_H_START;
 
+#define NJD_SET_DIGIT_KIGOU "µ­¹æ"
+#define NJD_SET_DIGIT_MEISHI "Ì¾»ì"
 #define NJD_SET_DIGIT_KAZU "¿ô"
 #define NJD_SET_DIGIT_SUUSETSUZOKU "¿ôÀÜÂ³"
 #define NJD_SET_DIGIT_JOSUUSHI "½õ¿ô»ì"
@@ -63,6 +65,7 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_KAKKO1 "¡Ê"
 #define NJD_SET_DIGIT_KAKKO2 "¡Ë"
 #define NJD_SET_DIGIT_BANGOU "ÈÖ¹æ"
+#define NJD_SET_DIGIT_COMMA "¡¤"
 #define NJD_SET_DIGIT_TEN1 "¡¥"
 #define NJD_SET_DIGIT_TEN2 "¡¦"
 #define NJD_SET_DIGIT_TEN_FEATURE "¡¥,Ì¾»ì,ÀÜÈø,½õ¿ô»ì,*,*,*,¡¥,¥Æ¥ó,¥Æ¥ó,0/2,*,-1"
@@ -76,6 +79,7 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_FIVE "¸Þ"
 #define NJD_SET_DIGIT_FIVE_BEFORE_DP "¥´¡¼"
 #define NJD_SET_DIGIT_FIVE_AFTER_DP "¥´¡¼"
+#define NJD_SET_DIGIT_SIX "Ï»"
 #define NJD_SET_DIGIT_NIN "¿Í"
 #define NJD_SET_DIGIT_GATSU "·î"
 #define NJD_SET_DIGIT_NICHI "Æü"
@@ -305,7 +309,7 @@ static const char *njd_set_digit_rule_numerative_class1g[] = {
    "²Á", "²Ý", "²è", "²ó", "²ó´÷", "²óÀ¸", "²óÀï", "²óÀþ", "²óÊ¬", "³¤Î¤", "¥«¥¤¥ê", "³½", "³Ñ",
    "³ô", "´§", "´¬", "´Ì", "´Ó", "´ÓÌÜ", "´Ö", "´ð", "´ü", "´üÀ¸", "µ¡", "µ¤°µ", "µ¨", "µ³",
    "µÒ", "µÓ", "µå", "µé", "¶¶", "¶É", "¶Ê", "¶Ë", "½Å¤Í", "¶Ô", "¶â", "¶ç", "¶è", "¶í", "·×",
-   "·å", "¥±¥¿", "¹»", "¹Á", "¹Ô", "¹à", "ÁÈ", "·ï", "¸®", "¸À", "¸Í", "¸Ð", "¸÷Ç¯", "ÀÐ",
+   "·å", "¥±¥¿", "¹»", "¹Á", /* "¹Ô", */ "¹à", "ÁÈ", "·ï", "¸®", "¸À", "¸Í", "¸Ð", "¸÷Ç¯", "ÀÐ",
    "¤Ô¤­", "¤Ú¤ó", "ÇÈ", "ÇÉ", "ÇÔ", "ÇÕ", "Çï", "Çñ", "ÈÇ", "ÈÈ", "ÈÉ", "É¤", "É¥", "É®", "É¶",
    "É¼", "ÉÊ", "Ê¬´Ö", "Ê¬ÌÜ", "ÊÒ", "ÊÒ", "ÊÓ", "ÊÔ", "ÊÕ", "Ê×", "Êâ", "Êâ", "Êó", "Êý", "Êý",
    "Ë¡", "ËÜÎ©¤Æ", "Æ¬¿È",

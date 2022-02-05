@@ -51,6 +51,8 @@
 
 NJD_SET_DIGIT_RULE_H_START;
 
+#define NJD_SET_DIGIT_KIGOU "記号"
+#define NJD_SET_DIGIT_MEISHI "名詞"
 #define NJD_SET_DIGIT_KAZU "数"
 #define NJD_SET_DIGIT_SUUSETSUZOKU "数接続"
 #define NJD_SET_DIGIT_JOSUUSHI "助数詞"
@@ -63,6 +65,7 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_KAKKO1 "（"
 #define NJD_SET_DIGIT_KAKKO2 "）"
 #define NJD_SET_DIGIT_BANGOU "番号"
+#define NJD_SET_DIGIT_COMMA "，"
 #define NJD_SET_DIGIT_TEN1 "．"
 #define NJD_SET_DIGIT_TEN2 "・"
 #define NJD_SET_DIGIT_TEN_FEATURE "．,名詞,接尾,助数詞,*,*,*,．,テン,テン,0/2,*,-1"
@@ -76,6 +79,7 @@ NJD_SET_DIGIT_RULE_H_START;
 #define NJD_SET_DIGIT_FIVE "五"
 #define NJD_SET_DIGIT_FIVE_BEFORE_DP "ゴー"
 #define NJD_SET_DIGIT_FIVE_AFTER_DP "ゴー"
+#define NJD_SET_DIGIT_SIX "六"
 #define NJD_SET_DIGIT_NIN "人"
 #define NJD_SET_DIGIT_GATSU "月"
 #define NJD_SET_DIGIT_NICHI "日"
@@ -305,7 +309,7 @@ static const char *njd_set_digit_rule_numerative_class1g[] = {
    "価", "課", "画", "回", "回忌", "回生", "回戦", "回線", "回分", "海里", "カイリ", "浬", "角",
    "株", "冠", "巻", "缶", "貫", "貫目", "間", "基", "期", "期生", "機", "気圧", "季", "騎",
    "客", "脚", "球", "級", "橋", "局", "曲", "極", "重ね", "斤", "金", "句", "区", "躯", "計",
-   "桁", "ケタ", "校", "港", "行", "項", "組", "件", "軒", "言", "戸", "湖", "光年", "石",
+   "桁", "ケタ", "校", "港", /* "行", */ "項", "組", "件", "軒", "言", "戸", "湖", "光年", "石",
    "ぴき", "ぺん", "波", "派", "敗", "杯", "拍", "泊", "版", "犯", "班", "匹", "疋", "筆", "俵",
    "票", "品", "分間", "分目", "片", "片", "篇", "編", "辺", "遍", "歩", "歩", "報", "方", "方",
    "法", "本立て", "頭身",

@@ -127,10 +127,16 @@ void njd_set_pronunciation(NJD * njd)
                   pos++;
                }
             }
-            NJDNode_set_pos(node, NJD_SET_PRONUNCIATION_FILLER);
-            NJDNode_set_pos_group1(node, NULL);
-            NJDNode_set_pos_group2(node, NULL);
-            NJDNode_set_pos_group3(node, NULL);
+            /* if filler, overwrite pos */
+            if (NJDNode_get_mora_size(node) != 0) {
+               NJDNode_set_pos(node, NJD_SET_PRONUNCIATION_FILLER);
+               NJDNode_set_pos_group1(node, NULL);
+               NJDNode_set_pos_group2(node, NULL);
+               NJDNode_set_pos_group3(node, NULL);
+            }
+            if (strcmp(NJDNode_get_orig(node), "*") == 0) {
+               NJDNode_set_orig(node, str);
+            }
          }
          /* if known symbol, set the pronunciation */
          if (strcmp(NJDNode_get_pron(node), "*") == 0) {
@@ -147,6 +153,40 @@ void njd_set_pronunciation(NJD * njd)
             NJDNode_set_read(node, NJD_SET_PRONUNCIATION_TOUTEN);
             NJDNode_set_pron(node, NJD_SET_PRONUNCIATION_TOUTEN);
             NJDNode_set_pos(node, NJD_SET_PRONUNCIATION_KIGOU);
+         }
+      }
+   }
+   NJD_remove_silent_node(njd);
+
+   /* chain kana sequence */
+   {
+      NJDNode *head_of_kana_filler_sequence = NULL;
+      int find;
+      for (node = njd->head; node != NULL; node = node->next) {
+         if (strcmp(NJDNode_get_pos(node), NJD_SET_PRONUNCIATION_FILLER) == 0) {
+            find = 0;
+            for (i = 0; njd_set_pronunciation_list[i] != NULL; i += 3) {
+               if (strcmp(NJDNode_get_string(node), njd_set_pronunciation_list[i]) == 0) {
+                  find = 1;
+                  if (head_of_kana_filler_sequence == NULL) {
+                     head_of_kana_filler_sequence = node;
+                  } else {
+                     NJDNode_add_string(head_of_kana_filler_sequence, NJDNode_get_string(node));
+                     NJDNode_add_orig(head_of_kana_filler_sequence, NJDNode_get_orig(node));
+                     NJDNode_add_read(head_of_kana_filler_sequence, NJDNode_get_read(node));
+                     NJDNode_add_pron(head_of_kana_filler_sequence, NJDNode_get_pron(node));
+                     NJDNode_add_mora_size(head_of_kana_filler_sequence,
+                                           NJDNode_get_mora_size(node));
+                     NJDNode_set_pron(node, NULL);
+                  }
+                  break;
+               }
+            }
+            if (find == 0) {
+               head_of_kana_filler_sequence = NULL;
+            }
+         } else {
+            head_of_kana_filler_sequence = NULL;
          }
       }
    }

@@ -232,6 +232,40 @@ void NJDNode_set_chain_flag(NJDNode * node, int flag)
    node->chain_flag = flag;
 }
 
+void NJDNode_add_string(NJDNode * node, const char *str)
+{
+   char *c;
+
+   if (str != NULL) {
+      if (node->string == NULL) {
+         node->string = strdup(str);
+      } else {
+         c = (char *) calloc(strlen(node->string) + strlen(str) + 1, sizeof(char));
+         strcpy(c, node->string);
+         strcat(c, str);
+         free(node->string);
+         node->string = c;
+      }
+   }
+}
+
+void NJDNode_add_orig(NJDNode * node, const char *str)
+{
+   char *c;
+
+   if (str != NULL) {
+      if (node->orig == NULL) {
+         node->orig = strdup(str);
+      } else {
+         c = (char *) calloc(strlen(node->orig) + strlen(str) + 1, sizeof(char));
+         strcpy(c, node->orig);
+         strcat(c, str);
+         free(node->orig);
+         node->orig = c;
+      }
+   }
+}
+
 void NJDNode_add_read(NJDNode * node, const char *str)
 {
    char *c;

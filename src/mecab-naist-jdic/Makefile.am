@@ -1,5 +1,5 @@
 
-EXTRA_DIST = COPYING Makefile.mak naist-jdic.csv matrix.def _left-id.def _pos-id.def _rewrite.def _right-id.def char.def unk.def feature.def
+EXTRA_DIST = COPYING Makefile.mak naist-jdic.csv matrix.def _left-id.def _pos-id.def _rewrite.def _right-id.def char.def unk.def feature.def unidic-csj.csv
 
 DISTCLEANFILES = *.log *.out *~
 
@@ -9,7 +9,7 @@ dicdir = @prefix@/dic
 
 dic_DATA   = char.bin matrix.bin sys.dic unk.dic left-id.def rewrite.def pos-id.def right-id.def
 
-char.bin matrix.bin sys.dic unk.dic left-id.def rewrite.def pos-id.def right-id.def: naist-jdic.csv matrix.def _left-id.def _rewrite.def _pos-id.def _right-id.def char.def unk.def feature.def
+char.bin matrix.bin sys.dic unk.dic left-id.def rewrite.def pos-id.def right-id.def: naist-jdic.csv matrix.def _left-id.def _rewrite.def _pos-id.def _right-id.def char.def unk.def feature.def unidic-csj.csv
 	cp _left-id.def left-id.def
 	cp _rewrite.def rewrite.def
 	cp _pos-id.def pos-id.def
