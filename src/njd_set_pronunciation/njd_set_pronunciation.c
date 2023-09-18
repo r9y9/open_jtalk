@@ -153,6 +153,11 @@ void njd_set_pronunciation(NJD * njd)
             NJDNode_set_read(node, NJD_SET_PRONUNCIATION_TOUTEN);
             NJDNode_set_pron(node, NJD_SET_PRONUNCIATION_TOUTEN);
             NJDNode_set_pos(node, NJD_SET_PRONUNCIATION_KIGOU);
+            NJDNode_set_pos_group1(node, NJD_SET_PRONUNCIATION_TOUTEN_POS_GROUP1);
+            NJDNode_set_pos_group2(node, "*");
+            NJDNode_set_pos_group3(node, "*");
+            NJDNode_set_ctype(node, "*");
+            NJDNode_set_cform(node, "*");
          }
       }
    }
