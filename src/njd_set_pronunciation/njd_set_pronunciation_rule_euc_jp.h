@@ -446,6 +446,7 @@ static const char *njd_set_pronunciation_symbol_list[] = {
 #define NJD_SET_PRONUNCIATION_MASU_PRON "マス"
 
 #define NJD_SET_PRONUNCIATION_TOUTEN "、"
+#define NJD_SET_PRONUNCIATION_TOUTEN_POS_GROUP1 "読点"
 
 NJD_SET_PRONUNCIATION_RULE_H_END;
 

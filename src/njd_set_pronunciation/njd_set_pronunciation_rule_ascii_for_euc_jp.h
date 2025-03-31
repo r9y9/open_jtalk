@@ -446,6 +446,7 @@ static const char *njd_set_pronunciation_symbol_list[] = {
 #define NJD_SET_PRONUNCIATION_MASU_PRON "\xa5\xde\xa5\xb9"
 
 #define NJD_SET_PRONUNCIATION_TOUTEN "\xa1\xa2"
+#define NJD_SET_PRONUNCIATION_TOUTEN_POS_GROUP1 "\xc6\xc9\xc5\xc0"
 
 NJD_SET_PRONUNCIATION_RULE_H_END;
 
