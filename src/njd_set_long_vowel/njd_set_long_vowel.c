@@ -126,6 +126,7 @@ void njd_set_long_vowel(NJD * njd)
    const char *str;
    int len;
    char buff[MAXBUFLEN];
+   int buff_len;
    int byte = -1;
 
    for (node = njd->head; node != NULL; node = node->next) {
@@ -133,23 +134,42 @@ void njd_set_long_vowel(NJD * njd)
       str = NJDNode_get_pron(node);
       len = strlen(str);
       buff[0] = '\0';
+      buff_len = 0;
+
+      if (len >= MAXBUFLEN - 1) {
+         fprintf(stderr, "ERROR: %s() in %s:%d: Input too long (%d bytes). Skipping.\n", __func__, __FILE__, __LINE__, len);
+         continue;
+      }
+
       /* search */
       for (i = 0; i < len; i += byte) {
          byte = -1;
          for (j = 0; njd_set_long_vowel_table[j] != NULL; j += 2) {
             byte = strtopcmp(&str[i], njd_set_long_vowel_table[j]);
             if (byte > 0) {
-               /* find */
+               /* find - check buffer bounds before strcat */
+               int add_len = strlen(njd_set_long_vowel_table[j + 1]);
+               if (buff_len + add_len >= MAXBUFLEN) {
+                  fprintf(stderr, "ERROR: %s() in %s:%d: Buffer overflow prevented.\n", __func__, __FILE__, __LINE__);
+                  goto finish;
+               }
                strcat(buff, njd_set_long_vowel_table[j + 1]);
+               buff_len += add_len;
                break;
             }
          }
          /* not found */
          if (byte < 0) {
             byte = detect_byte(&str[i]);
+            if (buff_len + byte >= MAXBUFLEN) {
+               fprintf(stderr, "ERROR: %s() in %s:%d: Buffer overflow prevented.\n", __func__, __FILE__, __LINE__);
+               break;
+            }
             strncat(buff, &str[i], byte);
+            buff_len += byte;
          }
       }
+finish:
       /* finish */
       NJDNode_set_pron(node, buff);
    }

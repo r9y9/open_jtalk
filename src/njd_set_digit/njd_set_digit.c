@@ -370,6 +370,10 @@ static void convert_numerative_pron(const char *list[], NJDNode * node1, NJDNode
          str = NJDNode_get_pron(node2);
          j = strtopcmp(str, njd_set_digit_rule_voiced_sound_symbol_list[i]);
          if (j >= 0) {
+            if (strlen(njd_set_digit_rule_voiced_sound_symbol_list[i + 1]) + strlen(&str[j]) >= MAXBUFLEN) {
+               fprintf(stderr, "ERROR: %s() in %s:%d: Buffer overflow prevented.\n", __func__, __FILE__, __LINE__);
+               return;
+            }
             strcpy(buff, njd_set_digit_rule_voiced_sound_symbol_list[i + 1]);
             strcat(buff, &str[j]);
             NJDNode_set_pron(node2, buff);
@@ -381,6 +385,10 @@ static void convert_numerative_pron(const char *list[], NJDNode * node1, NJDNode
          str = NJDNode_get_pron(node2);
          j = strtopcmp(str, njd_set_digit_rule_semivoiced_sound_symbol_list[i]);
          if (j >= 0) {
+            if (strlen(njd_set_digit_rule_semivoiced_sound_symbol_list[i + 1]) + strlen(&str[j]) >= MAXBUFLEN) {
+               fprintf(stderr, "ERROR: %s() in %s:%d: Buffer overflow prevented.\n", __func__, __FILE__, __LINE__);
+               return;
+            }
             strcpy(buff, njd_set_digit_rule_semivoiced_sound_symbol_list[i + 1]);
             strcat(buff, &str[j]);
             NJDNode_set_pron(node2, buff);

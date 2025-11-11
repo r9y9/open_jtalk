@@ -206,6 +206,7 @@ void njd_set_unvoiced_vowel(NJD * njd)
    int index;
    int len;
    char buff[MAXBUFLEN];
+   int buff_len;
    const char *str;
 
    /* mora information for current, next, and next-next moras */
@@ -218,10 +219,16 @@ void njd_set_unvoiced_vowel(NJD * njd)
 
    for (node = njd->head; node != NULL; node = node->next) {
       buff[0] = '\0';
+      buff_len = 0;
 
       /* get pronunciation */
       str = NJDNode_get_pron(node);
       len = strlen(str);
+
+      if (len * 2 >= MAXBUFLEN - 1) {
+         fprintf(stderr, "ERROR: %s() in %s:%d: Input too long (%d bytes, max %d). Skipping.\n", __func__, __FILE__, __LINE__, len, MAXBUFLEN/2);
+         continue;  /* Skip this node, continue processing */
+      }
 
       /* parse pronunciation */
       for (index = 0; index < len;) {
@@ -303,10 +310,21 @@ void njd_set_unvoiced_vowel(NJD * njd)
             flag2 = 0;
          }
 
-         /* store pronunciation */
+         /* store pronunciation with bounds checking */
+         int mora1_len = strlen(mora1);
+         int quot_len = (flag1 == 1) ? strlen(NJD_SET_UNVOICED_VOWEL_QUOTATION) : 0;
+
+         if (buff_len + mora1_len + quot_len >= MAXBUFLEN) {
+            fprintf(stderr, "ERROR: %s() in %s:%d: Buffer overflow prevented. Truncating.\n", __func__, __FILE__, __LINE__);
+            break;  /* Stop processing this node */
+         }
+
          strcat(buff, mora1);
-         if (flag1 == 1)
+         buff_len += mora1_len;
+         if (flag1 == 1) {
             strcat(buff, NJD_SET_UNVOICED_VOWEL_QUOTATION);
+            buff_len += quot_len;
+         }
 
          /* prepare next step */
          index += size1;

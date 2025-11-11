@@ -69,6 +69,14 @@ static void get_token_from_string(const char *str, int *index, char *buff, char 
    c = str[(*index)];
    if (c != '\0') {
       while (c != d && c != '\0') {
+         if (i >= MAXBUFLEN - 1) {
+            /* Buffer full - skip rest but continue parsing */
+            fprintf(stderr, "WARNING: %s() in %s:%d: Token too long, truncating at %d bytes.\n", __func__, __FILE__, __LINE__, MAXBUFLEN - 1);
+            while (c != d && c != '\0') {
+               c = str[++(*index)];
+            }
+            break;
+         }
          buff[i++] = c;
          c = str[++(*index)];
       }
@@ -428,6 +436,11 @@ void NJDNode_load(NJDNode * node, const char *str)
    int index_pron;
    int index_acc;
    NJDNode *prev = NULL;
+
+   if (strlen(str) >= MAXBUFLEN * 6) {
+      fprintf(stderr, "ERROR: %s() in %s:%d: Input too long (%zu bytes). Skipping node.\n", __func__, __FILE__, __LINE__, strlen(str));
+      return;
+   }
 
    /* load */
    get_token_from_string(str, &index, buff_string, ',');

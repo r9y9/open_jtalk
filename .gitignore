@@ -6,7 +6,6 @@ src/mecab/src/config.h
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
-Makefile
 cmake_install.cmake
 install_manifest.txt
 
@@ -122,7 +121,6 @@ Makefile.in
 ### CMake ###
 CMakeCache.txt
 CMakeFiles
-Makefile
 cmake_install.cmake
 install_manifest.txt
 
@@ -185,6 +183,6 @@ $RECYCLE.BIN/
 *.lib
 *.log
 build
-Makefile
 .deps/
 config.status
+tests/test_issue12
